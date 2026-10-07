@@ -1,91 +1,95 @@
-<p align="center">
-  <a href="https://pterodactyl.io">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset=".github/assets/logo-dark.svg">
-      <img alt="Pterodactyl" src=".github/assets/logo-light.svg" height="72">
-    </picture>
-  </a>
-</p>
+<div align="center">
 
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/pterodactyl/panel/ci.yaml?label=Tests&style=for-the-badge&branch=1.0-develop)
-![Discord](https://img.shields.io/discord/122900397965705216?label=Discord&logo=Discord&logoColor=white&style=for-the-badge)
-![GitHub Releases](https://img.shields.io/github/downloads/pterodactyl/panel/latest/total?style=for-the-badge)
-![GitHub contributors](https://img.shields.io/github/contributors/pterodactyl/panel?style=for-the-badge)
+# Hyper Game Panel
 
-# Pterodactyl Panel
+**Pterodactyl + the Hyper theme, merged into one installable panel.**
 
-Pterodactyl® is a free, open-source game server management panel built with PHP, React, and Go. Designed with security
-in mind, Pterodactyl runs all game servers in isolated Docker containers while exposing a beautiful and intuitive
-UI to end users.
+The Hyper theme (v2.1.2) is **already inside this repository** — installing the
+panel installs the themed panel. There is no separate theme step.
 
-Stop settling for less. Make game servers a first class citizen on your platform.
+</div>
 
-## Pterodactyl v2 is coming soon
+---
 
-The next major version of Pterodactyl is on the way: a fully modernized tech stack, a brand new admin area, and an
-extension SDK built into the panel. It is still 100% free and open source under the MIT license.
+## What is this?
 
-[![Watch: Introducing Pterodactyl v2](.github/assets/v2-video.jpg)](https://www.youtube.com/watch?v=1ER4kv0jVEU)
+This repository is a merge of two things:
 
-Development happens on the [`2.0-develop`](https://github.com/pterodactyl/panel/tree/2.0-develop) branch. This branch
-(`1.0-develop`) remains the current stable release line.
+1. **[Pterodactyl Panel](https://github.com/pterodactyl/panel)** — the
+   open-source game server management panel this is built on
+   (Pterodactyl 1.15.x line, MIT-licensed upstream code).
+2. **Hyper Game Panel v2.1.2** — a commercial, heavily themed Pterodactyl
+   distribution ("Hyper" theme, DGEN addons: Discord bot, server stats,
+   DDOS alerts, custom eggs, and more).
 
-![Image](https://cdn.pterodactyl.io/site-assets/pterodactyl_v1_demo.gif)
+The Hyper codebase (with the theme applied) is committed directly in this repo,
+so a single install flow gives you the full themed panel out of the box.
 
-## Documentation
+## One-command install
 
-* [Panel Documentation](https://pterodactyl.io/panel/1.0/getting_started.html)
-* [Wings Documentation](https://pterodactyl.io/wings/1.0/installing.html)
-* [Community Guides](https://pterodactyl.io/community/about.html)
-* Or, get additional help [via Discord](https://discord.gg/pterodactyl)
+Fresh Ubuntu 22.04 / 24.04 (or Debian 12) server, as root:
 
-## Sponsors
+```bash
+git clone <this-repo-url> /tmp/ptero
+cd /tmp/ptero
+sudo bash hyper/install.sh
+```
 
-I would like to extend my sincere thanks to the following sponsors for helping fund Pterodactyl's development.
-[Interested in becoming a sponsor?](https://github.com/sponsors/pterodactyl)
+Then create your admin account and open the panel:
 
-| Company                                                                           | About                                                                                                                                                                                                                                           |
-|-----------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [**Buildurly**](https://buildurly.com/)                                           | Buildurly is a hardware procurement company. They deliver tailored, enterprise-grade hardware solutions designed around your unique needs. From sourcing to delivery, Buildurly's white-glove service ensures a seamless, worry-free, professional experience.                                                                                                                                          |
-| [**Hosturly**](https://hosturly.com/)                                             | Hosturly is an enterprise hosting provider. They provide cost-effective, high-performance, and reliable services, including VPS, Web, Dedicated, and Colocation.                                                                                |
-| [**indifferent broccoli**](https://indifferentbroccoli.com/)                      | indifferent broccoli is a game server hosting and rental company. With them, you get top-notch computer power for your gaming sessions. They destroy lag, latency, and complexity--letting you focus on the fun stuff.                         |
-| [**Infraly, LLC**](https://infraly.co/)                                           | Infraly is an infrastructure company powering the next generation of online services. Through their brands, Infraly delivers cutting-edge solutions across multiple markets. Their vertically integrated approach provides unmatched performance, scalability, and reliability, giving our customers full control.                                                                                     |
-| [**MineStrator**](https://minestrator.com/)                                       | MineStrator is a game server hosting provider. Looking for the most high-end French hosting company for your Minecraft server? More than 24,000 members on our Discord trust us. Give us a try!                                                |
-| [**Physgun**](https://physgun.com/)                                               | Physgun is a game server hosting provider. Most providers rent rack space and rebrand a panel. At Physgun, they engineer the performance, write the features, and staff the support. Physgun truly is game hosting perfected!                   |
-| [**WISP**](https://wisp.gg/)                                                      | WISP is an industry-leading SaaS platform for game server management, designed for hosting companies, gaming organizations, and enthusiasts. WISP combines modern, intuitive interfaces with powerful tools, making server deployment and administration seamless, scalable, and efficient.                                                                                                                 |
+```bash
+cd /var/www/pterodactyl && php artisan p:user:make
+```
 
+Full installer documentation, options, and the update flow are in
+[`hyper/README.md`](hyper/README.md).
 
-### Supported Games
+## Repository layout
 
-Pterodactyl supports a wide variety of games by utilizing Docker containers to isolate each instance. This gives
-you the power to run game servers without bloating machines with a host of additional dependencies.
+```text
+app/  bootstrap/  config/  database/   <- Hyper Game Panel (ionCube-encoded PHP)
+public/DGEN/      public/themes/       <- Hyper theme assets
+resources/views/  routes/              <- themed views & routes
+hyper/install.sh                       <- one-command installer
+hyper/license/                         <- ionCube license key for this release
+hyper_fetch.sh   hyper_watcher.sh      <- Hyper update scripts (shipped by Hyper)
+composer.json    composer.lock         <- panel dependencies
+```
 
-Some of our core supported games include:
+## What changed vs. stock Pterodactyl?
 
-* Minecraft — including Paper, Sponge, Bungeecord, Waterfall, and more
-* Rust
-* Terraria
-* Teamspeak
-* Mumble
-* Team Fortress 2
-* Counter Strike: Global Offensive
-* Garry's Mod
-* ARK: Survival Evolved
+Stock Pterodactyl `1.0-develop` has been **replaced** by the Hyper Game Panel
+codebase (v2.1.2, based on Pterodactyl 1.15.x). Changes include:
 
-In addition to our standard nest of supported games, our community is constantly pushing the limits of this software
-and there are plenty more games available provided by the community. Some of these games include:
+- The **Hyper theme pre-applied** (views, `public/DGEN`, `public/themes/`).
+- Hyper/DGEN app code: `app/**/DGEN/*`, extra artisan commands, custom eggs.
+- PHP code is **ionCube-encoded** and requires the bundled license key at
+  runtime — this is the Hyper author's commercial licensing, kept in place.
+- Standard Pterodactyl install steps still apply (composer, artisan migrate,
+  queue worker), which the installer automates.
 
-* Factorio
-* San Andreas: MP
-* Pocketmine MP
-* Squad
-* Xonotic
-* Starmade
-* Discord ATLBot, and most other Node.js/Python discord bots
-* [and many more...](https://eggs.pterodactyl.io)
+Pull requests from upstream Pterodactyl will **not** apply cleanly.
 
-## License
+## ⚠️ Licensing & security notice
 
-Pterodactyl® Copyright © 2015 - 2022 Dane Everitt and contributors.
+Read this before publishing or forking publicly:
 
-Code released under the [MIT License](./LICENSE.md).
+- **Proprietary code.** Most PHP in this repo is ionCube-encoded and is the
+  commercial **Hyper Game Panel** product, distributed under Hyper/
+  dgenx.net's own terms — *not* under Pterodactyl's MIT license. You are
+  responsible for complying with those terms.
+- **License key.** `hyper/license/` contains the ionCube runtime key for this
+  release. The panel will not run without it (and the ionCube Loader).
+- **Phone-home.** The panel contacts `license.dgenx.net` / `hyper-r2.dgenx.net`
+  for update checks and license verification.
+- This repo is provided for the repository owner's own use. If you did not
+  obtain a Hyper Game Panel license, do not deploy it.
+
+## Updating
+
+```bash
+cd /var/www/pterodactyl && sudo bash hyper_fetch.sh
+```
+
+See [`hyper/README.md`](hyper/README.md) for details and `--update` support in
+`hyper/install.sh`.

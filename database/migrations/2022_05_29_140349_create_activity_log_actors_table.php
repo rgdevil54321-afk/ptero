@@ -6,10 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateActivityLogActorsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::create('activity_log_subjects', function (Blueprint $table) {
             $table->id();
@@ -18,10 +15,7 @@ class CreateActivityLogActorsTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('activity_log_subjects');
     }

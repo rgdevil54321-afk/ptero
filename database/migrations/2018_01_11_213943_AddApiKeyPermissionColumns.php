@@ -6,10 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class AddApiKeyPermissionColumns extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::dropIfExists('api_permissions');
 
@@ -27,10 +24,7 @@ class AddApiKeyPermissionColumns extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::create('api_permissions', function (Blueprint $table) {
             $table->increments('id');

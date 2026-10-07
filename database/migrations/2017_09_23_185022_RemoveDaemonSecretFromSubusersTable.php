@@ -1,7 +1,6 @@
 <?php
 
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -9,10 +8,7 @@ use Pterodactyl\Contracts\Repository\DaemonKeyRepositoryInterface;
 
 class RemoveDaemonSecretFromSubusersTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         $inserts = [];
         $subusers = DB::table('subusers')->get();
@@ -37,10 +33,7 @@ class RemoveDaemonSecretFromSubusersTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('subusers', function (Blueprint $table) {
             $table->char('daemonSecret', 36)->after('server_id');

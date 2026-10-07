@@ -6,20 +6,14 @@ use Illuminate\Database\Migrations\Migration;
 
 class AddForceOutgoingIpColumnToEggsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('eggs', function (Blueprint $table) {
             $table->boolean('force_outgoing_ip')->default(false);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('eggs', function (Blueprint $table) {
             $table->dropColumn('force_outgoing_ip');

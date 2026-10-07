@@ -6,10 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class CascadeDeletionWhenAServerOrVariableIsDeleted extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('server_variables', function (Blueprint $table) {
             $table->dropForeign(['server_id']);
@@ -20,10 +17,7 @@ class CascadeDeletionWhenAServerOrVariableIsDeleted extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('server_variables', function (Blueprint $table) {
             $table->dropForeign(['server_id']);

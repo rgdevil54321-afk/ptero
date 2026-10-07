@@ -7,10 +7,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class UpgradeTaskSystem extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('tasks', function (Blueprint $table) {
             $table->dropForeign(['server']);
@@ -30,14 +27,9 @@ class UpgradeTaskSystem extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('tasks', function (Blueprint $table) {
-            //            $table->dropForeign(['server_id']);
-            //            $table->dropForeign(['user_id']);
 
             $table->renameColumn('server_id', 'server');
             $table->dropColumn('user_id');

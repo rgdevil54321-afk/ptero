@@ -10,12 +10,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class MergePermissionsTableIntoSubusers extends Migration
 {
-    /**
-     * A list of all pre-1.0 permissions available to a user and their associated
-     * casting for the new permissions system.
-     *
-     * @var array
-     */
     protected static $permissionsMap = [
         'power-start' => P::ACTION_CONTROL_START,
         'power-stop' => P::ACTION_CONTROL_STOP,
@@ -32,7 +26,6 @@ class MergePermissionsTableIntoSubusers extends Migration
         'view-startup' => P::ACTION_STARTUP_READ,
         'edit-startup' => P::ACTION_STARTUP_UPDATE,
         'view-databases' => P::ACTION_DATABASE_READ,
-        // Better to just break this flow a bit than accidentally grant a dangerous permission.
         'reset-db-password' => P::ACTION_DATABASE_UPDATE,
         'delete-database' => P::ACTION_DATABASE_DELETE,
         'create-database' => P::ACTION_DATABASE_CREATE,
@@ -48,21 +41,16 @@ class MergePermissionsTableIntoSubusers extends Migration
         'edit-schedule' => P::ACTION_SCHEDULE_UPDATE,
         'create-schedule' => P::ACTION_SCHEDULE_CREATE,
         'delete-schedule' => P::ACTION_SCHEDULE_DELETE,
-        // Skipping these permissions as they are granted if you have more specific read/write permissions.
         'move-files' => null,
         'copy-files' => null,
         'decompress-files' => null,
         'upload-files' => null,
         'download-files' => null,
-        // These permissions do not exist in 1.0
         'toggle-schedule' => null,
         'queue-schedule' => null,
     ];
 
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('subusers', function (Blueprint $table) {
             $table->json('permissions')->nullable()->after('server_id');
@@ -70,12 +58,7 @@ class MergePermissionsTableIntoSubusers extends Migration
 
         $cursor = DB::table('permissions')
             ->select(['subuser_id'])
-            ->when(DB::getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME) === 'mysql', function ($query) {
-                $query->selectRaw('group_concat(permission) as permissions');
-            })
-            ->when(DB::getPdo()->getAttribute(PDO::ATTR_DRIVER_NAME) === 'pgsql', function ($query) {
-                $query->selectRaw("string_agg(permission, ',') as permissions");
-            })
+            ->selectRaw('GROUP_CONCAT(permission) as permissions')
             ->from('permissions')
             ->groupBy(['subuser_id'])
             ->cursor();
@@ -88,7 +71,6 @@ class MergePermissionsTableIntoSubusers extends Migration
                     })->filter(function ($value) {
                         return !is_null($value) && $value !== Permission::ACTION_WEBSOCKET_CONNECT;
                     })
-                    // All subusers get this permission, so make sure it gets pushed into the array.
                     ->merge([Permission::ACTION_WEBSOCKET_CONNECT])
                     ->unique()
                     ->values()
@@ -99,10 +81,7 @@ class MergePermissionsTableIntoSubusers extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         $flipped = array_flip(array_filter(self::$permissionsMap));
 

@@ -114,17 +114,6 @@
                                 <textarea id="pStartup" name="startup" class="form-control" rows="8">{{ $egg->startup }}</textarea>
                                 <p class="text-muted small">The default startup command that should be used for new servers using this Egg.</p>
                             </div>
-                            <div class="form-group">
-                                <label for="pConfigFeatures" class="control-label">Features</label>
-                                <div>
-                                    <select class="form-control" name="features[]" id="pConfigFeatures" multiple>
-                                        @foreach(($egg->features ?? []) as $feature)
-                                            <option value="{{ $feature }}" selected>{{ $feature }}</option>
-                                        @endforeach
-                                    </select>
-                                    <p class="text-muted small">Additional features belonging to the egg. Useful for configuring additional panel modifications.</p>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -182,7 +171,9 @@
                 <div class="box-footer">
                     {!! csrf_field() !!}
                     <button type="submit" name="_method" value="PATCH" class="btn btn-primary btn-sm pull-right">Save</button>
-                    <a href="{{ route('admin.nests.egg.export', $egg->id) }}" class="btn btn-sm btn-info pull-right" style="margin-right:10px;">Export</a>
+                    @if(Auth::user()->root_admin || Auth::user()->hasAdminPermission('admin.nests.egg.export'))
+                        <a href="{{ route('admin.nests.egg.export', $egg->id) }}" class="btn btn-sm btn-info pull-right" style="margin-right:10px;">Export</a>
+                    @endif
                     <button id="deleteButton" type="submit" name="_method" value="DELETE" class="btn btn-danger btn-sm muted muted-hover">
                         <i class="fa fa-trash-o"></i>
                     </button>
@@ -212,11 +203,6 @@
 
             $(this).val(prepend + '    ' + append);
         }
-    });
-    $('#pConfigFeatures').select2({
-        tags: true,
-        selectOnClose: false,
-        tokenSeparators: [',', ' '],
     });
     </script>
 @endsection

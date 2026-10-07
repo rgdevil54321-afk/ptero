@@ -34,8 +34,12 @@
                 <div class="box-footer">
                     {!! csrf_field() !!}
                     {!! method_field('PATCH') !!}
+                    @if(Auth::user()->root_admin || Auth::user()->hasAdminPermission('admin.locations.update'))
                     <button name="action" value="edit" class="btn btn-sm btn-primary pull-right">Save</button>
+                    @endif
+                    @if(Auth::user()->root_admin || Auth::user()->hasAdminPermission('admin.locations.delete'))
                     <button name="action" value="delete" class="btn btn-sm btn-danger pull-left muted muted-hover"><i class="fa fa-trash-o"></i></button>
+                    @endif
                 </div>
             </form>
         </div>

@@ -3,9 +3,9 @@
     "target": "es2015",
     "module": "es2020",
     "jsx": "react-jsx",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "lib": [
-      "es2015",
+      "es2019",
       "dom"
     ],
     "strict": true,
@@ -15,18 +15,38 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "esModuleInterop": true,
+    "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
-    "verbatimModuleSyntax": false,
     "paths": {
       "@/*": [
-        "./resources/scripts/*"
+        "./DGEN/themes/Hyperv2/*"
       ],
       "@definitions/*": [
-        "./resources/scripts/api/definitions/*"
+        "./DGEN/themes/Hyperv2/api/definitions/*"
       ],
-      "@feature/*": [
-        "./resources/scripts/components/server/features/*"
+      "@DGEN/*": [
+        "./DGEN/*"
+      ],
+      "@DGEN/themes/Hyperv2/*": [
+        "./DGEN/themes/Hyperv2/*"
+      ],
+      "@DGEN/addons/*": [
+        "./DGEN/addons/*"
+      ],
+      "@DGEN/addons/theme-settings/*": [
+        "./DGEN/addons/theme-settings/*"
+      ],
+      "@DGEN/addons/admin-theme-settings/*": [
+        "./DGEN/addons/admin-theme-settings/*"
+      ],
+      "@DGEN/addons/recycle-bin/*": [
+        "./DGEN/addons/recycle-bin/*"
+      ],
+      "@DGEN/addons/notifications/*": [
+        "./DGEN/addons/notifications/*"
+      ],
+      "@DGEN/addons/alerts/*": [
+        "./DGEN/addons/alerts/*"
       ]
     },
     "plugins": [
@@ -39,7 +59,9 @@
     ]
   },
   "include": [
-    "./resources/scripts/**/*"
+    "./DGEN/themes/**/*",
+    "./DGEN/addons/**/*",
+    "./DGEN/globals.d.ts"
   ],
   "exclude": [
     "/node_modules/"

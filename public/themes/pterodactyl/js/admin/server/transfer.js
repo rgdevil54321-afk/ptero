@@ -6,6 +6,17 @@ $(document).ready(function () {
         dropdownParent: $modal,
     }).change();
 
+    if (typeof Pterodactyl !== 'undefined' && Array.isArray(Pterodactyl.nodeData)) {
+        $('#pNodeId option').each(function () {
+            const val = $(this).val();
+            const found = Pterodactyl.nodeData.find((n) => n.id == val);
+            if (found && found.server_limit !== null && found.servers_count >= found.server_limit) {
+                $(this).prop('disabled', true);
+                $(this).text($(this).text() + ' (limit reached)');
+            }
+        });
+    }
+
     $('#pAllocation').select2({
         placeholder: 'Select a Default Allocation',
         dropdownParent: $modal,
@@ -19,14 +30,12 @@ $(document).ready(function () {
 
 $('#pNodeId').on('change', function () {
     let currentNode = $(this).val();
-    const $modal = $('#transferServerModal');
 
     $.each(Pterodactyl.nodeData, function (i, v) {
         if (v.id == currentNode) {
             $('#pAllocation').html('').select2({
                 data: v.allocations,
                 placeholder: 'Select a Default Allocation',
-                dropdownParent: $modal,
             });
 
             updateAdditionalAllocations();
@@ -41,7 +50,6 @@ $('#pAllocation').on('change', function () {
 function updateAdditionalAllocations() {
     let currentAllocation = $('#pAllocation').val();
     let currentNode = $('#pNodeId').val();
-    const $modal = $('#transferServerModal');
 
     $.each(Pterodactyl.nodeData, function (i, v) {
         if (v.id == currentNode) {
@@ -58,7 +66,6 @@ function updateAdditionalAllocations() {
             $('#pAllocationAdditional').html('').select2({
                 data: allocations,
                 placeholder: 'Select Additional Allocations',
-                dropdownParent: $modal,
             });
         }
     });

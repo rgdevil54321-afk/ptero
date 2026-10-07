@@ -15,7 +15,7 @@
 
 @section('content')
 <div class="row">
-    <form method="post">
+    <form id="createUserForm" action="{{ route('admin.users.store') }}" method="post">
         <div class="col-md-6">
             <div class="box box-primary">
                 <div class="box-header with-border">
@@ -60,7 +60,7 @@
                 </div>
                 <div class="box-footer">
                     {!! csrf_field() !!}
-                    <input type="submit" value="Create User" class="btn btn-success btn-sm">
+                    <input id="createUserSubmit" type="submit" value="Create User" class="btn btn-success btn-sm" data-loading-text="Creating User...">
                 </div>
             </div>
         </div>
@@ -70,6 +70,7 @@
                     <h3 class="box-title">Permissions</h3>
                 </div>
                 <div class="box-body">
+                    @if(Auth::user()->root_admin)
                     <div class="form-group col-md-12">
                         <label for="root_admin" class="control-label">Administrator</label>
                         <div>
@@ -80,6 +81,7 @@
                             <p class="text-muted"><small>Setting this to 'Yes' gives a user full administrative access.</small></p>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -108,7 +110,36 @@
 
 @section('footer-scripts')
     @parent
-    <script>$("#gen_pass_bttn").click(function (event) {
+    <script>
+        (function () {
+            var $form = $('#createUserForm');
+            var $submit = $('#createUserSubmit');
+            var originalText = $submit.val();
+
+            function resetSubmit() {
+                $submit.val(originalText).prop('disabled', false).removeClass('disabled');
+            }
+
+            $form.on('submit', function () {
+                if ($submit.prop('disabled')) {
+                    return false;
+                }
+
+                $submit.val($submit.data('loading-text')).prop('disabled', true).addClass('disabled');
+
+                window.setTimeout(function () {
+                    if (document.visibilityState !== 'hidden') {
+                        resetSubmit();
+                    }
+                }, 15000);
+
+                return true;
+            });
+
+            $(window).on('pageshow', resetSubmit);
+        })();
+
+        $("#gen_pass_bttn").click(function (event) {
             event.preventDefault();
             $.ajax({
                 type: "GET",

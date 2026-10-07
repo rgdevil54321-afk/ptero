@@ -90,8 +90,10 @@
                         {!! csrf_field() !!}
                         {!! method_field('PATCH') !!}
 
+                        @if(Auth::user()->root_admin || Auth::user()->hasAdminPermission('admin.servers.mount'))
                         <button name="action" value="edit" class="btn btn-sm btn-primary pull-right">Save</button>
                         <button name="action" value="delete" class="btn btn-sm btn-danger pull-left muted muted-hover"><i class="fa fa-trash-o"></i></button>
+                        @endif
                     </div>
                 </form>
             </div>
@@ -103,7 +105,9 @@
                     <h3 class="box-title">Eggs</h3>
 
                     <div class="box-tools">
+                        @if(Auth::user()->root_admin || Auth::user()->hasAdminPermission('admin.servers.mount'))
                         <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addEggsModal">Add Eggs</button>
+                        @endif
                     </div>
                 </div>
 
@@ -120,7 +124,9 @@
                                 <td class="col-sm-2 middle"><code>{{ $egg->id }}</code></td>
                                 <td class="middle"><a href="{{ route('admin.nests.egg.view', $egg->id) }}">{{ $egg->name }}</a></td>
                                 <td class="col-sm-1 middle">
+                                    @if(Auth::user()->root_admin || Auth::user()->hasAdminPermission('admin.servers.mount'))
                                     <button data-action="detach-egg" data-id="{{ $egg->id }}" class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i></button>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
@@ -133,7 +139,9 @@
                     <h3 class="box-title">Nodes</h3>
 
                     <div class="box-tools">
+                        @if(Auth::user()->root_admin || Auth::user()->hasAdminPermission('admin.servers.mount'))
                         <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#addNodesModal">Add Nodes</button>
+                        @endif
                     </div>
                 </div>
 
@@ -152,7 +160,9 @@
                                 <td class="middle"><a href="{{ route('admin.nodes.view', $node->id) }}">{{ $node->name }}</a></td>
                                 <td class="middle"><code>{{ $node->fqdn }}</code></td>
                                 <td class="col-sm-1 middle">
+                                    @if(Auth::user()->root_admin || Auth::user()->hasAdminPermission('admin.servers.mount'))
                                     <button data-action="detach-node" data-id="{{ $node->id }}" class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i></button>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
@@ -278,7 +288,6 @@
                     element.parent().parent().addClass('warning').delay(100).fadeOut();
                     swal({ type: 'success', title: 'Egg detached.' });
                 }).fail(function (jqXHR) {
-                    console.error(jqXHR);
                     swal({
                         title: 'Whoops!',
                         text: jqXHR.responseJSON.error,
@@ -301,7 +310,6 @@
                     element.parent().parent().addClass('warning').delay(100).fadeOut();
                     swal({ type: 'success', title: 'Node detached.' });
                 }).fail(function (jqXHR) {
-                    console.error(jqXHR);
                     swal({
                         title: 'Whoops!',
                         text: jqXHR.responseJSON.error,

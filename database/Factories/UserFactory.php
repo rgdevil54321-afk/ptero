@@ -5,16 +5,13 @@ namespace Database\Factories;
 use Carbon\Carbon;
 use Ramsey\Uuid\Uuid;
 use Illuminate\Support\Str;
+use Pterodactyl\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\Pterodactyl\Models\User>
- */
 class UserFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     */
+    protected $model = User::class;
+
     public function definition(): array
     {
         static $password;
@@ -35,9 +32,6 @@ class UserFactory extends Factory
         ];
     }
 
-    /**
-     * Indicate that the user is an admin.
-     */
     public function admin(): static
     {
         return $this->state(['root_admin' => true]);

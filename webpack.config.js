@@ -2,6 +2,7 @@ const path = require('node:path');
 const webpack = require('webpack');
 const { WebpackAssetsManifest } = require('webpack-assets-manifest');
 const TerserPlugin = require('terser-webpack-plugin');
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -13,7 +14,7 @@ module.exports = {
     performance: {
         hints: false,
     },
-    entry: ['react-hot-loader/patch', './resources/scripts/index.tsx'],
+    entry: ['./DGEN/themes/Hyperv2/entry.tsx'],
     output: {
         path: path.join(__dirname, '/public/assets'),
         filename: isProduction ? 'bundle.[chunkhash:8].js' : 'bundle.[fullhash:8].js',
@@ -25,13 +26,33 @@ module.exports = {
         rules: [
             {
                 test: /\.tsx?$/,
-                exclude: /node_modules|\.spec\.tsx?$/,
+                exclude: /node_modules(?!\/ogl)|\.spec\.tsx?$/,
+                loader: 'babel-loader',
+            },
+            {
+                test: /\.c?js$/,
+                include: /node_modules\/(ogl|tailwind-merge|motion|framer-motion|motion-dom|pathe)/,
                 loader: 'babel-loader',
             },
             {
                 test: /\.mjs$/,
                 include: /node_modules/,
                 type: 'javascript/auto',
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [
+                            ['@babel/preset-env', {
+                                modules: false,
+                                useBuiltIns: 'entry',
+                                corejs: 3,
+                                targets: {
+                                    browsers: ['> 0.5%', 'last 2 versions', 'firefox esr', 'not dead']
+                                }
+                            }]
+                        ],
+                    }
+                }
             },
             {
                 test: /\.css$/,
@@ -42,11 +63,10 @@ module.exports = {
                         options: {
                             modules: {
                                 auto: true,
-                                // https://github.com/webpack/css-loader/blob/main/CHANGELOG.md#700-2024-04-04
                                 namedExport: false,
                                 exportLocalsConvention: 'as-is',
                                 localIdentName: isProduction ? '[name]_[hash:base64:8]' : '[path][name]__[local]',
-                                localIdentContext: path.join(__dirname, 'resources/scripts/components'),
+                                localIdentContext: path.join(__dirname, 'DGEN/themes/Hyperv2/components'),
                             },
                             sourceMap: !isProduction,
                             importLoaders: 1,
@@ -59,10 +79,10 @@ module.exports = {
                 ],
             },
             {
-                test: /\.(png|jp(e?)g|gif)$/,
-                loader: 'file-loader',
-                options: {
-                    name: 'images/[name].[hash:8].[ext]',
+                test: /\.(png|jp(e?)g|gif|avif)$/,
+                type: 'asset/resource',
+                generator: {
+                    filename: 'images/[name].[hash:8][ext]',
                 },
             },
             {
@@ -81,22 +101,26 @@ module.exports = {
         ],
     },
     stats: {
-        // Ignore warnings emitted by "source-map-loader" when trying to parse source maps from
-        // JS plugins we use, namely brace editor.
-        warningsFilter: [/Failed to parse source map/],
+        errorDetails: true,
     },
+    ignoreWarnings: [/Failed to parse source map/],
     resolve: {
-        extensions: ['.ts', '.tsx', '.js', '.json'],
+        extensions: ['.ts', '.tsx', '.js', '.json', '.mjs'],
         alias: {
-            '@': path.join(__dirname, '/resources/scripts'),
-            '@definitions': path.join(__dirname, '/resources/scripts/api/definitions'),
-            '@feature': path.join(__dirname, '/resources/scripts/components/server/features'),
+            '@': path.join(__dirname, '/DGEN/themes/Hyperv2'),
+            '@DGEN': path.join(__dirname, '/DGEN'),
+            '@definitions': path.join(__dirname, '/DGEN/themes/Hyperv2/api/definitions'),
+            'motion/react': path.resolve(__dirname, 'node_modules/motion/dist/cjs/react.js'),
+            'tailwind-merge': path.resolve(__dirname, 'node_modules/tailwind-merge/dist/bundle-mjs.mjs'),
+            'state-local': path.resolve(__dirname, 'node_modules/state-local/lib/cjs/state-local.js'),
+            'state-local/lib/es/state-local.js': path.resolve(
+                __dirname,
+                'node_modules/state-local/lib/cjs/state-local.js'
+            ),
         },
         symlinks: false,
     },
     externals: {
-        // Mark moment as an external to exclude it from the Chart.js build since we don't need to use
-        // it for anything.
         moment: 'moment',
     },
     plugins: [
@@ -111,6 +135,62 @@ module.exports = {
             publicPath: true,
             integrity: true,
             integrityHashes: ['sha384'],
+        }),
+        new MonacoWebpackPlugin({
+            languages: [
+                'javascript',
+                'typescript',
+                'json',
+                'css',
+                'html',
+                'python',
+                'php',
+                'java',
+                'csharp',
+                'cpp',
+                'ruby',
+                'go',
+                'rust',
+                'sql',
+                'shell',
+                'yaml',
+                'xml',
+                'markdown',
+                'lua',
+            ],
+            features: [
+                '!accessibilityHelp',
+                '!bracketMatching',
+                '!caretOperations',
+                '!clipboard',
+                '!comment',
+                '!contextmenu',
+                '!coreCommands',
+                '!cursorUndo',
+                '!dnd',
+                '!find',
+                '!folding',
+                '!format',
+                '!hover',
+                '!inPlaceReplace',
+                '!inspectTokens',
+                '!iPadShowKeyboard',
+                '!linesOperations',
+                '!linkedEditing',
+                '!links',
+                '!multicursor',
+                '!parameterHints',
+                '!quickCommand',
+                '!quickHelp',
+                '!quickOutline',
+                '!referenceSearch',
+                '!rename',
+                '!smartSelect',
+                '!suggest',
+                '!toggleHighContrast',
+                '!walkThrough',
+                '!viewportSemanticTokens',
+            ],
         }),
     ],
     optimization: {
@@ -143,10 +223,10 @@ module.exports = {
             type: 'https',
             options: process.env.USE_LOCAL_CERTS
                 ? {
-                      ca: path.join(__dirname, '../../docker/certificates/root_ca.pem'),
-                      cert: path.join(__dirname, '../../docker/certificates/pterodactyl.test.pem'),
-                      key: path.join(__dirname, '../../docker/certificates/pterodactyl.test-key.pem'),
-                  }
+                    ca: path.join(__dirname, '../../docker/certificates/root_ca.pem'),
+                    cert: path.join(__dirname, '../../docker/certificates/pterodactyl.test.pem'),
+                    key: path.join(__dirname, '../../docker/certificates/pterodactyl.test-key.pem'),
+                }
                 : undefined,
         },
         static: {

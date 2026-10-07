@@ -6,10 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class AddScriptsToServiceOptions extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('service_options', function (Blueprint $table) {
             $table->text('script_install')->after('startup')->nullable();
@@ -19,10 +16,7 @@ class AddScriptsToServiceOptions extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('service_options', function (Blueprint $table) {
             $table->dropColumn('script_install');

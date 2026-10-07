@@ -6,10 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateAuditLogsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::create('audit_logs', function (Blueprint $table) {
             $table->id();
@@ -28,10 +25,7 @@ class CreateAuditLogsTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('audit_logs');
     }

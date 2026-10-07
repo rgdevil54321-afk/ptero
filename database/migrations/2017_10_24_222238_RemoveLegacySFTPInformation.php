@@ -6,10 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class RemoveLegacySFTPInformation extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('servers', function (Blueprint $table) {
             $table->dropUnique(['username']);
@@ -19,10 +16,7 @@ class RemoveLegacySFTPInformation extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('servers', function (Blueprint $table) {
             $table->string('username')->nullable()->after('image')->unique();

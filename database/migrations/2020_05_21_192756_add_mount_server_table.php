@@ -6,10 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class AddMountServerTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::create('mount_server', function (Blueprint $table) {
             $table->integer('server_id');
@@ -19,10 +16,7 @@ class AddMountServerTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('mount_server');
     }

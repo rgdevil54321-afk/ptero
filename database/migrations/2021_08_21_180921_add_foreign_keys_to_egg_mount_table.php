@@ -6,22 +6,16 @@ use Illuminate\Database\Migrations\Migration;
 
 class AddForeignKeysToEggMountTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
-        // Fix the columns having a different type than their relations.
         Schema::table('egg_mount', function (Blueprint $table) {
             $table->unsignedInteger('egg_id')->change();
             $table->unsignedInteger('mount_id')->change();
         });
 
-        // Fetch an array of node and mount ids to check relations against.
         $eggs = DB::table('eggs')->select('id')->pluck('id')->toArray();
         $mounts = DB::table('mounts')->select('id')->pluck('id')->toArray();
 
-        // Drop any relations that are missing an egg or mount.
         DB::table('egg_mount')
             ->select('egg_id', 'mount_id')
             ->whereNotIn('egg_id', $eggs)
@@ -41,10 +35,7 @@ class AddForeignKeysToEggMountTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('egg_mount', function (Blueprint $table) {
             $table->dropForeign(['egg_id']);

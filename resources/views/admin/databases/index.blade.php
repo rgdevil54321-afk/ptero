@@ -19,7 +19,9 @@
             <div class="box-header with-border">
                 <h3 class="box-title">Host List</h3>
                 <div class="box-tools">
+                    @if(Auth::user()->root_admin || Auth::user()->hasAdminPermission('admin.servers.database'))
                     <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#newHostModal">Create New</button>
+                    @endif
                 </div>
             </div>
             <div class="box-body table-responsive no-padding">

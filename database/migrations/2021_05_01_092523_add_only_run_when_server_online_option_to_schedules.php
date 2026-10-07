@@ -6,20 +6,14 @@ use Illuminate\Database\Migrations\Migration;
 
 class AddOnlyRunWhenServerOnlineOptionToSchedules extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('schedules', function (Blueprint $table) {
             $table->unsignedTinyInteger('only_when_online')->after('is_processing')->default(0);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('schedules', function (Blueprint $table) {
             $table->dropColumn('only_when_online');

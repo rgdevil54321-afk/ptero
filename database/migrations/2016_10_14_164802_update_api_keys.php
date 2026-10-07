@@ -6,10 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class UpdateApiKeys extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('api_keys', function (Blueprint $table) {
             $table->unsignedInteger('user')->after('id');
@@ -18,10 +15,7 @@ class UpdateApiKeys extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('api_keys', function (Blueprint $table) {
             $table->dropColumn('user');

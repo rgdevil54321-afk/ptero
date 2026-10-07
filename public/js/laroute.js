@@ -32,7 +32,7 @@
                 var qs  = this.getRouteQueryString(parameters);
 
                 if (this.absolute && this.isOtherHost(route)){
-                    return "//" + route.host + "/" + uri + qs;
+                    return "
                 }
 
                 return this.getCorrectUrl(uri + qs);
@@ -53,7 +53,6 @@
                     }
                 });
 
-                // Strip out any optional parameters that were not given
                 uri = uri.replace(/\/\{.*?\?\}/g, '');
 
                 return uri;
@@ -124,48 +123,36 @@
         };
 
         return {
-            // Generate a url for a given controller action.
-            // Router.action('HomeController@getIndex', [params = {}])
             action : function (name, parameters) {
                 parameters = parameters || {};
 
                 return routes.route(name, parameters, routes.getByAction(name));
             },
 
-            // Generate a url for a given named route.
-            // Router.route('routeName', [params = {}])
             route : function (route, parameters) {
                 parameters = parameters || {};
 
                 return routes.route(route, parameters);
             },
 
-            // Generate a fully qualified URL to the given path.
-            // Router.route('url', [params = {}])
             url : function (route, parameters) {
                 parameters = parameters || {};
 
                 return routes.url(route, parameters);
             },
 
-            // Generate a html link to the given url.
-            // Router.link_to('foo/bar', [title = url], [attributes = {}])
             link_to : function (url, title, attributes) {
                 url = this.url(url);
 
                 return getHtmlLink(url, title, attributes);
             },
 
-            // Generate a html link to the given route.
-            // Router.link_to_route('route.name', [title=url], [parameters = {}], [attributes = {}])
             link_to_route : function (route, title, parameters, attributes) {
                 var url = this.route(route, parameters);
 
                 return getHtmlLink(url, title, attributes);
             },
 
-            // Generate a html link to the given controller action.
-            // Router.link_to_action('HomeController@getIndex', [title=url], [parameters = {}], [attributes = {}])
             link_to_action : function(action, title, parameters, attributes) {
                 var url = this.action(action, parameters);
 
@@ -176,9 +163,6 @@
 
     }).call(this);
 
-    /**
-     * Expose the class either via AMD, CommonJS or the global object
-     */
     if (typeof define === 'function' && define.amd) {
         define(function () {
             return laroute;

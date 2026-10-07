@@ -126,7 +126,6 @@
                 self.parent().parent().slideUp();
                 swal.close();
             }).fail(function (jqXHR) {
-                console.error(jqXHR);
                 swal({
                     type: 'error',
                     title: 'Whoops!',
@@ -151,7 +150,6 @@
                 text: 'The password for this database has been reset.',
             });
         }).fail(function(jqXHR, textStatus, errorThrown) {
-            console.error(jqXHR);
             var error = 'An error occurred while trying to process this request.';
             if (typeof jqXHR.responseJSON !== 'undefined' && typeof jqXHR.responseJSON.error !== 'undefined') {
                 error = jqXHR.responseJSON.error;

@@ -36,7 +36,14 @@
                             <tr>
                                 <td><code>
                                     @if (Auth::user()->is($key->user))
-                                        {{ $key->identifier . decrypt($key->token) }}
+                                        @php
+                                            try {
+                                                $decryptedToken = decrypt($key->token);
+                                            } catch (\Throwable $e) {
+                                                $decryptedToken = '****';
+                                            }
+                                        @endphp
+                                        {{ $key->identifier . $decryptedToken }}
                                     @else
                                         {{ $key->identifier . '****' }}
                                     @endif
@@ -99,7 +106,6 @@
                         });
                         self.parent().parent().slideUp();
                     }).fail(function (jqXHR) {
-                        console.error(jqXHR);
                         swal({
                             type: 'error',
                             title: 'Whoops!',

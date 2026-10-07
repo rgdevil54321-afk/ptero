@@ -6,10 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class AllowNullableDescriptions extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('eggs', function (Blueprint $table) {
             $table->text('description')->nullable()->change();
@@ -28,10 +25,7 @@ class AllowNullableDescriptions extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('eggs', function (Blueprint $table) {
             $table->text('description')->nullable(false)->change();

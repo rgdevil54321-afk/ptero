@@ -21,7 +21,9 @@
                     <h3 class="box-title">Mount List</h3>
 
                     <div class="box-tools">
+                        @if(Auth::user()->root_admin || Auth::user()->hasAdminPermission('admin.servers.mount'))
                         <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#newMountModal">Create New</button>
+                        @endif
                     </div>
                 </div>
 

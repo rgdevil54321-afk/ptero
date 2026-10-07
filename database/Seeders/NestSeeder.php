@@ -8,32 +8,18 @@ use Pterodactyl\Contracts\Repository\NestRepositoryInterface;
 
 class NestSeeder extends Seeder
 {
-    /**
-     * @var NestCreationService
-     */
     private $creationService;
 
-    /**
-     * @var NestRepositoryInterface
-     */
     private $repository;
 
-    /**
-     * NestSeeder constructor.
-     */
     public function __construct(
         NestCreationService $creationService,
-        NestRepositoryInterface $repository,
+        NestRepositoryInterface $repository
     ) {
         $this->creationService = $creationService;
         $this->repository = $repository;
     }
 
-    /**
-     * Run the seeder to add missing nests to the Panel.
-     *
-     * @throws \Pterodactyl\Exceptions\Model\DataValidationException
-     */
     public function run()
     {
         $items = $this->repository->findWhere([
@@ -44,13 +30,9 @@ class NestSeeder extends Seeder
         $this->createSourceEngineNest(array_get($items, 'Source Engine'));
         $this->createVoiceServersNest(array_get($items, 'Voice Servers'));
         $this->createRustNest(array_get($items, 'Rust'));
+        $this->createUtilitiesNest(array_get($items, 'Utilities'));
     }
 
-    /**
-     * Create the Minecraft nest to be used later on.
-     *
-     * @throws \Pterodactyl\Exceptions\Model\DataValidationException
-     */
     private function createMinecraftNest(?array $nest = null)
     {
         if (is_null($nest)) {
@@ -61,11 +43,6 @@ class NestSeeder extends Seeder
         }
     }
 
-    /**
-     * Create the Source Engine Games nest to be used later on.
-     *
-     * @throws \Pterodactyl\Exceptions\Model\DataValidationException
-     */
     private function createSourceEngineNest(?array $nest = null)
     {
         if (is_null($nest)) {
@@ -76,11 +53,6 @@ class NestSeeder extends Seeder
         }
     }
 
-    /**
-     * Create the Voice Servers nest to be used later on.
-     *
-     * @throws \Pterodactyl\Exceptions\Model\DataValidationException
-     */
     private function createVoiceServersNest(?array $nest = null)
     {
         if (is_null($nest)) {
@@ -91,17 +63,22 @@ class NestSeeder extends Seeder
         }
     }
 
-    /**
-     * Create the Rust nest to be used later on.
-     *
-     * @throws \Pterodactyl\Exceptions\Model\DataValidationException
-     */
     private function createRustNest(?array $nest = null)
     {
         if (is_null($nest)) {
             $this->creationService->handle([
                 'name' => 'Rust',
                 'description' => 'Rust - A game where you must fight to survive.',
+            ], 'support@pterodactyl.io');
+        }
+    }
+
+    private function createUtilitiesNest(?array $nest = null)
+    {
+        if (is_null($nest)) {
+            $this->creationService->handle([
+                'name' => 'Utilities',
+                'description' => 'Utility tools and importers for server management.',
             ], 'support@pterodactyl.io');
         }
     }

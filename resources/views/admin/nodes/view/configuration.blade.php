@@ -24,7 +24,18 @@
                 <li class="active"><a href="{{ route('admin.nodes.view.configuration', $node->id) }}">Configuration</a></li>
                 <li><a href="{{ route('admin.nodes.view.allocation', $node->id) }}">Allocation</a></li>
                 <li><a href="{{ route('admin.nodes.view.servers', $node->id) }}">Servers</a></li>
-            </ul>
+                @if($liveNodeStatsEnabled)
+                <li><a href="{{ route('admin.nodes.view.wings-stats', $node->id) }}">Wings Stats</a></li>
+                @if($firewallManagementEnabled ?? false)
+                    <li><a href="{{ route('admin.nodes.view.firewall', $node->id) }}">Firewall</a></li>
+                @endif
+                @endif
+                @if($radarEnabled ?? false)
+                    <li><a href="{{ route('admin.nodes.view.radar', $node->id) }}">Radar</a></li>
+                @endif
+                <li><a href="{{ route('admin.nodes.view.logs', $node->id) }}">Logs</a></li>
+                <li><a href="{{ route('admin.nodes.view.backups', $node->id) }}">Backups</a></li>
+</ul>
         </div>
     </div>
 </div>
@@ -54,7 +65,7 @@
                 </p>
             </div>
             <div class="box-footer">
-                <button type="button" id="configTokenBtn" class="btn btn-sm btn-default" style="width:100%;">Generate Token</button>
+                <button type="button" id="configTokenBtn" class="btn btn-sm btn-primary" style="width:100%;">Generate Token</button>
             </div>
         </div>
     </div>

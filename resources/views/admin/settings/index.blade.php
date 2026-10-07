@@ -27,7 +27,7 @@
                             <div class="form-group col-md-4">
                                 <label class="control-label">Company Name</label>
                                 <div>
-                                    <input type="text" class="form-control" name="app:name" value="{{ old('app:name', config('app.name')) }}" />
+                                    <input type="text" class="form-control" name="app:name" value="{{ old('app:name', $appName) }}" />
                                     <p class="text-muted"><small>This is the name that is used throughout the panel and in emails sent to clients.</small></p>
                                 </div>
                             </div>
@@ -36,7 +36,7 @@
                                 <div>
                                     <div class="btn-group" data-toggle="buttons">
                                         @php
-                                            $level = old('pterodactyl:auth:2fa_required', config('pterodactyl.auth.2fa_required'));
+                                            $level = old('pterodactyl:auth:2fa_required', $twoFaRequired);
                                         @endphp
                                         <label class="btn btn-primary @if ($level == 0) active @endif">
                                             <input type="radio" name="pterodactyl:auth:2fa_required" autocomplete="off" value="0" @if ($level == 0) checked @endif> Not Required
@@ -56,12 +56,25 @@
                                 <div>
                                     <select name="app:locale" class="form-control">
                                         @foreach($languages as $key => $value)
-                                            <option value="{{ $key }}" @if(config('app.locale') === $key) selected @endif>{{ $value }}</option>
+                                            <option value="{{ $key }}" @if(($appLocale ?? '') === $key) selected @endif>{{ $value }}</option>
                                         @endforeach
                                     </select>
                                     <p class="text-muted"><small>The default language to use when rendering UI components.</small></p>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <label class="control-label">Admin Theme</label>
+                                <div>
+                                    <select name="app:admin_theme" class="form-control">
+                                        <option value="default" @if(old('app:admin_theme', $adminTheme ?? 'default') === 'default') selected @endif>Default</option>
+                                        <option value="hyperv2" @if(old('app:admin_theme', $adminTheme ?? 'default') === 'hyperv2') selected @endif>Hyperv2</option>
+                                    </select>
+                                    <p class="text-muted"><small>Select the theme for the admin panel.</small></p>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                     <div class="box-footer">

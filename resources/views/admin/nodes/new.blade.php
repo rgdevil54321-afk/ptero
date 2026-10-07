@@ -33,7 +33,7 @@
                     </div>
                     <div class="form-group">
                         <label for="pLocationId" class="form-label">Location</label>
-                        <select name="location_id" id="pLocationId">
+                        <select name="location_id" id="pLocationId" class="form-control">
                             @foreach($locations as $location)
                                 <option value="{{ $location->id }}" {{ $location->id != old('location_id') ?: 'selected' }}>{{ $location->short }}</option>
                             @endforeach
@@ -152,8 +152,21 @@
                             <label for="pDaemonSFTP" class="form-label">Daemon SFTP Port</label>
                             <input type="text" name="daemonSFTP" class="form-control" id="pDaemonSFTP" value="2022" />
                         </div>
+                        <div class="form-group col-md-6">
+                            <label for="pSftpPortAlias" class="form-label">SFTP Port Alias</label>
+                            <input type="number" name="sftp_port_alias" class="form-control" id="pSftpPortAlias" value="{{ old('sftp_port_alias') }}" min="1" max="65535" />
+                        </div>
                         <div class="col-md-12">
                             <p class="text-muted small">The daemon runs its own SFTP management container and does not use the SSHd process on the main physical server. <Strong>Do not use the same port that you have assigned for your physical server's SSH process.</strong> If you will be running the daemon behind CloudFlare&reg; you should set the daemon port to <code>8443</code> to allow websocket proxying over SSL.</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <label for="pServerLimit" class="form-label">Server Limit</label>
+                            <input type="number" name="server_limit" class="form-control" id="pServerLimit" value="{{ old('server_limit') }}" placeholder="Leave blank for no restriction" />
+                        </div>
+                        <div class="col-md-12">
+                            <p class="text-muted small">Enter the maximum number of servers that can be created on this node. Leave empty or zero to disable the limit.</p>
                         </div>
                     </div>
                 </div>

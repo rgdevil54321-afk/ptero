@@ -6,20 +6,14 @@ use Illuminate\Database\Migrations\Migration;
 
 class MakeSftpPortUnsignedInt extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('nodes', function (Blueprint $table) {
             $table->unsignedSmallInteger('daemonSFTP')->default(2022)->change();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('nodes', function (Blueprint $table) {
             $table->smallInteger('daemonSFTP')->default(2022)->change();

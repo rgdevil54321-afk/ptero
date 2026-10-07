@@ -1,21 +1,16 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class ModifyIpStorageMethod extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('servers', function (Blueprint $table) {
             $table->mediumInteger('allocation')->unsigned()->after('oom_disabled');
         });
 
-        // Parse All Servers
         $servers = DB::select('SELECT id, ip, port, node FROM servers');
         foreach ($servers as $server) {
             $allocation = DB::select(
@@ -38,24 +33,19 @@ class ModifyIpStorageMethod extends Migration
             }
         }
 
-        // Updated the server allocations, remove old fields
         Schema::table('servers', function (Blueprint $table) {
             $table->dropColumn('ip');
             $table->dropColumn('port');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('servers', function (Blueprint $table) {
             $table->text('ip')->after('allocation');
             $table->integer('port')->unsigned()->after('ip');
         });
 
-        // Find the allocations and reset the servers...
         $servers = DB::select('SELECT id, allocation FROM servers');
         foreach ($servers as $server) {
             $allocation = DB::select('SELECT * FROM allocations WHERE id = :alocid', ['alocid' => $server->allocation]);

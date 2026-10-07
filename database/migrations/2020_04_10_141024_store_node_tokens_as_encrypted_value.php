@@ -10,12 +10,7 @@ use Illuminate\Contracts\Encryption\Encrypter;
 
 class StoreNodeTokensAsEncryptedValue extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @throws Exception
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('nodes', function (Blueprint $table) {
             $table->dropUnique(['daemonSecret']);
@@ -24,7 +19,6 @@ class StoreNodeTokensAsEncryptedValue extends Migration
         Schema::table('nodes', function (Blueprint $table) {
             $table->char('uuid', 36)->after('id');
             $table->char('daemon_token_id', 16)->after('upload_size');
-
             $table->renameColumn('daemonSecret', 'daemon_token');
         });
 
@@ -32,7 +26,6 @@ class StoreNodeTokensAsEncryptedValue extends Migration
             $table->text('daemon_token')->change();
         });
 
-        /** @var Encrypter $encrypter */
         $encrypter = Container::getInstance()->make(Encrypter::class);
 
         foreach (DB::select('SELECT id, daemon_token FROM nodes') as $datum) {
@@ -50,13 +43,9 @@ class StoreNodeTokensAsEncryptedValue extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         DB::transaction(function () {
-            /** @var Encrypter $encrypter */
             $encrypter = Container::getInstance()->make(Encrypter::class);
 
             foreach (DB::select('SELECT id, daemon_token_id, daemon_token FROM nodes') as $datum) {

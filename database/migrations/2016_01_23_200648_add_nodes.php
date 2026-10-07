@@ -1,15 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 class AddNodes extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::create('nodes', function (Blueprint $table) {
             $table->increments('id');
@@ -24,16 +20,13 @@ class AddNodes extends Migration
             $table->mediumInteger('disk_overallocate')->unsigned()->nullable();
             $table->char('daemonSecret', 36)->unique();
             $table->smallInteger('daemonListen')->unsigned()->default(8080);
-            $table->smallInteger('daemonSFTP')->unsigned()->default(2022);
+            $table->smallInteger('daemonSFTP')->unsgined()->default(2022);
             $table->string('daemonBase')->default('/home/daemon-files');
             $table->timestamps();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('nodes');
     }

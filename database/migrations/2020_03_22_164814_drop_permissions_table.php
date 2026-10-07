@@ -6,18 +6,12 @@ use Illuminate\Database\Migrations\Migration;
 
 class DropPermissionsTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::dropIfExists('permissions');
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::create('permissions', function (Blueprint $table) {
             $table->increments('id');

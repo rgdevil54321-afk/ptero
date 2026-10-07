@@ -6,10 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateUserRecoveryTokensTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::create('recovery_tokens', function (Blueprint $table) {
             $table->id();
@@ -21,10 +18,7 @@ class CreateUserRecoveryTokensTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('recovery_tokens');
     }

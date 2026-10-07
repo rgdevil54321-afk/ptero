@@ -24,7 +24,18 @@
                 <li><a href="{{ route('admin.nodes.view.configuration', $node->id) }}">Configuration</a></li>
                 <li><a href="{{ route('admin.nodes.view.allocation', $node->id) }}">Allocation</a></li>
                 <li><a href="{{ route('admin.nodes.view.servers', $node->id) }}">Servers</a></li>
-            </ul>
+                @if($liveNodeStatsEnabled)
+                <li><a href="{{ route('admin.nodes.view.wings-stats', $node->id) }}">Wings Stats</a></li>
+                @if($firewallManagementEnabled ?? false)
+                    <li><a href="{{ route('admin.nodes.view.firewall', $node->id) }}">Firewall</a></li>
+                @endif
+                @endif
+                @if($radarEnabled ?? false)
+                    <li><a href="{{ route('admin.nodes.view.radar', $node->id) }}">Radar</a></li>
+                @endif
+                <li><a href="{{ route('admin.nodes.view.logs', $node->id) }}">Logs</a></li>
+                <li><a href="{{ route('admin.nodes.view.backups', $node->id) }}">Backups</a></li>
+</ul>
         </div>
     </div>
 </div>
@@ -44,6 +55,13 @@
                         </div>
                     </div>
                     <div class="form-group col-xs-12">
+                        <label for="app_name" class="control-label">App Name</label>
+                        <div>
+                            <input type="text" autocomplete="off" name="app_name" class="form-control" value="{{ old('app_name', $node->app_name) }}" />
+                            <p class="text-muted"><small>The name of the application to be used in the Wings configuration. <strong>You may need to restart Wings for changes to take effect.</strong></small></p>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12">
                         <label for="description" class="control-label">Description</label>
                         <div>
                             <textarea name="description" id="description" rows="4" class="form-control">{{ $node->description }}</textarea>
@@ -54,7 +72,7 @@
                         <div>
                             <select name="location_id" class="form-control">
                                 @foreach($locations as $location)
-                                    <option value="{{ $location->id }}" {{ (((int) old('location_id', $node->location_id)) === $location->id) ? 'selected' : '' }}>{{ $location->long }} ({{ $location->short }})</option>
+                                    <option value="{{ $location->id }}" {{ (old('location_id', $node->location_id) === $location->id) ? 'selected' : '' }}>{{ $location->long }} ({{ $location->short }})</option>
                                 @endforeach
                             </select>
                         </div>
@@ -67,6 +85,13 @@
                         </div>
                     </div>
                     <div class="form-group col-xs-12">
+                        <label for="server_limit" class="control-label">Server Limit</label>
+                        <div>
+                            <input type="number" name="server_limit" class="form-control" value="{{ old('server_limit', $node->server_limit) }}" placeholder="Leave blank for no restriction" />
+                        </div>
+                        <p class="text-muted"><small>Maximum number of servers allowed on this node (null = unlimited).</small></p>
+                    </div>
+                    <div class="form-group col-xs-12">
                         <label for="fqdn" class="control-label">Fully Qualified Domain Name</label>
                         <div>
                             <input type="text" autocomplete="off" name="fqdn" class="form-control" value="{{ old('fqdn', $node->fqdn) }}" />
@@ -74,6 +99,20 @@
                         <p class="text-muted"><small>Please enter domain name (e.g <code>node.example.com</code>) to be used for connecting to the daemon. An IP address may only be used if you are not using SSL for this node.
                                 <a tabindex="0" data-toggle="popover" data-trigger="focus" title="Why do I need a FQDN?" data-content="In order to secure communications between your server and this node we use SSL. We cannot generate a SSL certificate for IP Addresses, and as such you will need to provide a FQDN.">Why?</a>
                             </small></p>
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="sftp_alias" class="control-label">SFTP IP Alias</label>
+                        <div>
+                            <input type="text" autocomplete="off" name="sftp_alias" class="form-control" value="{{ old('sftp_alias', $node->sftp_alias) }}" />
+                        </div>
+                        <p class="text-muted"><small>If set, this address will be used for SFTP connections instead of the FQDN.</small></p>
+                    </div>
+                    <div class="form-group col-xs-12">
+                        <label for="sftp_port_alias" class="control-label">SFTP Port Alias</label>
+                        <div>
+                            <input type="number" name="sftp_port_alias" class="form-control" value="{{ old('sftp_port_alias', $node->sftp_port_alias) }}" min="1" max="65535" />
+                        </div>
+                        <p class="text-muted"><small>If set, this port will be used for SFTP connections instead of the daemon SFTP port ({{ $node->daemonSFTP }}).</small></p>
                     </div>
                     <div class="form-group col-xs-12">
                         <label class="form-label"><span class="label label-warning"><i class="fa fa-power-off"></i></span> Communicate Over SSL</label>
@@ -174,6 +213,13 @@
                 </div>
                 <div class="box-body row">
                     <div class="form-group col-xs-12">
+                        <label for="daemonBase" class="control-label">Daemon Server File Directory</label>
+                        <div>
+                            <input type="text" name="daemonBase" class="form-control" value="{{ old('daemonBase', $node->daemonBase) }}"/>
+                            <p class="text-muted"><small>Enter the directory where server files should be stored. <strong>If you use OVH you should check your partition scheme. You may need to use <code>/home/daemon-data</code> to have enough space.</strong></small></p>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-12">
                         <label for="disk_overallocate" class="control-label">Maximum Web Upload Filesize</label>
                         <div class="input-group">
                             <input type="text" name="upload_size" class="form-control" value="{{ old('upload_size', $node->upload_size) }}"/>
@@ -221,7 +267,9 @@
                 <div class="box-footer">
                     {!! method_field('PATCH') !!}
                     {!! csrf_field() !!}
+                    @if(Auth::user()->root_admin || Auth::user()->hasAdminPermission('admin.nodes.update'))
                     <button type="submit" class="btn btn-primary pull-right">Save Changes</button>
+                    @endif
                 </div>
             </div>
         </div>

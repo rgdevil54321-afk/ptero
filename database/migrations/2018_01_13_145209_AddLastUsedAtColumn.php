@@ -6,10 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class AddLastUsedAtColumn extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('api_keys', function (Blueprint $table) {
             $table->unsignedTinyInteger('key_type')->after('user_id')->default(0);
@@ -24,10 +21,7 @@ class AddLastUsedAtColumn extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('api_keys', function (Blueprint $table) {
             $table->timestamp('expires_at')->after('memo')->nullable();

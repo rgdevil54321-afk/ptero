@@ -1,0 +1,9 @@
+{
+    "product": "HyperV2",
+    "version": "v2.1.2",
+    "file_slug": "ioncube-key",
+    "runtime_key_path": "/etc/hyperv2/ioncube/hyperv2-release.key",
+    "key_file": "hyperv2-release.key",
+    "key_sha256": "eed95d072578e4d972e3ccf7b58c34a08bca7ac8e58c3460b8d82e1f1742a264",
+    "generated_at": "2026-08-20T00:16:21+00:00"
+}

@@ -8,10 +8,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class ChangeToABetterUniqueServiceConfiguration extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('service_options', function (Blueprint $table) {
             $table->char('uuid', 36)->after('id');
@@ -37,10 +34,7 @@ class ChangeToABetterUniqueServiceConfiguration extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('service_options', function (Blueprint $table) {
             $table->dropColumn('uuid');

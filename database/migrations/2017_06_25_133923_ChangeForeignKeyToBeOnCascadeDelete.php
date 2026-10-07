@@ -6,10 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class ChangeForeignKeyToBeOnCascadeDelete extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('api_permissions', function (Blueprint $table) {
             $table->dropForeign(['key_id']);
@@ -18,10 +15,7 @@ class ChangeForeignKeyToBeOnCascadeDelete extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('api_permissions', function (Blueprint $table) {
             $table->dropForeign(['key_id']);

@@ -74,8 +74,10 @@
                 </div>
                 <div class="box-footer">
                     {!! csrf_field() !!}
+                    @if(Auth::user()->root_admin || Auth::user()->hasAdminPermission('admin.servers.database'))
                     <button name="_method" value="PATCH" class="btn btn-sm btn-primary pull-right">Save</button>
                     <button name="_method" value="DELETE" class="btn btn-sm btn-danger pull-left muted muted-hover"><i class="fa fa-trash-o"></i></button>
+                    @endif
                 </div>
             </div>
         </div>

@@ -165,7 +165,6 @@
         }
 
         function showErrorDialog(jqXHR, verb) {
-            console.error(jqXHR);
             var errorText = '';
             if (!jqXHR.responseJSON) {
                 errorText = jqXHR.responseText;

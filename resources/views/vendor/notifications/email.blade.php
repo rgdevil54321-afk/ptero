@@ -6,7 +6,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
     <style type="text/css" rel="stylesheet" media="all">
-        /* Media Queries */
         @media only screen and (max-width: 500px) {
             .button {
                 width: 100% !important;
@@ -14,16 +13,31 @@
         }
     </style>
 </head>
+<?php
+$hyperThemeConfig = [];
+try {
+    $hyperThemeConfigRaw = null;
+        $settingsRepository = app(Pterodactyl\Repositories\Eloquent\SettingsRepository::class);
+        $hyperThemeConfigRaw = $settingsRepository->get('settings::app:theme:hyperv2', '{}');
+
+    if (!empty($hyperThemeConfigRaw)) {
+        $hyperThemeConfig = json_decode($hyperThemeConfigRaw, true);
+    }
+} catch (\Exception $e) { }
+
+$useHyperTheme = !empty($hyperThemeConfig) && !empty($hyperThemeConfig['variables']);
+?>
+
+@if($useHyperTheme)
+    @include('vendor.notifications.hyper', ['themeConfig' => $hyperThemeConfig])
+@else
 
 <?php
-
 $style = [
-    /* Layout ------------------------------ */
 
     'body' => 'margin: 0; padding: 0; width: 100%; background-color: #F2F4F6;',
     'email-wrapper' => 'width: 100%; margin: 0; padding: 0; background-color: #F2F4F6;',
 
-    /* Masthead ----------------------- */
 
     'email-masthead' => 'padding: 25px 0; text-align: center;',
     'email-masthead_name' => 'font-size: 16px; font-weight: bold; color: #2F3133; text-decoration: none; text-shadow: 0 1px 0 white;',
@@ -35,12 +49,10 @@ $style = [
     'email-footer' => 'width: auto; max-width: 570px; margin: 0 auto; padding: 0; text-align: center;',
     'email-footer_cell' => 'color: #AEAEAE; padding: 35px; text-align: center;',
 
-    /* Body ------------------------------ */
 
     'body_action' => 'width: 100%; margin: 30px auto; padding: 0; text-align: center;',
     'body_sub' => 'margin-top: 25px; padding-top: 25px; border-top: 1px solid #EDEFF2;',
 
-    /* Type ------------------------------ */
 
     'anchor' => 'color: #3869D4;',
     'header-1' => 'margin-top: 0; color: #2F3133; font-size: 19px; font-weight: bold; text-align: left;',
@@ -48,7 +60,6 @@ $style = [
     'paragraph-sub' => 'margin-top: 0; color: #74787E; font-size: 12px; line-height: 1.5em;',
     'paragraph-center' => 'text-align: center;',
 
-    /* Buttons ------------------------------ */
 
     'button' => 'display: block; display: inline-block; width: 200px; min-height: 20px; padding: 10px;
                  background-color: #3869D4; border-radius: 3px; color: #ffffff; font-size: 15px; line-height: 25px;
@@ -190,3 +201,4 @@ $style = [
     </table>
 </body>
 </html>
+@endif

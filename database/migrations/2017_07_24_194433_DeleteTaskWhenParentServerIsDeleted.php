@@ -6,10 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class DeleteTaskWhenParentServerIsDeleted extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('tasks', function (Blueprint $table) {
             $table->dropForeign(['server_id']);
@@ -18,10 +15,7 @@ class DeleteTaskWhenParentServerIsDeleted extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
     }
 }

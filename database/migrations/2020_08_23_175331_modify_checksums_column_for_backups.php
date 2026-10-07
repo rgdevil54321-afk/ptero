@@ -7,10 +7,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class ModifyChecksumsColumnForBackups extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('backups', function (Blueprint $table) {
             $table->renameColumn('sha256_hash', 'checksum');
@@ -21,10 +18,7 @@ class ModifyChecksumsColumnForBackups extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('backups', function (Blueprint $table) {
             $table->renameColumn('checksum', 'sha256_hash');

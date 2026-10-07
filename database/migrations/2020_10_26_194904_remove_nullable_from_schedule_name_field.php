@@ -7,10 +7,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class RemoveNullableFromScheduleNameField extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         DB::update("UPDATE schedules SET name = 'Schedule' WHERE name IS NULL OR name = ''");
 
@@ -19,10 +16,7 @@ class RemoveNullableFromScheduleNameField extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('schedules', function (Blueprint $table) {
             $table->string('name')->nullable()->change();

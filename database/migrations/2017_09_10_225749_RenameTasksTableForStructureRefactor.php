@@ -5,18 +5,12 @@ use Illuminate\Database\Migrations\Migration;
 
 class RenameTasksTableForStructureRefactor extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::rename('tasks', 'tasks_old');
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::rename('tasks_old', 'tasks');
     }

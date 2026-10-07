@@ -1,4 +1,3 @@
-/* global define, KeyboardEvent, module */
 
 (function () {
 
@@ -75,13 +74,11 @@
     }
   };
 
-  // Function keys (F1-24).
   var i;
   for (i = 1; i < 25; i++) {
     keyboardeventKeyPolyfill.keys[111 + i] = 'F' + i;
   }
 
-  // Printable ASCII characters.
   var letter = '';
   for (i = 65; i < 91; i++) {
     letter = String.fromCharCode(i);
@@ -94,7 +91,6 @@
       return false;
     }
 
-    // Polyfill `key` on `KeyboardEvent`.
     var proto = {
       get: function (x) {
         var key = keyboardeventKeyPolyfill.keys[this.which || this.keyCode];

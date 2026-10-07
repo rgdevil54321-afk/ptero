@@ -15,30 +15,22 @@ class EggSeeder extends Seeder
 
     protected EggUpdateImporterService $updateImporterService;
 
-    /**
-     * @var string[]
-     */
     public static array $import = [
         'Minecraft',
         'Source Engine',
         'Voice Servers',
         'Rust',
+        'Utilities',
     ];
 
-    /**
-     * EggSeeder constructor.
-     */
     public function __construct(
         EggImporterService $importerService,
-        EggUpdateImporterService $updateImporterService,
+        EggUpdateImporterService $updateImporterService
     ) {
         $this->importerService = $importerService;
         $this->updateImporterService = $updateImporterService;
     }
 
-    /**
-     * Run the egg seeder.
-     */
     public function run()
     {
         foreach (static::$import as $nest) {
@@ -49,15 +41,11 @@ class EggSeeder extends Seeder
         }
     }
 
-    /**
-     * Loop through the list of egg files and import them.
-     */
     protected function parseEggFiles(Nest $nest)
     {
         $files = new \DirectoryIterator(database_path('Seeders/eggs/' . kebab_case($nest->name)));
 
         $this->command->alert('Updating Eggs for Nest: ' . $nest->name);
-        /** @var \DirectoryIterator $file */
         foreach ($files as $file) {
             if (!$file->isFile() || !$file->isReadable()) {
                 continue;

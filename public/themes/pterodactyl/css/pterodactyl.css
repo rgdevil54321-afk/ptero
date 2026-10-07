@@ -1,32 +1,9 @@
-/**
- * Pterodactyl - Panel
- * Copyright (c) 2015 - 2017 Dane Everitt <dane@daneeveritt.com>
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
  @import 'checkbox.css';
 
 .login-page {
     background: #10529f;
 }
 
-#login-position-elements {
     margin: 25% auto;
 }
 
@@ -161,7 +138,6 @@ p.small {
     vertical-align: middle !important;
 }
 
-#fileOptionMenu.dropdown-menu > li > a {
     padding:3px 6px;
 }
 
@@ -425,7 +401,6 @@ input.form-autocomplete-stop[readonly] {
     cursor: text;
 }
 
-/* fix Google Recaptcha badge */
 .grecaptcha-badge {
     bottom: 54px !important;
     background: white;
@@ -489,11 +464,6 @@ label.control-label > span.field-optional:before {
 }
 
 
-/* *******
-
-  > Version v1.0
-
-******* */
 
 body {
     color: #cad1d8;
@@ -832,24 +802,4 @@ pre {
     color: #cad1d8;
     background-color: #515f6cbb;
     border-color: #1f2933;
-}
-
-/* Make the row a flex container so all columns in the same row can have equal height */
-.equal-height {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-.equal-height>[class*="col-"] {
-    display: flex;
-}
-
-.equal-height .box {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-
-.equal-height .box-body {
-    flex: 1;
 }

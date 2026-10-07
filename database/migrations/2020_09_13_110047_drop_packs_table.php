@@ -6,18 +6,12 @@ use Illuminate\Database\Migrations\Migration;
 
 class DropPacksTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::dropIfExists('packs');
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::create('packs', function (Blueprint $table) {
             $table->increments('id');

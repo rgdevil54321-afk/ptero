@@ -24,7 +24,18 @@
                 <li><a href="{{ route('admin.nodes.view.configuration', $node->id) }}">Configuration</a></li>
                 <li class="active"><a href="{{ route('admin.nodes.view.allocation', $node->id) }}">Allocation</a></li>
                 <li><a href="{{ route('admin.nodes.view.servers', $node->id) }}">Servers</a></li>
-            </ul>
+                @if($liveNodeStatsEnabled)
+                <li><a href="{{ route('admin.nodes.view.wings-stats', $node->id) }}">Wings Stats</a></li>
+                @if($firewallManagementEnabled ?? false)
+                    <li><a href="{{ route('admin.nodes.view.firewall', $node->id) }}">Firewall</a></li>
+                @endif
+                @endif
+                @if($radarEnabled ?? false)
+                    <li><a href="{{ route('admin.nodes.view.radar', $node->id) }}">Radar</a></li>
+                @endif
+                <li><a href="{{ route('admin.nodes.view.logs', $node->id) }}">Logs</a></li>
+                <li><a href="{{ route('admin.nodes.view.backups', $node->id) }}">Backups</a></li>
+</ul>
         </div>
     </div>
 </div>
@@ -217,7 +228,6 @@
                 element.parent().parent().addClass('warning').delay(100).fadeOut();
                 swal({ type: 'success', title: 'Port Deleted!' });
             }).fail(function (jqXHR) {
-                console.error(jqXHR);
                 swal({
                     title: 'Whoops!',
                     text: jqXHR.responseJSON.error,
@@ -249,7 +259,6 @@
         }).done(function () {
             element.parent().addClass('has-success');
         }).fail(function (jqXHR) {
-            console.error(jqXHR);
             element.parent().addClass('has-error');
         }).always(function () {
             element.parent().find('.input-loader').hide();
@@ -335,7 +344,6 @@
                         title: 'Allocations Deleted'
                     });
                 }).fail(function (jqXHR) {
-                    console.error(jqXHR);
                     swal({
                         type: 'error',
                         title: 'Whoops!',

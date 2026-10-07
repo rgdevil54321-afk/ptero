@@ -5,10 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class UpdateOldPermissionsToPointToNewScheduleSystem extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         $permissions = DB::table('permissions')->where('permission', 'like', '%-task%')->get();
         foreach ($permissions as $record) {
@@ -23,10 +20,7 @@ class UpdateOldPermissionsToPointToNewScheduleSystem extends Migration
         }
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         $permissions = DB::table('permissions')->where('permission', 'like', '%-schedule%')->get();
         foreach ($permissions as $record) {

@@ -6,20 +6,14 @@ use Illuminate\Database\Migrations\Migration;
 
 class AddAbilityToDefineConnectionOverSSLWithDaemonBehindProxy extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('nodes', function (Blueprint $table) {
             $table->boolean('behind_proxy')->after('scheme')->default(false);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('nodes', function (Blueprint $table) {
             $table->dropColumn('behind_proxy');

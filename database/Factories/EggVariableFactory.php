@@ -8,16 +8,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class EggVariableFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = EggVariable::class;
 
-    /**
-     * Define the model's default state.
-     */
     public function definition(): array
     {
         return [
@@ -31,9 +23,6 @@ class EggVariableFactory extends Factory
         ];
     }
 
-    /**
-     * Indicate that the egg variable is viewable.
-     */
     public function viewable(): static
     {
         return $this->state(function (array $attributes) {
@@ -43,9 +32,6 @@ class EggVariableFactory extends Factory
         });
     }
 
-    /**
-     * Indicate that the egg variable is editable.
-     */
     public function editable(): static
     {
         return $this->state(function (array $attributes) {

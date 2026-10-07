@@ -6,20 +6,14 @@ use Illuminate\Database\Migrations\Migration;
 
 class AddSupportForLockingABackup extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('backups', function (Blueprint $table) {
             $table->unsignedTinyInteger('is_locked')->after('is_successful')->default(0);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('backups', function (Blueprint $table) {
             $table->dropColumn('is_locked');

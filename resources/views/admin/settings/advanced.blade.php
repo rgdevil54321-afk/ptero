@@ -28,8 +28,8 @@
                                 <label class="control-label">Status</label>
                                 <div>
                                     <select class="form-control" name="recaptcha:enabled">
-                                        <option value="true">Enabled</option>
-                                        <option value="false" @if(old('recaptcha:enabled', config('recaptcha.enabled')) == '0') selected @endif>Disabled</option>
+                                        <option value="true" @if(old('recaptcha:enabled', $recaptchaEnabled) === true || old('recaptcha:enabled', $recaptchaEnabled) === 'true') selected @endif>Enabled</option>
+                                        <option value="false" @if(old('recaptcha:enabled', $recaptchaEnabled) === false || old('recaptcha:enabled', $recaptchaEnabled) === 'false' || old('recaptcha:enabled', $recaptchaEnabled) === '0') selected @endif>Disabled</option>
                                     </select>
                                     <p class="text-muted small">If enabled, login forms and password reset forms will do a silent captcha check and display a visible captcha if needed.</p>
                                 </div>
@@ -37,13 +37,13 @@
                             <div class="form-group col-md-4">
                                 <label class="control-label">Site Key</label>
                                 <div>
-                                    <input type="text" required class="form-control" name="recaptcha:website_key" value="{{ old('recaptcha:website_key', config('recaptcha.website_key')) }}">
+                                    <input type="text" required class="form-control" name="recaptcha:website_key" value="{{ old('recaptcha:website_key', $recaptchaWebsiteKey) }}">
                                 </div>
                             </div>
                             <div class="form-group col-md-4">
                                 <label class="control-label">Secret Key</label>
                                 <div>
-                                    <input type="text" required class="form-control" name="recaptcha:secret_key" value="{{ old('recaptcha:secret_key', config('recaptcha.secret_key')) }}">
+                                    <input type="text" required class="form-control" name="recaptcha:secret_key" value="{{ old('recaptcha:secret_key', $recaptchaSecretKey) }}">
                                     <p class="text-muted small">Used for communication between your site and Google. Be sure to keep it a secret.</p>
                                 </div>
                             </div>
@@ -68,14 +68,14 @@
                             <div class="form-group col-md-6">
                                 <label class="control-label">Connection Timeout</label>
                                 <div>
-                                    <input type="number" required class="form-control" name="pterodactyl:guzzle:connect_timeout" value="{{ old('pterodactyl:guzzle:connect_timeout', config('pterodactyl.guzzle.connect_timeout')) }}">
+                                    <input type="number" required class="form-control" name="pterodactyl:guzzle:connect_timeout" value="{{ old('pterodactyl:guzzle:connect_timeout', $guzzleConnectTimeout) }}">
                                     <p class="text-muted small">The amount of time in seconds to wait for a connection to be opened before throwing an error.</p>
                                 </div>
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="control-label">Request Timeout</label>
                                 <div>
-                                    <input type="number" required class="form-control" name="pterodactyl:guzzle:timeout" value="{{ old('pterodactyl:guzzle:timeout', config('pterodactyl.guzzle.timeout')) }}">
+                                    <input type="number" required class="form-control" name="pterodactyl:guzzle:timeout" value="{{ old('pterodactyl:guzzle:timeout', $guzzleTimeout) }}">
                                     <p class="text-muted small">The amount of time in seconds to wait for a request to be completed before throwing an error.</p>
                                 </div>
                             </div>
@@ -93,7 +93,7 @@
                                 <div>
                                     <select class="form-control" name="pterodactyl:client_features:allocations:enabled">
                                         <option value="false">Disabled</option>
-                                        <option value="true" @if(old('pterodactyl:client_features:allocations:enabled', config('pterodactyl.client_features.allocations.enabled'))) selected @endif>Enabled</option>
+                                        <option value="true" @if(old('pterodactyl:client_features:allocations:enabled', $allocationsEnabled)) selected @endif>Enabled</option>
                                     </select>
                                     <p class="text-muted small">If enabled users will have the option to automatically create new allocations for their server via the frontend.</p>
                                 </div>
@@ -101,14 +101,14 @@
                             <div class="form-group col-md-4">
                                 <label class="control-label">Starting Port</label>
                                 <div>
-                                    <input type="number" class="form-control" name="pterodactyl:client_features:allocations:range_start" value="{{ old('pterodactyl:client_features:allocations:range_start', config('pterodactyl.client_features.allocations.range_start')) }}">
+                                    <input type="number" class="form-control" name="pterodactyl:client_features:allocations:range_start" value="{{ old('pterodactyl:client_features:allocations:range_start', $allocationsRangeStart) }}">
                                     <p class="text-muted small">The starting port in the range that can be automatically allocated.</p>
                                 </div>
                             </div>
                             <div class="form-group col-md-4">
                                 <label class="control-label">Ending Port</label>
                                 <div>
-                                    <input type="number" class="form-control" name="pterodactyl:client_features:allocations:range_end" value="{{ old('pterodactyl:client_features:allocations:range_end', config('pterodactyl.client_features.allocations.range_end')) }}">
+                                    <input type="number" class="form-control" name="pterodactyl:client_features:allocations:range_end" value="{{ old('pterodactyl:client_features:allocations:range_end', $allocationsRangeEnd) }}">
                                     <p class="text-muted small">The ending port in the range that can be automatically allocated.</p>
                                 </div>
                             </div>

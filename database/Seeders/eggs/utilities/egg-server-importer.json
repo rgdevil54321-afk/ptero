@@ -1,0 +1,86 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2025-10-23T00:00:00+00:00",
+    "name": "Server Importer Hyper",
+    "author": "DGENs@gmail.com",
+    "description": "Imports all files and folders from an SFTP or FTP server to the server directory. Requires IP, port, username, and password.",
+    "features": [],
+    "docker_images": {
+        "Debian": "ghcr.io/pterodactyl/yolks:debian"
+    },
+    "file_denylist": [],
+    "startup": "echo 'Server Importer - Import completed during installation. No runtime server.'",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"Server Importer - Import completed\"\r\n}",
+        "logs": "{}",
+        "stop": "echo 'Stopping importer (no-op)'"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!/bin/bash\n# Server Importer Installation Script\n#\n# Server Files: /mnt/server\n\napt-get update && apt-get install -y lftp\n\necho \"[ServerImporter] Starting import process...\"\necho \"[ServerImporter] Protocol: $PROTOCOL\"\necho \"[ServerImporter] Host: $FTP_HOST\"\necho \"[ServerImporter] Port: $FTP_PORT\"\necho \"[ServerImporter] User: $FTP_USER\"\necho \"[ServerImporter] Remote Path: $REMOTE_PATH\"\necho \"[ServerImporter] Local Path: /mnt/server\"\n\necho \"[ServerImporter] Beginning file transfer...\"\n\nIMPORT_START_TIME=$(date +%s)\n\nif [ \"$PROTOCOL\" == \"SFTP\" ]; then\n    echo \"[ServerImporter] Using SFTP protocol\"\n    timeout 43200 lftp -c \"set net:timeout 30; set net:reconnect-interval-base 5; set sftp:connect-program \\\"ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null\\\"; open sftp://$FTP_USER:$FTP_PASS@$FTP_HOST:$FTP_PORT; mirror --verbose --parallel=5 $REMOTE_PATH /mnt/server\"\n    LFTP_EXIT_CODE=$?\nelse\n    echo \"[ServerImporter] Using FTP protocol\"\n    timeout 43200 lftp -c \"set ftp:ssl-allow no; set net:timeout 30; set net:reconnect-interval-base 5; open -u $FTP_USER,$FTP_PASS $FTP_HOST:$FTP_PORT; mirror --verbose --parallel=5 $REMOTE_PATH /mnt/server\"\n    LFTP_EXIT_CODE=$?\nfi\n\nIMPORT_END_TIME=$(date +%s)\nIMPORT_DURATION=$((IMPORT_END_TIME - IMPORT_START_TIME))\n\necho \"[ServerImporter] File transfer completed\"\necho \"[ServerImporter] LFTP exit code: $LFTP_EXIT_CODE\"\necho \"[ServerImporter] Transfer duration: ${IMPORT_DURATION}s\"\n\necho \"[ServerImporter] Checking imported files...\"\nFILE_COUNT=$(find /mnt/server -type f | wc -l)\nDIR_COUNT=$(find /mnt/server -type d | wc -l)\necho \"[ServerImporter] Imported $FILE_COUNT files in $DIR_COUNT directories\"\n\necho \"[ServerImporter] Creating completion marker...\"\necho \"{\\\"completed_at\\\": \\\"$(date -Iseconds)\\\", \\\"duration\\\": $IMPORT_DURATION, \\\"files\\\": $FILE_COUNT, \\\"exit_code\\\": $LFTP_EXIT_CODE}\" > /mnt/server/.server-importer-completed.json\n\necho \"[ServerImporter] Import process finished successfully\"",
+            "container": "ghcr.io/pterodactyl/installers:debian",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Protocol",
+            "description": "Choose FTP or SFTP for the import.",
+            "env_variable": "PROTOCOL",
+            "default_value": "FTP",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|in:FTP,SFTP"
+        },
+        {
+            "name": "FTP/SFTP Host",
+            "description": "The IP address or hostname of the FTP/SFTP server.",
+            "env_variable": "FTP_HOST",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:255"
+        },
+        {
+            "name": "FTP/SFTP Port",
+            "description": "The port of the FTP/SFTP server (default 21 for FTP, 22 for SFTP).",
+            "env_variable": "FTP_PORT",
+            "default_value": "2021",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|numeric|min:1|max:65535"
+        },
+        {
+            "name": "Username",
+            "description": "The username for FTP/SFTP authentication.",
+            "env_variable": "FTP_USER",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:255"
+        },
+        {
+            "name": "Password",
+            "description": "The password for FTP/SFTP authentication.",
+            "env_variable": "FTP_PASS",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:255"
+        },
+        {
+            "name": "Remote Path",
+            "description": "The remote directory path to import from (leave empty for root).",
+            "env_variable": "REMOTE_PATH",
+            "default_value": "/",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:255"
+        }
+    ]
+}

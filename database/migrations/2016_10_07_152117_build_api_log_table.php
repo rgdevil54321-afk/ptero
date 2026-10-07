@@ -6,10 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class BuildApiLogTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::create('api_logs', function (Blueprint $table) {
             $table->increments('id');
@@ -25,10 +22,7 @@ class BuildApiLogTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::drop('api_logs');
     }

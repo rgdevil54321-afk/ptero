@@ -1,0 +1,2983 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Console/Commands/CheckScheduledWipes.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Console/Commands/CheckScheduledWipes.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$short\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Console/Commands/Node/NodeListCommand.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Console/Commands/ProcessScheduledWipes.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Console/Commands/ProcessScheduledWipes.php
+
+		-
+			message: '#^Property Pterodactyl\\Console\\Commands\\DGEN\\ArmaReforgerWebhookLogCommand\:\:\$armaReforgerService is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Console/Commands/DGEN/ArmaReforgerWebhookLogCommand.php
+
+		-
+			message: '#^Result of \|\| is always false\.$#'
+			identifier: booleanOr.alwaysFalse
+			count: 1
+			path: app/Console/Commands/DGEN/ArmaReforgerWebhookLogCommand.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between string and false will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: app/Console/Commands/DGEN/ArmaReforgerWebhookLogCommand.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between string and null will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 1
+			path: app/Console/Commands/DGEN/ArmaReforgerWebhookLogCommand.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Console/Commands/DGEN/RunDiscordBot.php
+
+		-
+			message: '#^Anonymous function has an unused use \$service\.$#'
+			identifier: closure.unusedUse
+			count: 1
+			path: app/Console/Commands/DGEN/RunDiscordBot.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Console/Commands/Server/AutoRejectExpiredStaffRequestsCommand.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$username\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Console/Commands/Server/AutoRejectExpiredStaffRequestsCommand.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:send\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Console/Commands/Server/BulkPowerActionCommand.php
+
+		-
+			message: '#^Access to an undefined property Pterodactyl\\Models\\ActivityLog\:\:\$actor_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Events/ActivityLogged.php
+
+		-
+			message: '#^Call to an undefined method Prologue\\Alerts\\AlertsMessageBag\:\:danger\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Exceptions/DisplayException.php
+
+		-
+			message: '#^Property Laravel\\Sanctum\\NewAccessToken\:\:\$accessToken \(Laravel\\Sanctum\\PersonalAccessToken\) does not accept Pterodactyl\\Models\\ApiKey\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: app/Extensions/Laravel/Sanctum/NewAccessToken.php
+
+		-
+			message: '#^Call to an undefined method Prologue\\Alerts\\AlertsMessageBag\:\:success\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/ApiController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\ApiController\:\:create\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/ApiController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\ApiController\:\:index\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/ApiController.php
+
+		-
+			message: '#^Call to an undefined method Prologue\\Alerts\\AlertsMessageBag\:\:danger\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/DatabaseController.php
+
+		-
+			message: '#^Call to an undefined method Prologue\\Alerts\\AlertsMessageBag\:\:success\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: app/Http/Controllers/Admin/DatabaseController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\DatabaseController\:\:index\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/DatabaseController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\DatabaseController\:\:view\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/DatabaseController.php
+
+		-
+			message: '#^Call to an undefined method Prologue\\Alerts\\AlertsMessageBag\:\:danger\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/LocationController.php
+
+		-
+			message: '#^Call to an undefined method Prologue\\Alerts\\AlertsMessageBag\:\:success\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/LocationController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\LocationController\:\:index\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/LocationController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\LocationController\:\:view\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/LocationController.php
+
+		-
+			message: '#^Call to an undefined method Prologue\\Alerts\\AlertsMessageBag\:\:success\(\)\.$#'
+			identifier: method.notFound
+			count: 4
+			path: app/Http/Controllers/Admin/MountController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\MountController\:\:index\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/MountController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\MountController\:\:view\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/MountController.php
+
+		-
+			message: '#^Call to an undefined method Prologue\\Alerts\\AlertsMessageBag\:\:success\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: app/Http/Controllers/Admin/Nests/EggController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Nests\\EggController\:\:create\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Nests/EggController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Nests\\EggController\:\:view\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Nests/EggController.php
+
+		-
+			message: '#^Call to an undefined method Prologue\\Alerts\\AlertsMessageBag\:\:success\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/Nests/EggScriptController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Nests\\EggScriptController\:\:index\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Nests/EggScriptController.php
+
+		-
+			message: '#^Call to an undefined method Prologue\\Alerts\\AlertsMessageBag\:\:success\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Admin/Nests/EggShareController.php
+
+		-
+			message: '#^Call to an undefined method Prologue\\Alerts\\AlertsMessageBag\:\:success\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: app/Http/Controllers/Admin/Nests/EggVariableController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Nests\\EggVariableController\:\:view\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Nests/EggVariableController.php
+
+		-
+			message: '#^Call to an undefined method Prologue\\Alerts\\AlertsMessageBag\:\:success\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: app/Http/Controllers/Admin/Nests/NestController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Nests\\NestController\:\:create\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Nests/NestController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Nests\\NestController\:\:index\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Nests/NestController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Nests\\NestController\:\:view\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Nests/NestController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Nodes\\NodeController\:\:index\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Nodes/NodeController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Nodes\\NodeViewController\:\:allocations\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Nodes/NodeViewController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Nodes\\NodeViewController\:\:configuration\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Nodes/NodeViewController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Nodes\\NodeViewController\:\:index\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Nodes/NodeViewController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Nodes\\NodeViewController\:\:servers\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Nodes/NodeViewController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Nodes\\NodeViewController\:\:settings\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Nodes/NodeViewController.php
+
+		-
+			message: '#^Property Pterodactyl\\Http\\Controllers\\Admin\\Nodes\\NodeViewController\:\:\$allocationRepository is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/Admin/Nodes/NodeViewController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getSystemInformation\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/Nodes/SystemInformationController.php
+
+		-
+			message: '#^Call to an undefined method Prologue\\Alerts\\AlertsMessageBag\:\:info\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/NodesController.php
+
+		-
+			message: '#^Call to an undefined method Prologue\\Alerts\\AlertsMessageBag\:\:success\(\)\.$#'
+			identifier: method.notFound
+			count: 4
+			path: app/Http/Controllers/Admin/NodesController.php
+
+		-
+			message: '#^Call to an undefined method Prologue\\Alerts\\AlertsMessageBag\:\:warning\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/NodesController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\NodesController\:\:create\(\) should return Illuminate\\Http\\RedirectResponse\|Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/NodesController.php
+
+		-
+			message: '#^Call to an undefined method Prologue\\Alerts\\AlertsMessageBag\:\:success\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/Servers/CreateServerController.php
+
+		-
+			message: '#^Call to an undefined method Prologue\\Alerts\\AlertsMessageBag\:\:warning\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/Servers/CreateServerController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Servers\\CreateServerController\:\:index\(\) should return Illuminate\\Http\\RedirectResponse\|Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Servers/CreateServerController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Servers\\ServerController\:\:index\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Servers/ServerController.php
+
+		-
+			message: '#^Call to an undefined method Prologue\\Alerts\\AlertsMessageBag\:\:danger\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/Servers/ServerTransferController.php
+
+		-
+			message: '#^Call to an undefined method Prologue\\Alerts\\AlertsMessageBag\:\:success\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/Servers/ServerTransferController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:notify\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/Servers/ServerTransferController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Servers\\ServerViewController\:\:build\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Servers/ServerViewController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Servers\\ServerViewController\:\:database\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Servers/ServerViewController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Servers\\ServerViewController\:\:delete\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Servers/ServerViewController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Servers\\ServerViewController\:\:details\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Servers/ServerViewController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Servers\\ServerViewController\:\:index\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Servers/ServerViewController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Servers\\ServerViewController\:\:manage\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Servers/ServerViewController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Servers\\ServerViewController\:\:mounts\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Servers/ServerViewController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Servers\\ServerViewController\:\:startup\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Servers/ServerViewController.php
+
+		-
+			message: '#^Property Pterodactyl\\Http\\Controllers\\Admin\\Servers\\ServerViewController\:\:\$repository is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/Admin/Servers/ServerViewController.php
+
+		-
+			message: '#^Call to an undefined method Prologue\\Alerts\\AlertsMessageBag\:\:success\(\)\.$#'
+			identifier: method.notFound
+			count: 9
+			path: app/Http/Controllers/Admin/ServersController.php
+
+		-
+			message: '#^Call to an undefined method Prologue\\Alerts\\AlertsMessageBag\:\:success\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/Settings/AdvancedController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Settings\\AdvancedController\:\:index\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Settings/AdvancedController.php
+
+		-
+			message: '#^Call to an undefined method Prologue\\Alerts\\AlertsMessageBag\:\:success\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/Settings/IndexController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Settings\\IndexController\:\:index\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Settings/IndexController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Admin\\Settings\\MailController\:\:index\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Admin/Settings/MailController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Collection\<int, Pterodactyl\\Models\\User\>\|Pterodactyl\\Models\\User\:\:\$md5\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/UserController.php
+
+		-
+			message: '#^Access to an undefined property Pterodactyl\\Models\\User\:\:\$md5\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Admin/UserController.php
+
+		-
+			message: '#^Call to an undefined method Prologue\\Alerts\\AlertsMessageBag\:\:success\(\)\.$#'
+			identifier: method.notFound
+			count: 4
+			path: app/Http/Controllers/Admin/UserController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<Pterodactyl\\Models\\ActivityLog\>\:\:allowedFilters\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/ActivityLogController.php
+
+		-
+			message: '#^Access to an undefined property Pterodactyl\\Models\\User\:\:\$permissionRole\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Admin/DGEN/PermissionRoleController.php
+
+		-
+			message: '#^Relation ''permissionRole'' is not found in Pterodactyl\\Models\\User model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Api/Client/Admin/DGEN/PermissionRoleController.php
+
+		-
+			message: '#^Relation ''users'' is not found in Pterodactyl\\Models\\DGEN\\PermissionRole model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Api/Client/Admin/DGEN/PermissionRoleController.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Sanctum\\PersonalAccessToken\:\:\$identifier\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/ApiKeyController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\ClientApiController\:\:getTransformer\(\) should return T of Pterodactyl\\Transformers\\Api\\Client\\BaseClientTransformer but returns Pterodactyl\\Transformers\\Api\\Application\\BaseTransformer\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Api/Client/ClientApiController.php
+
+		-
+			message: '#^Relation ''allocation'' is not found in Pterodactyl\\Models\\ReverseProxy model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Api/Client/ReverseProxyController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Builder\<Pterodactyl\\Models\\ActivityLog\>\:\:allowedSorts\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/ActivityLogController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:restore\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/BackupController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:send\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/CommandController.php
+
+		-
+			message: '#^Instanceof between Psr\\Http\\Message\\ResponseInterface and Psr\\Http\\Message\\ResponseInterface will always evaluate to true\.$#'
+			identifier: instanceof.alwaysTrue
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/CommandController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DatabaseController\:\:validationException\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DatabaseController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:chmodFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/FileController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:compressFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/FileController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:copyFile\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/FileController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:createDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/FileController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:decompressFile\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/FileController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:deleteFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/FileController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getContent\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/FileController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/FileController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:pull\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/FileController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:putContent\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/FileController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:renameFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/FileController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\FileController\:\:calculateFolderSize\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/FileController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:send\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/PowerController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getDetails\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/ResourceUtilizationController.php
+
+		-
+			message: '#^Access to an undefined property Pterodactyl\\Models\\Node\:\:\$daemonSecret\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ArkModController.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between ''asa'' and ''asa'' will always evaluate to true\.$#'
+			identifier: identical.alwaysTrue
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ArkModController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>env_variable" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ArkModController.php
+
+		-
+			message: '#^Using nullsafe property access "\?\-\>server_value" on left side of \?\? is unnecessary\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ArkModController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getContent\(\)\.$#'
+			identifier: method.notFound
+			count: 11
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ArmaReforgerAdminToolsController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:putContent\(\)\.$#'
+			identifier: method.notFound
+			count: 8
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ArmaReforgerAdminToolsController.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between string and false will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ArmaReforgerAdminToolsController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getContent\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ArmaReforgerConfigController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ArmaReforgerConfigController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:putContent\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ArmaReforgerConfigController.php
+
+		-
+			message: '#^Dead catch \- Exception is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ArmaReforgerConfigController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\ArmaReforgerConfigController\:\:generateRandomPassword\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ArmaReforgerConfigController.php
+
+		-
+			message: '#^Offset ''scenarios'' on array\{modId\: mixed, name\: mixed, scenarios\: non\-empty\-array\} in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.offset
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ArmaReforgerConfigController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getContent\(\)\.$#'
+			identifier: method.notFound
+			count: 9
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ArmaReforgerModManagerController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:putContent\(\)\.$#'
+			identifier: method.notFound
+			count: 5
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ArmaReforgerModManagerController.php
+
+		-
+			message: '#^Dead catch \- Exception is already caught above\.$#'
+			identifier: catch.alreadyCaught
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ArmaReforgerModManagerController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\ArmaReforgerModManagerController\:\:isModInstalled\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ArmaReforgerModManagerController.php
+
+		-
+			message: '#^Negated boolean expression is always true\.$#'
+			identifier: booleanNot.alwaysTrue
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ArmaReforgerModManagerController.php
+
+		-
+			message: '#^Offset ''dependentMods'' on array\{id\: mixed, name\: mixed, summary\: mixed, currentVersionSize\: mixed, previews\: mixed, author\: mixed, dependentMods\: list\<array\{id\: mixed, name\: mixed\}\>\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ArmaReforgerModManagerController.php
+
+		-
+			message: '#^Right side of && is always false\.$#'
+			identifier: booleanAnd.rightAlwaysFalse
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ArmaReforgerModManagerController.php
+
+		-
+			message: '#^Variable \$pdo in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.variable
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ArmaReforgerModManagerController.php
+
+		-
+			message: '#^Property Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\AutoSuspendController\:\:\$licenseValidationService is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/AutoSuspendController.php
+
+		-
+			message: '#^Property Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\AutoSuspendController\:\:\$suspensionService is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/AutoSuspendController.php
+
+		-
+			message: '#^Property Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\CommandHistoryController\:\:\$licenseValidationService is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/CommandHistoryController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getContent\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ConfigEditorController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ConfigEditorController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:putContent\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ConfigEditorController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\ConfigEditorController\:\:castYamlValue\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ConfigEditorController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\ConfigEditorController\:\:flattenArray\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ConfigEditorController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\ConfigEditorController\:\:flattenJsonArray\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ConfigEditorController.php
+
+		-
+			message: '#^Property Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\CustomMonitorController\:\:\$licenseValidationService is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/CustomMonitorController.php
+
+		-
+			message: '#^Property Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\FiveMUtilsController\:\:\$licenseValidationService is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/FiveMUtilsController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:createDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/HytaleModController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:deleteFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/HytaleModController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/HytaleModController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:pull\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/HytaleModController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\HytaleModController\:\:generateModFilename\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/HytaleModController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\HytaleModController\:\:isValidJarFile\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/HytaleModController.php
+
+		-
+			message: '#^Offset 1 on array\{non\-falsy\-string, string, non\-empty\-string, non\-empty\-string\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/HytaleModController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\HytaleWorldCacheController\:\:loadCacheFromFile\(\) never returns array so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/HytaleWorldCacheController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:createDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/HytaleWorldController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:decompressFile\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/HytaleWorldController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:deleteFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/HytaleWorldController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getContent\(\)\.$#'
+			identifier: method.notFound
+			count: 5
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/HytaleWorldController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 6
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/HytaleWorldController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:pull\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/HytaleWorldController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:putContent\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/HytaleWorldController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:renameFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/HytaleWorldController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftBedrockAddonCacheController\:\:deleteCacheFile\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonCacheController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftBedrockAddonCacheController\:\:getCacheFileSize\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonCacheController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftBedrockAddonCacheController\:\:loadCacheFromFile\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonCacheController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftBedrockAddonCacheController\:\:saveCacheToFile\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonCacheController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftBedrockAddonCacheController\:\:getCacheFilePath\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonCacheController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftBedrockAddonCacheController\:\:getLicenseFeatureForType\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonCacheController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:compressFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:createDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 8
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:decompressFile\(\)\.$#'
+			identifier: method.notFound
+			count: 4
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:deleteFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 17
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getContent\(\)\.$#'
+			identifier: method.notFound
+			count: 5
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 29
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:pull\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:putContent\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:renameFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 10
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftBedrockAddonController\:\:cleanupExtractedDirectories\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftBedrockAddonController\:\:detectPackTypeFromExtractedDirs\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftBedrockAddonController\:\:extractAndUploadAddonClientSide\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftBedrockAddonController\:\:generateAddonFilenameWithType\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftBedrockAddonController\:\:isValidAddonFile\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftBedrockAddonController\:\:isWorldDirectory\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftBedrockAddonController\:\:moveDirectoryContentsFallback\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftBedrockAddonController\:\:organizePackType\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonController.php
+
+		-
+			message: '#^Offset '''' on non\-empty\-array\<string, non\-empty\-list\> in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.offset
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonController.php
+
+		-
+			message: '#^Variable \$createdArchiveName might not be defined\.$#'
+			identifier: variable.undefined
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonController.php
+
+		-
+			message: '#^Variable \$files in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockAddonController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:compressFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockVersionController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:decompressFile\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockVersionController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:deleteFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockVersionController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 5
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockVersionController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:pull\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockVersionController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:putContent\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockVersionController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:send\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockVersionController.php
+
+		-
+			message: '#^Constant Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftBedrockVersionController\:\:VERSION_BASE_URL is unused\.$#'
+			identifier: classConstant.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftBedrockVersionController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:deleteFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getContent\(\)\.$#'
+			identifier: method.notFound
+			count: 13
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 5
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:putContent\(\)\.$#'
+			identifier: method.notFound
+			count: 10
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftController\:\:getYamlFilesRecursively\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftController\:\:isDirectoryByContentCheck\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftController\:\:isYamlFile\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftController\:\:updateConfigPropertyInFile\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftController\:\:updateYamlPropertyInFile\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftModCacheController\:\:deleteCacheFile\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftModCacheController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftModCacheController\:\:fetchFromHostedCurseForgeJson\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftModCacheController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftModCacheController\:\:getCacheFileSize\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftModCacheController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftModCacheController\:\:loadCacheFromFile\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftModCacheController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftModCacheController\:\:saveCacheToFile\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftModCacheController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:createDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftModController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:deleteFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftModController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftModController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:pull\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftModController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftModController\:\:isValidJarFile\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftModController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:compressFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftModpackController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:createDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftModpackController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:deleteFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftModpackController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 6
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftModpackController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:renameFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftModpackController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftModpackController\:\:ensureModpacksFolderExists\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftModpackController.php
+
+		-
+			message: '#^Offset 1 on array\{non\-falsy\-string, string, non\-empty\-string, non\-empty\-string\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftModpackController.php
+
+		-
+			message: '#^Property Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftModpackController\:\:\$powerRepository is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftModpackController.php
+
+		-
+			message: '#^Property Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftModpackController\:\:\$reinstallServerService is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftModpackController.php
+
+		-
+			message: '#^Property Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftModpackController\:\:\$startupModificationService is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftModpackController.php
+
+		-
+			message: '#^Property Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftPlayerManagerController\:\:\$licenseValidationService is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftPlayerManagerController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:createDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftPluginController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:deleteFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftPluginController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftPluginController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:pull\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftPluginController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftPluginController\:\:generatePluginFilename\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftPluginController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftPluginController\:\:isValidJarFile\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftPluginController.php
+
+		-
+			message: '#^Offset 1 on array\{non\-falsy\-string, string, non\-empty\-string, non\-empty\-string\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftPluginController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:compressFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftVersionController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:decompressFile\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftVersionController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:deleteFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 4
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftVersionController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getContent\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftVersionController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 7
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftVersionController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:pull\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftVersionController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:putContent\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftVersionController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:renameFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftVersionController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:send\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftVersionController.php
+
+		-
+			message: '#^Property Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftVersionController\:\:\$licenseValidationService is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftVersionController.php
+
+		-
+			message: '#^Ternary operator condition is always true\.$#'
+			identifier: ternary.alwaysTrue
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftVersionController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:compressFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftWorldController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:createDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftWorldController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:decompressFile\(\)\.$#'
+			identifier: method.notFound
+			count: 4
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftWorldController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:deleteFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 13
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftWorldController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getContent\(\)\.$#'
+			identifier: method.notFound
+			count: 8
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftWorldController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 25
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftWorldController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:pull\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftWorldController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:putContent\(\)\.$#'
+			identifier: method.notFound
+			count: 8
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftWorldController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftWorldController\:\:generateWorldFilename\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftWorldController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\MinecraftWorldController\:\:uploadWorldToServer\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftWorldController.php
+
+		-
+			message: '#^Negated boolean expression is always true\.$#'
+			identifier: booleanNot.alwaysTrue
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftWorldController.php
+
+		-
+			message: '#^Offset 1 on array\{non\-falsy\-string, string, non\-empty\-string, non\-empty\-string\} on left side of \?\? always exists and is not nullable\.$#'
+			identifier: nullCoalesce.offset
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftWorldController.php
+
+		-
+			message: '#^Variable \$downloadUrl in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftWorldController.php
+
+		-
+			message: '#^Variable \$fileNames in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftWorldController.php
+
+		-
+			message: '#^Variable \$result in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/MinecraftWorldController.php
+
+		-
+			message: '#^Property Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\SchedulePresetsController\:\:\$processScheduleService is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/SchedulePresetsController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:compressFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerImporterController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:deleteFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerImporterController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerImporterController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:renameFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerImporterController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:send\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerImporterController.php
+
+		-
+			message: '#^Property Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\ServerImporterController\:\:\$reinstallServerService is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerImporterController.php
+
+		-
+			message: '#^Property Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\ServerImporterController\:\:\$serverVariableRepository is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerImporterController.php
+
+		-
+			message: '#^Property Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\ServerImporterController\:\:\$startupModificationService is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerImporterController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$backup_limit\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerSplitterController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$cpu\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerSplitterController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerSplitterController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$disk\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerSplitterController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerSplitterController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$master_server_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerSplitterController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$memory\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerSplitterController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerSplitterController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerSplitterController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$subServer\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerSplitterController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$sub_server_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerSplitterController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$updated_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerSplitterController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$uuid\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerSplitterController.php
+
+		-
+			message: '#^Relation ''server'' is not found in Pterodactyl\\Models\\DGEN\\ServerSplitterWhitelist model\.$#'
+			identifier: larastan.relationExistence
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerSplitterWhitelistController.php
+
+		-
+			message: '#^Property Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\ServerStatsController\:\:\$licenseValidationService is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerStatsController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerTypeChangerController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$docker_image\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerTypeChangerController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerTypeChangerController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerTypeChangerController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:compressFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerTypeChangerController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:deleteFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerTypeChangerController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerTypeChangerController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:renameFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerTypeChangerController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:send\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerTypeChangerController.php
+
+		-
+			message: '#^Property Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\ServerTypeChangerController\:\:\$configurationRepository is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerTypeChangerController.php
+
+		-
+			message: '#^Variable \$dockerImages in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerTypeChangerController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$commands\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerWiperController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$created_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerWiperController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$description\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerWiperController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$file_patterns\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerWiperController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerWiperController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$is_active\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerWiperController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$last_run_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerWiperController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerWiperController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$new_server_name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerWiperController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$next_run_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerWiperController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$recurrence_config\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerWiperController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$rust_config\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerWiperController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$schedule_type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerWiperController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$stop_server\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerWiperController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$timezone\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerWiperController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$updated_at\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/ServerWiperController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$egg\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/StaffRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/StaffRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 5
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/StaffRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/StaffRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$node\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/StaffRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$owner_id\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/StaffRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$user\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/StaffRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$username\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/StaffRequestController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$uuid\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/StaffRequestController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\SubdomainManagerController\:\:isSubdomainManagerEnabledByLicense\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/SubdomainManagerController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:compressFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/CustomModManagerController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:decompressFile\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/CustomModManagerController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:deleteFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/CustomModManagerController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/CustomModManagerController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:pull\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/CustomModManagerController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:renameFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/CustomModManagerController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:send\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/CustomModManagerController.php
+
+		-
+			message: '#^Call to function method_exists\(\) with Exception and ''getPrevious'' will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/CustomModManagerController.php
+
+		-
+			message: '#^Dead catch \- Exception is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/CustomModManagerController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:pull\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/UploadFromUrlController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:putContent\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/UploadFromUrlController.php
+
+		-
+			message: '#^Property Pterodactyl\\Http\\Controllers\\Api\\Client\\Servers\\DGEN\\UploadFromUrlController\:\:\$licenseValidationService is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/UploadFromUrlController.php
+
+		-
+			message: '#^Ternary operator condition is always true\.$#'
+			identifier: ternary.alwaysTrue
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/DGEN/UploadFromUrlController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$action\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/ScheduleController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$continue_on_failure\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/ScheduleController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$payload\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/ScheduleController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$sequence_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/ScheduleController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$time_offset\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/ScheduleController.php
+
+		-
+			message: '#^Instantiated class Symfony\\Component\\HttpKernelException\\NotFoundHttpException not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/ScheduleController.php
+
+		-
+			message: '#^Throwing object of an unknown class Symfony\\Component\\HttpKernelException\\NotFoundHttpException\.$#'
+			identifier: class.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/ScheduleController.php
+
+		-
+			message: '#^Access to an undefined property Pterodactyl\\Models\\EggVariable\:\:\$server_value\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/StartupController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/SubuserController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$uuid\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/SubuserController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:deauthorize\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Client/Servers/SubuserController.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:getConnectionAddress\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Client/Servers/WebsocketController.php
+
+		-
+			message: '#^Property Pterodactyl\\Http\\Controllers\\Api\\Client\\Theme\\HyperV2AddonController\:\:\$licenseValidationService is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Http/Controllers/Api/Client/Theme/HyperV2AddonController.php
+
+		-
+			message: '#^Constant Pterodactyl\\Http\\Controllers\\Api\\Client\\Theme\\HyperV2ThemeController\:\:DEFAULT_ALERTS is unused\.$#'
+			identifier: classConstant.unused
+			count: 2
+			path: app/Http/Controllers/Api/Client/Theme/HyperV2ThemeController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Api\\Client\\Theme\\HyperV2ThemeController\:\:show\(\) should return Illuminate\\Http\\Response but returns Illuminate\\Http\\JsonResponse\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Api/Client/Theme/HyperV2ThemeController.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between mixed and null will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 27
+			path: app/Http/Controllers/Api/Client/Theme/HyperV2ThemeController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$node_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Remote/Backups/BackupRemoteUploadController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$uuid\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Remote/Backups/BackupRemoteUploadController.php
+
+		-
+			message: '#^Instantiated class Pterodactyl\\Http\\Controllers\\Api\\Remote\\Backups\\HttpForbiddenException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Remote/Backups/BackupRemoteUploadController.php
+
+		-
+			message: '#^Throwing object of an unknown class Pterodactyl\\Http\\Controllers\\Api\\Remote\\Backups\\HttpForbiddenException\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Remote/Backups/BackupRemoteUploadController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$node_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Remote/Backups/BackupStatusController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$uuid\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Remote/Backups/BackupStatusController.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$subject\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Api/Remote/Servers/ServerDetailsController.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:delete\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Api/Remote/Servers/ServerTransferController.php
+
+		-
+			message: '#^Access to an undefined property Laragear\\WebAuthn\\Contracts\\WebAuthnAuthenticatable\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Auth/PasskeyController.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Socialite\\Contracts\\User\:\:\$refreshToken\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Auth/SSOLoginController.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Socialite\\Contracts\\User\:\:\$token\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Http/Controllers/Auth/SSOLoginController.php
+
+		-
+			message: '#^Call to an undefined method Laravel\\Socialite\\Contracts\\Provider\:\:stateless\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Controllers/Auth/SSOLoginController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Base\\HyperV2ThemePublicController\:\:show\(\) should return Illuminate\\Http\\Response but returns Illuminate\\Http\\JsonResponse\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Base/HyperV2ThemePublicController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Base\\IndexController\:\:index\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Base/IndexController.php
+
+		-
+			message: '#^Method Pterodactyl\\Http\\Controllers\\Base\\PublicStatusPageController\:\:index\(\) should return Illuminate\\View\\View but returns Illuminate\\Contracts\\View\\View\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Http/Controllers/Base/PublicStatusPageController.php
+
+		-
+			message: '#^Access to an undefined property Pterodactyl\\Models\\User\:\:\$permissionRole\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Middleware/AdminAuthenticate.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Sanctum\\PersonalAccessToken\:\:\$identifier\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Middleware/Api/AuthenticateIPAccess.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$daemon_token\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Middleware/Api/Daemon/DaemonAuthenticate.php
+
+		-
+			message: '#^Call to an undefined method Prologue\\Alerts\\AlertsMessageBag\:\:danger\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Http/Middleware/RequireTwoFactorAuthentication.php
+
+		-
+			message: '#^Unsafe access to private property Pterodactyl\\Http\\Middleware\\SetSecurityHeaders\:\:\$headers through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 1
+			path: app/Http/Middleware/SetSecurityHeaders.php
+
+		-
+			message: '#^Cannot access property \$id on object\|string\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Http/Requests/Admin/LocationFormRequest.php
+
+		-
+			message: '#^Cannot access property \$id on object\|string\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Http/Requests/Admin/MountFormRequest.php
+
+		-
+			message: '#^Access to an undefined property Laravel\\Sanctum\\PersonalAccessToken\:\:\$key_type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Http/Requests/Api/Application/ApplicationApiRequest.php
+
+		-
+			message: '#^Cannot access property \$id on object\|string\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Http/Requests/Api/Application/Locations/UpdateLocationRequest.php
+
+		-
+			message: '#^Cannot access property \$id on object\|string\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Http/Requests/Api/Application/Nodes/UpdateNodeRequest.php
+
+		-
+			message: '#^Cannot access property \$id on object\|string\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Http/Requests/Api/Application/Servers/Databases/StoreServerDatabaseRequest.php
+
+		-
+			message: '#^Caught class phpseclib3Exception\\NoKeyLoadedException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: app/Http/Requests/Api/Client/Account/StoreSSHKeyRequest.php
+
+		-
+			message: '#^Cannot access property \$owner_id on object\|string\.$#'
+			identifier: property.nonObject
+			count: 1
+			path: app/Http/Requests/Api/Client/Servers/Subusers/SubuserRequest.php
+
+		-
+			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/Http/ViewComposers/AssetComposer.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:deauthorize\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Jobs/RevokeSftpAccessJob.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:send\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Jobs/DGEN/EggSwappingInstallationJob.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$is_active\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Jobs/Schedule/RunTaskJob.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Jobs/Schedule/RunTaskJob.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:send\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Jobs/Schedule/RunTaskJob.php
+
+		-
+			message: '#^Access to an undefined property Pterodactyl\\Models\\ActivityLog\:\:\$subject_id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Listeners/ArmaReforgerWebhookListener.php
+
+		-
+			message: '#^Access to an undefined property Pterodactyl\\Models\\ActivityLog\:\:\$subject_type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Listeners/ArmaReforgerWebhookListener.php
+
+		-
+			message: '#^Unsafe access to private property Pterodactyl\\Models\\ActivityLog\:\:\$identifierDataColumn through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 1
+			path: app/Models/ActivityLog.php
+
+		-
+			message: '#^Unsafe access to private property Pterodactyl\\Models\\ActivityLog\:\:\$identifierPrefix through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 1
+			path: app/Models/ActivityLog.php
+
+		-
+			message: '#^Unsafe access to private property Pterodactyl\\Models\\Backup\:\:\$identifierDataColumn through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 1
+			path: app/Models/Backup.php
+
+		-
+			message: '#^Unsafe access to private property Pterodactyl\\Models\\Backup\:\:\$identifierPrefix through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 1
+			path: app/Models/Backup.php
+
+		-
+			message: '#^Unsafe access to private property Pterodactyl\\Models\\Egg\:\:\$identifierDataColumn through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 1
+			path: app/Models/Egg.php
+
+		-
+			message: '#^Unsafe access to private property Pterodactyl\\Models\\Egg\:\:\$identifierPrefix through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 1
+			path: app/Models/Egg.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Validation\\Validator\:\:passes\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Models/Model.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Contracts\\Validation\\Validator\:\:setData\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Models/Model.php
+
+		-
+			message: '#^Unsafe access to private property Pterodactyl\\Models\\Mount\:\:\$identifierDataColumn through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 1
+			path: app/Models/Mount.php
+
+		-
+			message: '#^Unsafe access to private property Pterodactyl\\Models\\Mount\:\:\$identifierPrefix through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 1
+			path: app/Models/Mount.php
+
+		-
+			message: '#^Access to an undefined property Pterodactyl\\Models\\Node\:\:\$sum_disk\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Node.php
+
+		-
+			message: '#^Access to an undefined property Pterodactyl\\Models\\Node\:\:\$sum_memory\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/Node.php
+
+		-
+			message: '#^Unsafe access to private property Pterodactyl\\Models\\Node\:\:\$identifierDataColumn through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 1
+			path: app/Models/Node.php
+
+		-
+			message: '#^Unsafe access to private property Pterodactyl\\Models\\Node\:\:\$identifierPrefix through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 1
+			path: app/Models/Node.php
+
+		-
+			message: '#^Unsafe access to private property Pterodactyl\\Models\\Server\:\:\$identifierDataColumn through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 1
+			path: app/Models/Server.php
+
+		-
+			message: '#^Unsafe access to private property Pterodactyl\\Models\\Server\:\:\$identifierPrefix through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 1
+			path: app/Models/Server.php
+
+		-
+			message: '#^Access to an undefined property Pterodactyl\\Models\\User\:\:\$permissionRole\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^PHPDoc tag @use contains generic type Pterodactyl\\Models\\Traits\\HasAccessTokens\<Pterodactyl\\Models\\ApiKey\> but trait Pterodactyl\\Models\\Traits\\HasAccessTokens is not generic\.$#'
+			identifier: generics.notGeneric
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Unsafe access to private property Pterodactyl\\Models\\User\:\:\$identifierDataColumn through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Unsafe access to private property Pterodactyl\\Models\\User\:\:\$identifierPrefix through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 1
+			path: app/Models/User.php
+
+		-
+			message: '#^Access to an undefined property Pterodactyl\\Events\\Event\:\:\$server\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Notifications/ServerInstalled.php
+
+		-
+			message: '#^Access to an undefined property Pterodactyl\\Models\\EggVariable\:\:\$field_type\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Observers/EggVariableObserver.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 6
+			path: app/Observers/DGEN/ServerSplitterObserver.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$owner_id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Observers/DGEN/ServerSplitterObserver.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Observers/DGEN/ServerSplitterObserver.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Observers/DGEN/UserIntegrationObserver.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$cpu\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Observers/ServerObserver.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$disk\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Observers/ServerObserver.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$is_splitting\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Observers/ServerObserver.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$memory\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Observers/ServerObserver.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Observers/SubuserObserver.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name_first\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Observers/SubuserObserver.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$uuidShort\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Observers/SubuserObserver.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:notify\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Observers/SubuserObserver.php
+
+		-
+			message: '#^Access to an undefined property Pterodactyl\\Models\\User\:\:\$permissionRole\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Policies/ServerPolicy.php
+
+		-
+			message: '#^Call to function is_array\(\) with array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 1
+			path: app/Providers/RouteServiceProvider.php
+
+		-
+			message: '#^Access to an undefined property Pterodactyl\\Models\\ActivityLog\:\:\$actor_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/Activity/ActivityLogService.php
+
+		-
+			message: '#^Access to an undefined property Pterodactyl\\Models\\ActivityLog\:\:\$actor_type\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/Activity/ActivityLogService.php
+
+		-
+			message: '#^Method Pterodactyl\\Services\\Allocations\\FindAssignableAllocationService\:\:createNewAllocation\(\) should return Pterodactyl\\Models\\Allocation but returns Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Services/Allocations/FindAssignableAllocationService.php
+
+		-
+			message: '#^Method Pterodactyl\\Services\\Allocations\\FindAssignableAllocationService\:\:handle\(\) should return Pterodactyl\\Models\\Allocation but returns Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Services/Allocations/FindAssignableAllocationService.php
+
+		-
+			message: '#^Property Pterodactyl\\Services\\Api\\KeyCreationService\:\:\$connection is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Services/Api/KeyCreationService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$uuid\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/Backups/DeleteBackupService.php
+
+		-
+			message: '#^Call to an undefined method League\\Flysystem\\FilesystemAdapter\:\:getBucket\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/Backups/DeleteBackupService.php
+
+		-
+			message: '#^Call to an undefined method League\\Flysystem\\FilesystemAdapter\:\:getClient\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/Backups/DeleteBackupService.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:delete\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/Backups/DeleteBackupService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$node\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Services/Backups/DownloadLinkService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$uuid\.$#'
+			identifier: property.notFound
+			count: 3
+			path: app/Services/Backups/DownloadLinkService.php
+
+		-
+			message: '#^Call to an undefined method League\\Flysystem\\FilesystemAdapter\:\:getBucket\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/Backups/DownloadLinkService.php
+
+		-
+			message: '#^Call to an undefined method League\\Flysystem\\FilesystemAdapter\:\:getClient\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Services/Backups/DownloadLinkService.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:setBackupAdapter\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/Backups/InitiateBackupService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$host\.$#'
+			identifier: property.notFound
+			count: 6
+			path: app/Services/Databases/DatabaseManagementService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$port\.$#'
+			identifier: property.notFound
+			count: 5
+			path: app/Services/Databases/DatabaseManagementService.php
+
+		-
+			message: '#^Instanceof between null and Pterodactyl\\Models\\Database will always evaluate to false\.$#'
+			identifier: instanceof.alwaysFalse
+			count: 1
+			path: app/Services/Databases/DatabaseManagementService.php
+
+		-
+			message: '#^PHPDoc tag @throws with type Pterodactyl\\Exceptions\\Service\\BadValidationRuleException is not subtype of Throwable$#'
+			identifier: throws.notThrowable
+			count: 1
+			path: app/Services/Eggs/Variables/VariableCreationService.php
+
+		-
+			message: '#^Property Pterodactyl\\Services\\Eggs\\Variables\\VariableCreationService\:\:\$connection is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Services/Eggs/Variables/VariableCreationService.php
+
+		-
+			message: '#^PHPDoc tag @throws with type Pterodactyl\\Exceptions\\Service\\BadValidationRuleException is not subtype of Throwable$#'
+			identifier: throws.notThrowable
+			count: 1
+			path: app/Services/Eggs/Variables/VariableUpdateService.php
+
+		-
+			message: '#^Property Pterodactyl\\Services\\Nests\\NestCreationService\:\:\$connection is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Services/Nests/NestCreationService.php
+
+		-
+			message: '#^Property Pterodactyl\\Services\\Nodes\\NodeCreationService\:\:\$config is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Services/Nodes/NodeCreationService.php
+
+		-
+			message: '#^Property Pterodactyl\\Services\\Nodes\\NodeCreationService\:\:\$encrypter is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Services/Nodes/NodeCreationService.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:update\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/Nodes/NodeUpdateService.php
+
+		-
+			message: '#^Access to an undefined property Pterodactyl\\Models\\ReverseProxy\:\:\$allocation\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/ReverseProxy/NginxConfigService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$provider_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/DGEN/DiscordBotService.php
+
+		-
+			message: '#^Method Pterodactyl\\Services\\DGEN\\AutoSuspendService\:\:getExpiredServers\(\) should return Illuminate\\Database\\Eloquent\\Collection but returns Illuminate\\Support\\Collection\<\(int\|string\), mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Services/DGEN/AutoSuspendService.php
+
+		-
+			message: '#^Method Pterodactyl\\Services\\DGEN\\AutoSuspendService\:\:getServersExpiringWithin\(\) should return Illuminate\\Database\\Eloquent\\Collection but returns Illuminate\\Support\\Collection\<\(int\|string\), mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Services/DGEN/AutoSuspendService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$expires_at\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Services/DGEN/Billing/OrderService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/DGEN/Billing/OrderService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$owner_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/DGEN/Billing/OrderService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$product_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/DGEN/Billing/OrderService.php
+
+		-
+			message: '#^Method Pterodactyl\\Services\\DGEN\\Billing\\OrderService\:\:renewServer\(\) should return Pterodactyl\\Models\\Server but returns Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Services/DGEN/Billing/OrderService.php
+
+		-
+			message: '#^Property Pterodactyl\\Services\\DGEN\\Billing\\OrderService\:\:\$deletionService is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Services/DGEN/Billing/OrderService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$email\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/DGEN/CommandHistoryService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/DGEN/CommandHistoryService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$username\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/DGEN/CommandHistoryService.php
+
+		-
+			message: '#^Method Pterodactyl\\Services\\DGEN\\FastDLService\:\:fileExists\(\) is unused\.$#'
+			identifier: method.unused
+			count: 2
+			path: app/Services/DGEN/FastDLService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$host\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/DGEN/FiveMUtilsService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$port\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/DGEN/FiveMUtilsService.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:deleteFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/DGEN/FiveMUtilsService.php
+
+		-
+			message: '#^Property Pterodactyl\\Services\\DGEN\\FiveMUtilsService\:\:\$daemonRepository is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Services/DGEN/FiveMUtilsService.php
+
+		-
+			message: '#^Property Pterodactyl\\Services\\DGEN\\FiveMUtilsService\:\:\$startupModificationService is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Services/DGEN/FiveMUtilsService.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:send\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: app/Services/DGEN/MinecraftPlayerManagerService.php
+
+		-
+			message: '#^Method Pterodactyl\\Services\\DGEN\\MinecraftPlayerManagerService\:\:fetchIconContent\(\) never returns null so it can be removed from the return type\.$#'
+			identifier: return.unusedType
+			count: 1
+			path: app/Services/DGEN/MinecraftPlayerManagerService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Services/DGEN/NodeStatusService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/DGEN/NodeStatusService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$target\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/DGEN/NodeStatusService.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:incidents\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: app/Services/DGEN/NodeStatusService.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getSystemInformation\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/DGEN/NodeStatusService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$time_offset\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/Schedules/ProcessScheduleService.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getDetails\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/Schedules/ProcessScheduleService.php
+
+		-
+			message: '#^Property Pterodactyl\\Services\\ServerImporter\\TestConnectionService\:\:\$serverRepository is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Services/ServerImporter/TestConnectionService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 2
+			path: app/Services/ServerSplitterService.php
+
+		-
+			message: '#^Access to an undefined property Pterodactyl\\Models\\Server\:\:\$database_host_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/ServerSplitterService.php
+
+		-
+			message: '#^Call to an undefined method Illuminate\\Database\\Eloquent\\Model\:\:allocations\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/ServerSplitterService.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getDetails\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Services/ServerSplitterService.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:send\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: app/Services/ServerSplitterService.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:sync\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/ServerSplitterService.php
+
+		-
+			message: '#^Property Pterodactyl\\Services\\ServerSplitterService\:\:\$reinstallServerService is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Services/ServerSplitterService.php
+
+		-
+			message: '#^Property Pterodactyl\\Services\\ServerSplitterService\:\:\$serverVariableRepository is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Services/ServerSplitterService.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:deleteFiles\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/ServerWiperService.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getDirectory\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/ServerWiperService.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:send\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: app/Services/ServerWiperService.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:sync\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/ServerWiperService.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:sync\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/Servers/BuildModificationService.php
+
+		-
+			message: '#^Access to an undefined property Pterodactyl\\Models\\User\:\:\$permissionRole\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Services/Servers/GetUserPermissionsService.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:reinstall\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/Servers/ReinstallServerService.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:create\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/Servers/ServerCreationService.php
+
+		-
+			message: '#^Method Pterodactyl\\Services\\Servers\\ServerCreationService\:\:createModel\(\) should return Pterodactyl\\Models\\Server but returns bool\|Illuminate\\Database\\Eloquent\\Model\.$#'
+			identifier: return.type
+			count: 1
+			path: app/Services/Servers/ServerCreationService.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:delete\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/Servers/ServerDeletionService.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:sync\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: app/Services/Servers/SuspensionService.php
+
+		-
+			message: '#^Property Pterodactyl\\Services\\SubdomainManager\\CloudflareService\:\:\$email is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: app/Services/SubdomainManager/CloudflareService.php
+
+		-
+			message: '#^Call to an undefined method Pterodactyl\\Repositories\\Wings\\DaemonRepository\:\:getSystemInformation\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: app/Services/Telemetry/TelemetryCollectionService.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$allocation_id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Transformers/Api/Client/AllocationTransformer.php
+
+		-
+			message: '#^Access to an undefined property Pterodactyl\\Models\\EggVariable\:\:\$server_value\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Transformers/Api/Client/EggVariableTransformer.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$cpu\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Transformers/Api/Client/ServerSplitTransformer.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$disk\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Transformers/Api/Client/ServerSplitTransformer.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$id\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Transformers/Api/Client/ServerSplitTransformer.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$memory\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Transformers/Api/Client/ServerSplitTransformer.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$name\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Transformers/Api/Client/ServerSplitTransformer.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$status\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Transformers/Api/Client/ServerSplitTransformer.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$uuid\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Transformers/Api/Client/ServerSplitTransformer.php
+
+		-
+			message: '#^Access to an undefined property Illuminate\\Database\\Eloquent\\Model\:\:\$masterServer\.$#'
+			identifier: property.notFound
+			count: 1
+			path: app/Transformers/Api/Client/ServerTransformer.php

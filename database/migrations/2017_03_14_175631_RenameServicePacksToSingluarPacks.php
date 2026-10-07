@@ -6,10 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class RenameServicePacksToSingluarPacks extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('service_packs', function (Blueprint $table) {
             $table->dropForeign(['option_id']);
@@ -22,10 +19,7 @@ class RenameServicePacksToSingluarPacks extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('packs', function (Blueprint $table) {
             $table->dropForeign(['option_id']);

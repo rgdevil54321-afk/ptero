@@ -6,10 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class AddNewServiceOptionsColumns extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('service_options', function (Blueprint $table) {
             $table->dropColumn('executable');
@@ -24,10 +21,7 @@ class AddNewServiceOptionsColumns extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('service_options', function (Blueprint $table) {
             $table->dropForeign(['config_from']);

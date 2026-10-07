@@ -6,11 +6,6 @@ use Illuminate\Database\Migrations\Migration;
 
 class MakeAllocationFieldsJson extends Migration
 {
-    /**
-     * Run the migrations.
-     *
-     * @return void
-     */
     public function up()
     {
         Schema::table('server_transfers', function (Blueprint $table) {
@@ -19,11 +14,6 @@ class MakeAllocationFieldsJson extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
     public function down()
     {
         Schema::table('server_transfers', function (Blueprint $table) {

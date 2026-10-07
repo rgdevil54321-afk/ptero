@@ -19,7 +19,9 @@
             <div class="box-header with-border">
                 <h3 class="box-title">Location List</h3>
                 <div class="box-tools">
+                    @if(Auth::user()->root_admin || Auth::user()->hasAdminPermission('admin.locations.create'))
                     <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#newLocationModal">Create New</button>
+                    @endif
                 </div>
             </div>
             <div class="box-body table-responsive no-padding">

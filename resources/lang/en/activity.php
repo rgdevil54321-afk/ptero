@@ -1,11 +1,5 @@
 <?php
 
-/**
- * Contains all of the translation strings for different activity log
- * events. These should be keyed by the value in front of the colon (:)
- * in the event name. If there is no colon present, they should live at
- * the top level.
- */
 return [
     'auth' => [
         'fail' => 'Failed log in',

@@ -4,20 +4,15 @@ use Illuminate\Database\Migrations\Migration;
 
 class AddArkServiceOptionFixed extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         DB::transaction(function () {
             $service = DB::table('services')->select('id')->where('author', 'ptrdctyl-v040-11e6-8b77-86f30ca893d3')->where('name', 'Source Engine')->first();
 
-            // No SRCDS Service, Skipping
             if (!$service) {
                 return;
             }
 
-            // Already have this service option installed.
             if (DB::table('service_options')->select('id')->where('name', 'Ark: Survival Evolved')->where('parent_service', $service->id)->first()) {
                 return;
             }
@@ -70,10 +65,7 @@ class AddArkServiceOptionFixed extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         DB::transaction(function () {
             $service = DB::table('services')->select('id')->where('author', 'ptrdctyl-v040-11e6-8b77-86f30ca893d3')->where('name', 'Source Engine')->first();

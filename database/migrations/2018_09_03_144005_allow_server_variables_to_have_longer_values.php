@@ -6,20 +6,14 @@ use Illuminate\Database\Migrations\Migration;
 
 class AllowServerVariablesToHaveLongerValues extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('server_variables', function (Blueprint $table) {
             $table->text('variable_value')->change();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('server_variables', function (Blueprint $table) {
             $table->string('variable_value')->change();

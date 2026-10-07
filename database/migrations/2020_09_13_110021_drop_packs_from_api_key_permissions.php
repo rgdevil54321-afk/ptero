@@ -6,20 +6,14 @@ use Illuminate\Database\Migrations\Migration;
 
 class DropPacksFromApiKeyPermissions extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('api_keys', function (Blueprint $table) {
             $table->dropColumn('r_packs');
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('api_keys', function (Blueprint $table) {
             $table->unsignedTinyInteger('r_packs')->default(0);

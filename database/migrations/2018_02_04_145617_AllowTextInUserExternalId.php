@@ -6,20 +6,14 @@ use Illuminate\Database\Migrations\Migration;
 
 class AllowTextInUserExternalId extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('external_id')->nullable()->change();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('users', function (Blueprint $table) {
             $table->unsignedInteger('external_id')->change();

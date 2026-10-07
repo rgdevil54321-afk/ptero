@@ -15,17 +15,16 @@ const gray = {
 
 module.exports = {
     content: [
-        './resources/scripts/**/*.{js,ts,tsx}',
+        './DGEN/themes/**/*.{js,ts,tsx}',
+        './DGEN/addons/**/*.{js,ts,tsx}',
     ],
     theme: {
         extend: {
             fontFamily: {
-                header: ['"IBM Plex Sans"', '"Roboto"', 'system-ui', 'sans-serif'],
+                header: ['"Poppins"', '"IBM Plex Sans"', '"Roboto"', 'system-ui', 'sans-serif'],
             },
             colors: {
                 black: '#131a20',
-                // "primary" and "neutral" are deprecated, prefer the use of "blue" and "gray"
-                // in new code.
                 primary: colors.blue,
                 gray: gray,
                 neutral: gray,
@@ -37,13 +36,50 @@ module.exports = {
             transitionDuration: {
                 250: '250ms',
             },
-            borderColor: theme => ({
-                default: theme('colors.neutral.400', 'currentColor'),
-            }),
+            borderColor: {
+                default: 'hsl(211, 10%, 53%)',
+            },
+            keyframes: {
+                "shimmer-slide": {
+                    to: {
+                        transform: "translate(calc(100cqw - 100%), 0)",
+                    },
+                },
+                "spin-around": {
+                    "0%": {
+                        transform: "translateZ(0) rotate(0)",
+                    },
+                    "15%, 35%": {
+                        transform: "translateZ(0) rotate(90deg)",
+                    },
+                    "65%, 85%": {
+                        transform: "translateZ(0) rotate(270deg)",
+                    },
+                    "100%": {
+                        transform: "translateZ(0) rotate(360deg)",
+                    },
+                },
+                shine: {
+                    '0%': {
+                        backgroundPosition: '0% 0%',
+                    },
+                    '50%': {
+                        backgroundPosition: '100% 100%',
+                    },
+                    '100%': {
+                        backgroundPosition: '0% 0%',
+                    },
+                },
+
+            },
+            animation: {
+                "shimmer-slide": "shimmer-slide var(--speed) ease-in-out infinite alternate",
+                "spin-around": "spin-around calc(var(--speed) * 2) infinite linear",
+                "shine": 'shine var(--duration, 2s) linear infinite',
+            },
         },
     },
     plugins: [
-        require('@tailwindcss/line-clamp'),
         require('@tailwindcss/forms')({
             strategy: 'class',
         }),

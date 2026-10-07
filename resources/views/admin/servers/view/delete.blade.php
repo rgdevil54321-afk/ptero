@@ -29,7 +29,9 @@
             <div class="box-footer">
                 <form id="deleteform" action="{{ route('admin.servers.view.delete', $server->id) }}" method="POST">
                     {!! csrf_field() !!}
+                    @if(Auth::user()->root_admin || Auth::user()->hasAdminPermission('admin.servers.delete'))
                     <button id="deletebtn" class="btn btn-danger">Safely Delete This Server</button>
+                    @endif
                 </form>
             </div>
         </div>
@@ -47,7 +49,9 @@
                 <form id="forcedeleteform" action="{{ route('admin.servers.view.delete', $server->id) }}" method="POST">
                     {!! csrf_field() !!}
                     <input type="hidden" name="force_delete" value="1" />
+                    @if(Auth::user()->root_admin || Auth::user()->hasAdminPermission('admin.servers.delete'))
                     <button id="forcedeletebtn"" class="btn btn-danger">Forcibly Delete This Server</button>
+                    @endif
                 </form>
             </div>
         </div>

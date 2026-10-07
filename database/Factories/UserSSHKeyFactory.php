@@ -7,11 +7,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class UserSSHKeyFactory extends Factory
 {
-    /**
-     * Some fake public keys generated for test purposes.
-     *
-     * @var string[]
-     */
     protected static array $keys = [
         'dsa' => 'ssh-dss AAAAB3NzaC1kc3MAAACBAPfiWwEFvBOafdUmHDPjXsUttt+65FHSZSCVVeEFOTaL7Y3d0CJyrtck8KS1vmXHSb8QFBY2B1yVSb/reaQvNreWZN3KDYfLbF57/zimBn+IrHrJR+ZglhOxDRHoGPWK7q9jYIrOLwoOjkNKXxz1eOHKUgufFfSNtIRLycEXczLrAAAAFQC6LnBErezotG52jN4JostfC/TfEwAAAIACuTxRzYFDXHAxFICeqqY9w+y+v2yQfdeQ1BgCq2GMagUYfOdqnjizTO9M614r/nXZK1SV10TqhUcQtkJzDQIUtBqzBF5cIC/1cIFKzXi5rNHs8Y4bz/PBD+EbQJdiy+1so1oi790r710bqnkzTravAOJ5rGyfuQRLt+f+kuS9NAAAAIEA7tjGtJuXGUtPIXfnrMYS1iOWryO4irqnvaWfel002/DaGaNjRghNe/cUBYlAsjPhGJ1F7BQlLAY1koliTY6l0svs7ZPBM5QOumrr8OaNXGGVIq/RkkxuZHmRoUL2qH3DGYaktPUn4vFPliiAmGWOHAEu1K6B4g4vG/SKgMRpIvc=',
         'rsa_2048' => 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAAAgQC4VVsHFO5MxvCtAPyoKGANWyuwZ4fvllvFog5RJbfpDpw8etDFVGEXl+uRR8p79g9oV7MscoFo6HiWrJc4/4vlP665msjosILdIcbnuzMhvXnKisaGh9zflkpyR3KhUxoHxqYp2q8XtffjKKAHz1a8o7OUG6fwaKIqu+d0PoICZQ==',
@@ -19,11 +14,6 @@ class UserSSHKeyFactory extends Factory
         'ed25519' => 'ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOaXIq09NH4a93EVdrvHYiZ67Wj+GBEBQ9ou4W0qSYm2',
     ];
 
-    /**
-     * Returns a fake public key for use on the system.
-     *
-     * @return array
-     */
     public function definition()
     {
         $key = PublicKeyLoader::loadPublicKey(static::$keys['ed25519']);
@@ -35,9 +25,6 @@ class UserSSHKeyFactory extends Factory
         ];
     }
 
-    /**
-     * Returns a DSA public key.
-     */
     public function dsa(): self
     {
         $key = PublicKeyLoader::loadPublicKey(static::$keys['dsa']);
@@ -48,10 +35,6 @@ class UserSSHKeyFactory extends Factory
         ]);
     }
 
-    /**
-     * Returns an RSA public key, if "weak" is specified a 1024-bit RSA key is returned
-     * which should fail validation when being stored.
-     */
     public function rsa(bool $weak = false): self
     {
         $key = PublicKeyLoader::loadPublicKey(static::$keys[$weak ? 'rsa_2048' : 'rsa_4096']);

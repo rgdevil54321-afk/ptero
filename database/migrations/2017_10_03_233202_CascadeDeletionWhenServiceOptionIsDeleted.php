@@ -6,10 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class CascadeDeletionWhenServiceOptionIsDeleted extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('service_variables', function (Blueprint $table) {
             $table->dropForeign(['option_id']);
@@ -18,10 +15,7 @@ class CascadeDeletionWhenServiceOptionIsDeleted extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('service_variables', function (Blueprint $table) {
             $table->dropForeign(['option_id']);

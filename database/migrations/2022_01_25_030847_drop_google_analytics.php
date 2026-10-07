@@ -5,21 +5,17 @@ use Illuminate\Database\Migrations\Migration;
 
 class DropGoogleAnalytics extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         DB::table('settings')->where('key', 'settings::app:analytics')->delete();
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
-        DB::table('settings')->insert([
+        DB::table('settings')->insert(
+            [
             'key' => 'settings::app:analytics',
-        ]);
+            ]
+        );
     }
 }

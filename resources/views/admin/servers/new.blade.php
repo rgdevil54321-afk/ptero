@@ -14,6 +14,14 @@
 @endsection
 
 @section('content')
+<style>
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.5) sepia(1) saturate(5) hue-rotate(175deg) brightness(1.1);
+}
+input[type="datetime-local"]::-moz-calendar-picker-indicator {
+    color: #337ab7;
+}
+</style>
 <form action="{{ route('admin.servers.new') }}" method="POST">
     <div class="row">
         <div class="col-xs-12">
@@ -34,6 +42,12 @@
                             <label for="pUserId">Server Owner</label>
                             <select id="pUserId" name="owner_id" class="form-control" style="padding-left:0;"></select>
                             <p class="small text-muted no-margin">Email address of the Server Owner.</p>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exp_date">Server Expiry Date</label>
+                            <input type="datetime-local" class="form-control" id="exp_date" name="exp_date" value="{{ old('exp_date') }}" placeholder="Server Expiry Date">
+                            <p class="small text-muted no-margin">Set the expiry date for this server. Leave blank for no expiry.</p>
                         </div>
                     </div>
 
@@ -74,7 +88,16 @@
 
                                 <option value="{{ $node->id }}"
                                     @if($location->id === old('location_id')) selected @endif
-                                >{{ $node->name }}</option>
+                                    @if(!is_null($node->server_limit) && $node->servers_count >= $node->server_limit) disabled @endif
+                                >
+                                    {{ $node->name }}
+                                    @if(!is_null($node->server_limit))
+                                        ({{ $node->servers_count }}/{{ $node->server_limit }})
+                                        @if($node->servers_count >= $node->server_limit)
+                                            - limit reached
+                                        @endif
+                                    @endif
+                                </option>
 
                                 @endforeach
                                 </optgroup>
@@ -130,6 +153,33 @@
                         </div>
                         <p class="text-muted small">The total number of backups that can be created for this server.</p>
                     </div>
+                    @if($addonSplitterEnabled ?? false)
+                    <div class="form-group col-xs-6">
+                        <label for="pSplitLimit" class="control-label">Server Split Limit <span class="label label-primary">Server Splitter</span></label>
+                        <div>
+                            <input type="number" min="0" id="pSplitLimit" name="split_limit" class="form-control" value="{{ old('split_limit', 0) }}"/>
+                        </div>
+                        <p class="text-muted small">Max sub-servers allowed via Server Splitter. Set to <code>0</code> to use addon defaults.</p>
+                    </div>
+                    @endif
+                    @if($addonProxyEnabled ?? false)
+                    <div class="form-group col-xs-6">
+                        <label for="pProxyLimit" class="control-label">Reverse Proxy Limit <span class="label label-primary">Reverse Proxy</span></label>
+                        <div>
+                            <input type="number" min="0" id="pProxyLimit" name="proxy_limit" class="form-control" value="{{ old('proxy_limit', 0) }}"/>
+                        </div>
+                        <p class="text-muted small">Max reverse proxies allowed. Set to <code>0</code> to use addon defaults.</p>
+                    </div>
+                    @endif
+                    @if($addonSubdomainEnabled ?? false)
+                    <div class="form-group col-xs-6">
+                        <label for="pSubdomainLimit" class="control-label">Subdomain Limit <span class="label label-primary">Subdomain Manager</span></label>
+                        <div>
+                            <input type="number" min="0" id="pSubdomainLimit" name="subdomain_limit" class="form-control" value="{{ old('subdomain_limit', 0) }}"/>
+                        </div>
+                        <p class="text-muted small">Max subdomains allowed. Set to <code>0</code> to use addon defaults.</p>
+                    </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -317,10 +367,8 @@
     {!! Theme::js('vendor/lodash/lodash.js') !!}
 
     <script type="application/javascript">
-        // Persist 'Service Variables'
         function serviceVariablesUpdated(eggId, ids) {
             @if (old('egg_id'))
-                // Check if the egg id matches.
                 if (eggId != '{{ old('egg_id') }}') {
                     return;
                 }
@@ -335,14 +383,12 @@
                 $('#pDefaultContainer').val('{{ old('image') }}');
             @endif
         }
-        // END Persist 'Service Variables'
     </script>
 
     {!! Theme::js('js/admin/new-server.js?v=20220530') !!}
 
     <script type="application/javascript">
         $(document).ready(function() {
-            // Persist 'Server Owner' select2
             @if (old('owner_id'))
                 $.ajax({
                     url: '/admin/users/accounts.json?user_id={{ old('owner_id') }}',
@@ -353,19 +399,14 @@
             @else
                 initUserIdSelect();
             @endif
-            // END Persist 'Server Owner' select2
 
-            // Persist 'Node' select2
             @if (old('node_id'))
                 $('#pNodeId').val('{{ old('node_id') }}').change();
 
-                // Persist 'Default Allocation' select2
                 @if (old('allocation_id'))
                     $('#pAllocation').val('{{ old('allocation_id') }}').change();
                 @endif
-                // END Persist 'Default Allocation' select2
 
-                // Persist 'Additional Allocations' select2
                 @if (old('allocation_additional'))
                     const additional_allocations = [];
 
@@ -375,21 +416,15 @@
 
                     $('#pAllocationAdditional').val(additional_allocations).change();
                 @endif
-                // END Persist 'Additional Allocations' select2
             @endif
-            // END Persist 'Node' select2
 
-            // Persist 'Nest' select2
             @if (old('nest_id'))
                 $('#pNestId').val('{{ old('nest_id') }}').change();
 
-                // Persist 'Egg' select2
                 @if (old('egg_id'))
                     $('#pEggId').val('{{ old('egg_id') }}').change();
                 @endif
-                // END Persist 'Egg' select2
             @endif
-            // END Persist 'Nest' select2
         });
     </script>
 @endsection

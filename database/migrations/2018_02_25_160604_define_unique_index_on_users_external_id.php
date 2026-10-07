@@ -6,20 +6,14 @@ use Illuminate\Database\Migrations\Migration;
 
 class DefineUniqueIndexOnUsersExternalId extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('users', function (Blueprint $table) {
             $table->index(['external_id']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('users', function (Blueprint $table) {
             $table->dropIndex(['external_id']);

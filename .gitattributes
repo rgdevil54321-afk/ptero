@@ -1,0 +1,9 @@
+# Shell scripts must stay LF (they run on Linux servers).
+*.sh text eol=lf
+
+# The Hyper panel's PHP is ionCube-encoded. Line-ending conversion corrupts
+# encoded payloads, so treat every .php file as binary (stored verbatim).
+*.php binary
+
+# License/material byte-exact files.
+*.key binary

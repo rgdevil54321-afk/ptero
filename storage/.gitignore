@@ -1,0 +1,9 @@
+*
+!.gitignore
+!app/
+!framework/
+!logs/
+!app/public/
+!framework/cache/
+!framework/sessions/
+!framework/views/

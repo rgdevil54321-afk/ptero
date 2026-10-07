@@ -4,7 +4,9 @@ return [
     'daemon_connection_failed' => 'There was an exception while attempting to communicate with the daemon resulting in a HTTP/:code response code. This exception has been logged.',
     'node' => [
         'servers_attached' => 'A node must have no servers linked to it in order to be deleted.',
-        'daemon_off_config_updated' => 'The daemon configuration has been updated, however there was an error encountered while attempting to automatically update the configuration file on the Daemon. You will need to manually update the configuration file (config.yml) for the daemon to apply these changes.',
+        'allocations_in_use' => 'This node has allocations that are still assigned to a server. Unassign those allocations first, or enable force delete if they are stale allocations linked to servers on other nodes.',
+        'primary_allocation_in_use' => 'Force delete cannot remove allocation #:allocation because it is still the primary allocation for server #:server and no replacement allocation exists on that server\'s current node.',
+        'daemon_off_config_updated' => 'The daemon configuration <strong>has been updated</strong>, however there was an error encountered while attempting to automatically update the configuration file on the Daemon. You will need to manually update the configuration file (config.yml) for the daemon to apply these changes.',
     ],
     'allocations' => [
         'server_using' => 'A server is currently assigned to this allocation. An allocation can only be deleted if no server is currently assigned.',

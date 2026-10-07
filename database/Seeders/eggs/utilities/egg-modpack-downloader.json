@@ -1,0 +1,104 @@
+{
+    "_comment": "DO NOT EDIT: FILE GENERATED AUTOMATICALLY BY PTERODACTYL PANEL - PTERODACTYL.IO",
+    "meta": {
+        "version": "PTDL_v2",
+        "update_url": null
+    },
+    "exported_at": "2025-10-31T00:00:00+00:00",
+    "name": "Modpack Downloader Hyper",
+    "author": "DGENs@gmail.com",
+    "description": "Downloads and extracts Minecraft modpacks from URLs. Extracts JAR files to /mods directory.",
+    "features": [],
+    "docker_images": {
+        "Debian": "ghcr.io/pterodactyl/yolks:debian"
+    },
+    "file_denylist": [],
+    "startup": "echo 'Modpack Downloader - Download completed during installation. No runtime server.'",
+    "config": {
+        "files": "{}",
+        "startup": "{\r\n    \"done\": \"Modpack Downloader - Download completed\"\r\n}",
+        "logs": "{}",
+        "stop": "echo 'Stopping downloader (no-op)'"
+    },
+    "scripts": {
+        "installation": {
+            "script": "#!/bin/bash\n\n# Hyper Smart Modpack Installer (Python Based)\n# Integrated RoleDev API Support\nexport CURSEFORGE_API_KEY='$2a$10$Mq226KUCWWFalJoPKe25YuHzCIKUoQJGx8ejyqhOyO92bF2cdX2dm'\n\n# Force temp files to use the server volume (fixes 'no space left' on small rootfs)\nmkdir -p /mnt/server/tmp\nexport TMPDIR=/mnt/server/tmp\n\nmkdir -p /mnt/server\ncd /mnt/server || exit\n\n# 1. Install Dependencies\necho \"[Hyper] Installing dependencies (Python3, Requests, Java)...\"\napt-get update -qq && apt-get install -y -qq python3 python3-requests curl unzip openjdk-17-jre-headless >/dev/null 2>&1\n\n# Fallback for requests if apt failed (some images minimal)\nif ! python3 -c \"import requests\" &>/dev/null; then\n    echo \"[Hyper] Installing requests via pip...\"\n    apt-get install -y -qq python3-pip >/dev/null 2>&1\n    pip3 install requests --quiet\nfi\n\n# 2. Download Python Installer Script\n# REPLACE THIS URL WITH YOUR HOSTED LOCATION OF installer.py\nINSTALLER_URL=\"https://hyper-r2.dgenx.net/java/modpacks/installer.py\"\n\necho \"[Hyper] Downloading installer logic...\"\ncurl -sL -o installer.py \"$INSTALLER_URL\"\n\n# 3. Run Installer\necho \"[Hyper] Launching Python Installer...\"\npython3 installer.py\n\n# Cleanup\nrm -f installer.py\nrm -rf $TMPDIR",
+            "container": "ghcr.io/pterodactyl/installers:debian",
+            "entrypoint": "bash"
+        }
+    },
+    "variables": [
+        {
+            "name": "Modpack Download URL",
+            "description": "The direct download URL for the modpack ZIP file.",
+            "env_variable": "MODPACK_URL",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string"
+        },
+        {
+            "name": "Modpack Filename",
+            "description": "The original filename of the modpack (for reference).",
+            "env_variable": "MODPACK_FILENAME",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "nullable|string|max:255"
+        },
+        {
+            "name": "Modpack Provider",
+            "description": "The modpack provider (modrinth, curseforge, etc.).",
+            "env_variable": "MODPACK_PROVIDER",
+            "default_value": "modrinth",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|in:modrinth,curseforge"
+        },
+        {
+            "name": "Modpack ID",
+            "description": "The unique identifier for the modpack.",
+            "env_variable": "MODPACK_ID",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:255"
+        },
+        {
+            "name": "Modpack Name",
+            "description": "The display name of the modpack.",
+            "env_variable": "MODPACK_NAME",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": true,
+            "rules": "required|string|max:255"
+        },
+        {
+            "name": "Minecraft Version",
+            "description": "The Minecraft version of the modpack.",
+            "env_variable": "MINECRAFT_VERSION",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": false,
+            "rules": "nullable|string"
+        },
+        {
+            "name": "Modloader",
+            "description": "The modloader used (forge, fabric, etc).",
+            "env_variable": "MODLOADER",
+            "default_value": "",
+            "user_viewable": true,
+            "user_editable": false,
+            "rules": "nullable|string"
+        },
+        {
+            "name": "Modpack Version ID",
+            "description": "The modpack version ID to use for the installation.",
+            "env_variable": "MODPACK_VERSION_ID",
+            "default_value": "",
+            "user_viewable": false,
+            "user_editable": false,
+            "rules": "required|string"
+        }
+    ]
+}

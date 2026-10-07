@@ -4,10 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class MigrateToNewServiceSystem extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         DB::transaction(function () {
             $service = DB::table('services')->where('author', config('pterodactyl.service.core'))->where('folder', 'srcds')->first();
@@ -29,11 +26,7 @@ class MigrateToNewServiceSystem extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
-        // Not doing reversals right now...
     }
 }

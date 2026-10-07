@@ -6,10 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class CreateSchedulesTable extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->increments('id');
@@ -29,10 +26,7 @@ class CreateSchedulesTable extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('schedules');
     }

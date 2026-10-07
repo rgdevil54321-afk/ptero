@@ -10,16 +10,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 class NodeFactory extends Factory
 {
-    /**
-     * The name of the factory's corresponding model.
-     *
-     * @var string
-     */
     protected $model = Node::class;
 
-    /**
-     * Define the model's default state.
-     */
     public function definition(): array
     {
         return [
@@ -38,7 +30,9 @@ class NodeFactory extends Factory
             'daemon_token' => Crypt::encrypt(Str::random(Node::DAEMON_TOKEN_LENGTH)),
             'daemonListen' => 8080,
             'daemonSFTP' => 2022,
+            'sftp_port_alias' => null,
             'daemonBase' => '/var/lib/pterodactyl/volumes',
+            'server_limit' => null,
         ];
     }
 }

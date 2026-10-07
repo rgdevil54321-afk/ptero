@@ -16,6 +16,14 @@
 
 @section('content')
 @include('admin.servers.partials.navigation')
+<style>
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.5) sepia(1) saturate(5) hue-rotate(175deg) brightness(1.1);
+}
+input[type="datetime-local"]::-moz-calendar-picker-indicator {
+    color: #337ab7;
+}
+</style>
 <div class="row">
     <div class="col-xs-12">
         <div class="box box-primary">
@@ -46,6 +54,26 @@
                         <textarea name="description" rows="3" class="form-control">{{ old('description', $server->description) }}</textarea>
                         <p class="text-muted small">A brief description of this server.</p>
                     </div>
+                    <div class="form-group">
+                        <label for="exp_date" class="control-label">Server Expiry Date</label>
+                        <input type="datetime-local" name="exp_date" value="{{ old('exp_date', $server->exp_date ? $server->exp_date->format('Y-m-d\TH:i') : '') }}" class="form-control" />
+                        <p class="text-muted small">Set the expiry date for this server. Leave blank for no expiry.</p>
+                    </div>
+
+                    @if($billingEnabled)
+                        <div class="form-group">
+                            <label for="billing_plan_id" class="control-label">Billing Plan (Game)</label>
+                            <select name="product_id" class="form-control">
+                                <option value="">None (Custom/No Plan)</option>
+                                @foreach($billingGames as $game)
+                                    <option value="{{ $game->id }}" {{ $server->product_id == $game->id ? 'selected' : '' }}>
+                                        {{ $game->category_name }} - {{ $game->name }} ({{ $game->price }})
+                                    </option>
+                                @endforeach
+                            </select>
+                            <p class="text-muted small">Assign a billing plan to this server. This links the server to a specific product/price.</p>
+                        </div>
+                    @endif
                 </div>
                 <div class="box-footer">
                     {!! csrf_field() !!}

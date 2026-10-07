@@ -6,10 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 
 class UpdateFileDenylistToJson extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function up()
     {
         Schema::table('eggs', function (Blueprint $table) {
             $table->dropColumn('file_denylist');
@@ -20,10 +17,7 @@ class UpdateFileDenylistToJson extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::table('eggs', function (Blueprint $table) {
             $table->dropColumn('file_denylist');
