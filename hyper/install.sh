@@ -10,7 +10,7 @@
 #  separate "theme" step: the panel ships with the theme built in.
 #
 #  Requirements:
-#   - Ubuntu 22.04 / 24.04 (or Debian 12) x86_64
+#   - Ubuntu 22.04 / 24.04 x86_64 (Debian is possible with manual PHP setup)
 #   - Run as root
 #
 #  Usage (recommended - clone first, then run):
@@ -100,6 +100,28 @@ require_script_file() {
         exit 1
     fi
     log "Repo root: $REPO_ROOT (Hyper Game Panel $SCRIPT_VERSION)"
+}
+
+require_os() {
+    # The automatic prerequisite path assumes Ubuntu (ondrej/php PPA). Other
+    # distros are allowed, but PHP 8.4 + the loader must then be prepared by
+    # hand and the installer re-run with --skip-prereqs.
+    if [[ -f /etc/os-release ]]; then
+        local ID="$(sed -n 's/^ID=//p' /etc/os-release)"
+        case "$ID" in
+            ubuntu|debian)
+                if [[ "$ID" == "debian" ]]; then
+                    warn "On Debian the ondrej/php PPA is unavailable."
+                    warn "Install PHP 8.4 + the ionCube Loader manually, then re-run with --skip-prereqs."
+                fi
+                ;;
+            *)
+                warn "Untested OS family '${ID}' - the automatic package install expects Ubuntu."
+                warn "Install nginx, MariaDB, Redis, PHP 8.x + ionCube Loader and Composer yourself,"
+                warn "then re-run with --skip-prereqs."
+                ;;
+        esac
+    fi
 }
 
 # -----------------------------------------------------------------------------
@@ -288,14 +310,18 @@ install_deps() {
     cd "$PANEL_PATH"
     export COMPOSER_ALLOW_SUPERUSER=1
 
-    # Ensure the extra packages the Hyper panel relies on are present.
+    # Install from the locked dependency set first; then fill in any extras
+    # the Hyper panel needs that are not part of the lock file.
+    composer install --no-dev --optimize-autoloader --no-interaction || {
+        err "composer install failed. Check the output above."
+        exit 1
+    }
+
     for PKG in intervention/image laragear/webauthn laravel/socialite socialiteproviders/whmcs team-reflex/discord-php; do
         composer show "$PKG" >/dev/null 2>&1 || \
             composer require "$PKG" --no-interaction --with-all-dependencies >/dev/null 2>&1 || \
             warn "Could not install optional package ${PKG}."
     done
-
-    composer install --no-dev --optimize-autoloader --no-interaction
 }
 
 migrate_db() {
@@ -545,6 +571,7 @@ finish() {
 main() {
     require_root
     require_script_file
+    require_os
     echo ""
     log "Hyper Game Panel installer - version ${SCRIPT_VERSION}"
     log "Repository : ${REPO_ROOT}"

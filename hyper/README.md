@@ -11,7 +11,8 @@ this repo, so there is nothing extra to download.
 
 ## Quick install (fresh server)
 
-Requirements: **Ubuntu 22.04/24.04 (or Debian 12) x86_64**, run as **root**.
+Requirements: **Ubuntu 22.04/24.04 x86_64**, run as **root** (Debian works if you
+prepare PHP 8.4 + the ionCube Loader manually and re-run with `--skip-prereqs`).
 
 ```bash
 git clone <this-repo-url> /tmp/ptero
