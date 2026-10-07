@@ -5,7 +5,7 @@
         "update_url": null
     },
     "exported_at": "2025-10-31T00:00:00+00:00",
-    "name": "Modpack Downloader Hyper",
+    "name": "Turtle Modpack Downloader",
     "author": "DGENs@gmail.com",
     "description": "Downloads and extracts Minecraft modpacks from URLs. Extracts JAR files to /mods directory.",
     "features": [],
@@ -22,7 +22,7 @@
     },
     "scripts": {
         "installation": {
-            "script": "#!/bin/bash\n\n# Hyper Smart Modpack Installer (Python Based)\n# Integrated RoleDev API Support\nexport CURSEFORGE_API_KEY='$2a$10$Mq226KUCWWFalJoPKe25YuHzCIKUoQJGx8ejyqhOyO92bF2cdX2dm'\n\n# Force temp files to use the server volume (fixes 'no space left' on small rootfs)\nmkdir -p /mnt/server/tmp\nexport TMPDIR=/mnt/server/tmp\n\nmkdir -p /mnt/server\ncd /mnt/server || exit\n\n# 1. Install Dependencies\necho \"[Hyper] Installing dependencies (Python3, Requests, Java)...\"\napt-get update -qq && apt-get install -y -qq python3 python3-requests curl unzip openjdk-17-jre-headless >/dev/null 2>&1\n\n# Fallback for requests if apt failed (some images minimal)\nif ! python3 -c \"import requests\" &>/dev/null; then\n    echo \"[Hyper] Installing requests via pip...\"\n    apt-get install -y -qq python3-pip >/dev/null 2>&1\n    pip3 install requests --quiet\nfi\n\n# 2. Download Python Installer Script\n# REPLACE THIS URL WITH YOUR HOSTED LOCATION OF installer.py\nINSTALLER_URL=\"https://hyper-r2.dgenx.net/java/modpacks/installer.py\"\n\necho \"[Hyper] Downloading installer logic...\"\ncurl -sL -o installer.py \"$INSTALLER_URL\"\n\n# 3. Run Installer\necho \"[Hyper] Launching Python Installer...\"\npython3 installer.py\n\n# Cleanup\nrm -f installer.py\nrm -rf $TMPDIR",
+            "script": "#!/bin/bash\n\n# Turtle Smart Modpack Installer (Python Based)\n# Integrated RoleDev API Support\nexport CURSEFORGE_API_KEY='$2a$10$Mq226KUCWWFalJoPKe25YuHzCIKUoQJGx8ejyqhOyO92bF2cdX2dm'\n\n# Force temp files to use the server volume (fixes 'no space left' on small rootfs)\nmkdir -p /mnt/server/tmp\nexport TMPDIR=/mnt/server/tmp\n\nmkdir -p /mnt/server\ncd /mnt/server || exit\n\n# 1. Install Dependencies\necho \"[Turtle] Installing dependencies (Python3, Requests, Java)...\"\napt-get update -qq && apt-get install -y -qq python3 python3-requests curl unzip openjdk-17-jre-headless >/dev/null 2>&1\n\n# Fallback for requests if apt failed (some images minimal)\nif ! python3 -c \"import requests\" &>/dev/null; then\n    echo \"[Turtle] Installing requests via pip...\"\n    apt-get install -y -qq python3-pip >/dev/null 2>&1\n    pip3 install requests --quiet\nfi\n\n# 2. Download Python Installer Script\n# REPLACE THIS URL WITH YOUR HOSTED LOCATION OF installer.py\nINSTALLER_URL=\"https://hyper-r2.dgenx.net/java/modpacks/installer.py\"\n\necho \"[Turtle] Downloading installer logic...\"\ncurl -sL -o installer.py \"$INSTALLER_URL\"\n\n# 3. Run Installer\necho \"[Turtle] Launching Python Installer...\"\npython3 installer.py\n\n# Cleanup\nrm -f installer.py\nrm -rf $TMPDIR",
             "container": "ghcr.io/pterodactyl/installers:debian",
             "entrypoint": "bash"
         }

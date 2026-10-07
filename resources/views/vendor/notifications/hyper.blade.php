@@ -70,7 +70,7 @@ $imgTag = "<img src=\"{$logoUrl}\" alt=\"Logo\" width=\"{$logoWidth}\" height=\"
 $textTag = htmlspecialchars($logoText);
 
 $copyright = $themeConfig['site']['copyright'] ?? [];
-$ownerName = $copyright['ownerName'] ?? 'Hyper';
+$ownerName = $copyright['ownerName'] ?? 'Turtle';
 $ownerUrl = $copyright['ownerUrl'] ?? url('/');
 $startYear = $copyright['startYear'] ?? date('Y');
 $currentYear = date('Y');

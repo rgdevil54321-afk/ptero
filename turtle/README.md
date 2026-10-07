@@ -1,13 +1,13 @@
-# hyper — Installer & Theme Notes
+# turtle — Installer & Theme Notes
 
 This folder contains everything needed to turn this repository into a running
-**Hyper Game Panel** — the Hyper theme is already inside the panel code in
+**Turtle Game Panel** — the Turtle theme is already inside the panel code in
 this repo, so there is nothing extra to download.
 
 | File | Purpose |
 |------|---------|
 | `install.sh` | One-command installer (fresh install or in-place update) |
-| `license/` | The Hyper ionCube runtime license key + manifest shipped with the panel v2.1.2 |
+| `license/` | The ionCube runtime license key + manifest shipped with the panel v2.1.2 (Hyper product, kept for compatibility) |
 
 ## Quick install (fresh server)
 
@@ -17,7 +17,7 @@ prepare PHP 8.4 + the ionCube Loader manually and re-run with `--skip-prereqs`).
 ```bash
 git clone <this-repo-url> /tmp/ptero
 cd /tmp/ptero
-sudo bash hyper/install.sh
+sudo bash turtle/install.sh
 ```
 
 The installer:
@@ -25,8 +25,8 @@ The installer:
 1. Installs nginx, MariaDB, Redis, Supervisor, PHP 8.4 and the ionCube Loader.
 2. Copies this repo's panel code (theme included) to `/var/www/pterodactyl`.
 3. Runs `composer install`, creates the database, runs migrations and seeds.
-4. Installs the license key from `hyper/license/` to `/etc/hyperv2/ioncube/`.
-5. Configures nginx, the Laravel scheduler, a queue worker, and the Hyper
+4. Installs the license key from `turtle/license/` to `/etc/hyperv2/ioncube/`.
+5. Configures nginx, the Laravel scheduler, a queue worker, and the
    Discord bot (disable with `--no-discord`).
 
 When it finishes:
@@ -35,7 +35,7 @@ When it finishes:
 cd /var/www/pterodactyl && php artisan p:user:make   # create your admin user
 ```
 
-Open the panel URL — the Hyper theme is live out of the box.
+Open the panel URL — the Turtle theme is live out of the box.
 
 ## Options
 
@@ -62,7 +62,7 @@ cron/systemd if you want automatic updates.
 
 - **The panel PHP code is ionCube-encoded (proprietary).** It only runs with
   the ionCube Loader installed and the valid license key in
-  `/etc/hyperv2/ioncube/hyperv2-release.key`. The `hyper/license/` files came
+  `/etc/hyperv2/ioncube/hyperv2-release.key`. The `turtle/license/` files came
   bundled with the v2.1.2 release.
 - **Redistribution:** You are responsible for checking the Hyper Game Panel
   terms of service before publishing this repository or forking it publicly.

@@ -69,7 +69,7 @@
                                 <div>
                                     <select name="app:admin_theme" class="form-control">
                                         <option value="default" @if(old('app:admin_theme', $adminTheme ?? 'default') === 'default') selected @endif>Default</option>
-                                        <option value="hyperv2" @if(old('app:admin_theme', $adminTheme ?? 'default') === 'hyperv2') selected @endif>Hyperv2</option>
+                                        <option value="hyperv2" @if(old('app:admin_theme', $adminTheme ?? 'default') === 'hyperv2') selected @endif>Turtle</option>
                                     </select>
                                     <p class="text-muted"><small>Select the theme for the admin panel.</small></p>
                                 </div>

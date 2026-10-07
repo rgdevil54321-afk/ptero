@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 #
 # =============================================================================
-#  Hyper Game Panel - One-Command Installer
+#  Turtle Game Panel - One-Command Installer
 # =============================================================================
-#  Installs the Hyper Game Panel straight from THIS repository.
+#  Installs the Turtle Game Panel straight from THIS repository.
 #
-#  This repository already contains the Hyper Game Panel v2.1.2 codebase
-#  (Pterodactyl-based) with the Hyper theme pre-installed, so there is no
-#  separate "theme" step: the panel ships with the theme built in.
+#  This repository already contains the Turtle Game Panel v2.1.2 codebase
+#  (Pterodactyl-based, forked from the Hyper Game Panel) with the Turtle
+#  theme pre-installed, so there is no separate "theme" step: the panel
+#  ships with the theme built in.
 #
 #  Requirements:
 #   - Ubuntu 22.04 / 24.04 x86_64 (Debian is possible with manual PHP setup)
@@ -16,7 +17,7 @@
 #  Usage (recommended - clone first, then run):
 #     git clone <this-repo> /tmp/ptero
 #     cd /tmp/ptero
-#     sudo bash hyper/install.sh
+#     sudo bash turtle/install.sh
 #
 #  Options:
 #     --path PATH         Panel install directory  (default: /var/www/pterodactyl)
@@ -54,9 +55,9 @@ UPDATE_MODE=0
 SCRIPT_VERSION=$(cat "$REPO_ROOT/hyper_version.json" 2>/dev/null | grep -o '"version"[^,]*' | cut -d'"' -f4 || echo "unknown")
 LOG_FILE="/var/log/pterodactyl/install.log"
 
-log()  { echo -e "\e[1;34m[hyper]\e[0m $*"; }
-warn() { echo -e "\e[1;33m[hyper][warn]\e[0m $*"; }
-err()  { echo -e "\e[1;31m[hyper][error]\e[0m $*" >&2; }
+log()  { echo -e "\e[1;34m[turtle]\e[0m $*"; }
+warn() { echo -e "\e[1;33m[turtle][warn]\e[0m $*"; }
+err()  { echo -e "\e[1;31m[turtle][error]\e[0m $*" >&2; }
 
 usage() {
     sed -n '2,30p' "${BASH_SOURCE[0]}" | sed -e 's/^# \{0,1\}//' -e '/^===/d'
@@ -86,7 +87,7 @@ done
 # -----------------------------------------------------------------------------
 require_root() {
     if [[ "$(id -u)" -ne 0 ]]; then
-        err "This installer must be run as root. Try: sudo bash hyper/install.sh"
+        err "This installer must be run as root. Try: sudo bash turtle/install.sh"
         exit 1
     fi
 }
@@ -96,10 +97,10 @@ require_script_file() {
     # the panel code into the install directory.
     if [[ ! -d "$REPO_ROOT/app" || ! -f "$REPO_ROOT/composer.json" ]]; then
         err "Cannot locate the panel code in this checkout ($REPO_ROOT)."
-        err "Please run: git clone <this-repo> /tmp/ptero && cd /tmp/ptero && sudo bash hyper/install.sh"
+        err "Please run: git clone <this-repo> /tmp/ptero && cd /tmp/ptero && sudo bash turtle/install.sh"
         exit 1
     fi
-    log "Repo root: $REPO_ROOT (Hyper Game Panel $SCRIPT_VERSION)"
+    log "Repo root: $REPO_ROOT (Turtle Game Panel $SCRIPT_VERSION)"
 }
 
 require_os() {
@@ -230,12 +231,12 @@ setup_database() {
     mysql -e "FLUSH PRIVILEGES;"
 
     # Save the credentials for reference.
-    cat > /root/.hyper-db-credentials <<EOF
+    cat > /root/.turtle-db-credentials <<EOF
 DB_DATABASE=${DB_DATABASE}
 DB_USERNAME=${DB_USERNAME}
 DB_PASSWORD=${DB_PASSWORD}
 EOF
-    chmod 600 /root/.hyper-db-credentials
+    chmod 600 /root/.turtle-db-credentials
 
     log "Database credentials saved to /root/.hyper-db-credentials"
 }
@@ -251,7 +252,7 @@ deploy_files() {
 
     # Copy the whole repo (excluding .git and the installer docs) via tar,
     # so there is no rsync dependency.
-    ( cd "$REPO_ROOT" && tar --exclude='.git' --exclude='hyper' -cf - . ) | ( cd "$PANEL_PATH" && tar -xf - )
+    ( cd "$REPO_ROOT" && tar --exclude='.git' --exclude='turtle' -cf - . ) | ( cd "$PANEL_PATH" && tar -xf - )
 }
 
 ensure_storage() {
@@ -330,10 +331,10 @@ migrate_db() {
 
     php artisan migrate --force
 
-    log "Migrating legacy hyperv1 settings to Hyper V2 (non-fatal if it fails)..."
+    log "Migrating legacy hyperv1 settings to Turtle V2 (non-fatal if it fails)..."
     php artisan hyperv2:migrate-legacy-settings || warn "Legacy settings migration skipped."
 
-    # Seed only the Hyper nests/eggs (avoids the default Pterodactyl set).
+    # Seed only the Turtle nests/eggs (avoids the default Pterodactyl set).
     if [[ -f database/Seeders/NestSeeder.php ]]; then
         cp database/Seeders/NestSeeder.php database/Seeders/NestSeeder.php.bak
         sed -i 's/\$this->createMinecraftNest/\/\/$this->createMinecraftNest/g' database/Seeders/NestSeeder.php
@@ -357,17 +358,17 @@ migrate_db() {
 }
 
 install_license_key() {
-    log "Installing the Hyper license (ionCube runtime key)..."
+    log "Installing the Turtle license (ionCube runtime key)..."
     mkdir -p "$HYPER_IONCUBE_KEY_DIR"
 
-    local KEY_SRC="$REPO_ROOT/hyper/license/hyperv2-release.key"
-    local MANIFEST_SRC="$REPO_ROOT/hyper/license/hyperv2-ioncube.json"
+    local KEY_SRC="$REPO_ROOT/turtle/license/hyperv2-release.key"
+    local MANIFEST_SRC="$REPO_ROOT/turtle/license/hyperv2-ioncube.json"
 
     if [[ -f "$KEY_SRC" ]]; then
         install -o root -g "$WEB_USER" -m 0640 "$KEY_SRC" "$HYPER_IONCUBE_KEY_DIR/hyperv2-release.key"
     else
         # Fallback: fetch the key from the Hyper license API.
-        log "Repo does not ship a license key - fetching from the Hyper API..."
+        log "Repo does not ship a license key - fetching from the update API..."
         local API_URL="https://license.dgenx.net/api/v1/update-check?app_id=7c4efcdc-986e-4e85-9b07-328d6ad6db52&file_slug=ioncube-key"
         local DL_URL
         DL_URL="$(curl -fsSL "$API_URL" 2>/dev/null | grep -o '"download_url":"[^"]*"' | head -n1 | cut -d'"' -f4)"
@@ -380,7 +381,7 @@ install_license_key() {
             find "$TMP_DIR" -type f -name 'hyperv2-ioncube.json' -exec install -o root -g "$WEB_USER" -m 0640 {} "$HYPER_IONCUBE_KEY_DIR/hyperv2-ioncube.json" \;
             rm -rf "$TMP_DIR"
         else
-            err "Could not obtain the Hyper license key. The panel will not start."
+            err "Could not obtain the license key. The panel will not start."
             return 1
         fi
     fi
@@ -543,17 +544,17 @@ restart_fpm() {
 finish() {
     echo ""
     echo "=========================================================================="
-    echo "  Hyper Game Panel $SCRIPT_VERSION installed successfully!"
+    echo "  Turtle Game Panel $SCRIPT_VERSION installed successfully!"
     echo "=========================================================================="
     echo ""
     echo "  Panel URL      : ${APP_URL}"
     echo "  Panel path     : ${PANEL_PATH}"
-    echo "  DB credentials : /root/.hyper-db-credentials"
+    echo "  DB credentials : /root/.turtle-db-credentials"
     echo ""
     echo "  Next steps:"
     echo "    1. Create your first admin user:"
     echo "         cd ${PANEL_PATH} && php artisan p:user:make"
-    echo "    2. Open the panel, log in, and bank on the Hyper theme being live."
+    echo "    2. Open the panel, log in, and bank on the Turtle theme being live."
     echo "    3. (Optional) Configure a domain + TLS, e.g. with certbot."
     echo "    4. To update the panel later:"
     echo "         cd ${PANEL_PATH} && sudo bash hyper_fetch.sh"
@@ -573,7 +574,7 @@ main() {
     require_script_file
     require_os
     echo ""
-    log "Hyper Game Panel installer - version ${SCRIPT_VERSION}"
+    log "Turtle Game Panel installer - version ${SCRIPT_VERSION}"
     log "Repository : ${REPO_ROOT}"
     log "Install to : ${PANEL_PATH}"
     log "Mode       : $([[ "$UPDATE_MODE" == "1" ]] && echo UPDATE || echo FRESH)"

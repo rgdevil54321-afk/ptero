@@ -889,7 +889,7 @@
                         : $__siteLogos;
                     $__shellLogoMode = ($__authLogos['largeMode'] ?? 'image') === 'text' ? 'text' : 'image';
                     $__shellLogoUrl = $__safeAuthAssetUrl($__authLogos['largeUrl'] ?? '/logo/large.png');
-                    $__shellLogoText = (string) ($__authLogos['largeText'] ?? 'HYPER');
+                    $__shellLogoText = (string) ($__authLogos['largeText'] ?? 'TURTLE');
                     $__shellLogoWidth = isset($__authLogos['largeWidth']) ? max(1, min(320, (int) $__authLogos['largeWidth'])) : 117;
                     $__shellLogoHeight = isset($__authLogos['largeHeight']) ? max(12, min(96, (int) $__authLogos['largeHeight'])) : 24;
                     $__shellPrimaryButton = is_array($__shellAuth['primaryButton'] ?? null) ? $__shellAuth['primaryButton'] : null;
@@ -945,7 +945,7 @@
                     $__shellUseTwoStepFlow = !empty($__shellSso['enabled']) && count($__shellSsoProviders) > 0;
                     $__shellSsoIconOnly = ($__shellAuth['ssoButtonStyle'] ?? 'full') === 'icon';
                     $__shellCopyright = is_array($themeDecoded['site']['copyright'] ?? null) ? $themeDecoded['site']['copyright'] : [];
-                    $__shellCopyrightOwner = trim((string) ($__shellCopyright['ownerName'] ?? '')) ?: 'Hyper';
+                    $__shellCopyrightOwner = trim((string) ($__shellCopyright['ownerName'] ?? '')) ?: 'Turtle';
                     $__shellCopyrightSuffix = array_key_exists('suffix', $__shellCopyright) ? (string) $__shellCopyright['suffix'] : '®';
                     $__shellCopyrightUrl = $__safeAuthAssetUrl($__shellCopyright['ownerUrl'] ?? null) ?: '/';
                     $__shellCopyrightStartYear = isset($__shellCopyright['startYear']) ? (int) $__shellCopyright['startYear'] : 2024;

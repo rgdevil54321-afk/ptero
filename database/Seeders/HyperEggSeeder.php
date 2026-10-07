@@ -34,7 +34,7 @@ class HyperEggSeeder extends Seeder
 
     public function run(): void
     {
-        $this->command->info('Seeding Hyper nests and eggs...');
+        $this->command->info('Seeding Turtle nests and eggs...');
 
         $items = $this->nestRepository->findWhere([
             'author' => 'support@pterodactyl.io',
@@ -61,7 +61,7 @@ class HyperEggSeeder extends Seeder
             $this->importEggsForNest($nest);
         }
 
-        $this->command->info('Hyper egg seeding complete.');
+        $this->command->info('Turtle egg seeding complete.');
     }
 
     private function createNest(string $name): void

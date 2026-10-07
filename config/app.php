@@ -7,7 +7,7 @@ return [
     'version' => '1.15.1',
 
 
-    'name' => env('APP_NAME', 'Hyper Game Panel'),
+    'name' => env('APP_NAME', 'Turtle Game Panel'),
 
 
     'env' => env('APP_ENV', 'production'),

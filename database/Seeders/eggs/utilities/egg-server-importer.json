@@ -5,7 +5,7 @@
         "update_url": null
     },
     "exported_at": "2025-10-23T00:00:00+00:00",
-    "name": "Server Importer Hyper",
+    "name": "Turtle Server Importer",
     "author": "DGENs@gmail.com",
     "description": "Imports all files and folders from an SFTP or FTP server to the server directory. Requires IP, port, username, and password.",
     "features": [],
