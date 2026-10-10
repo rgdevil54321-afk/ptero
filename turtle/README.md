@@ -7,6 +7,7 @@ this repo, so there is nothing extra to download.
 | File | Purpose |
 |------|---------|
 | `install.sh` | One-command installer (fresh install or in-place update) |
+| `install_node.sh` | Optional module: install a real **local Wings node** on the same server |
 | `license/` | The ionCube runtime license key + manifest shipped with the panel v2.1.2 (Hyper product, kept for compatibility) |
 
 ## Quick install (fresh server)
@@ -42,11 +43,80 @@ Open the panel URL — the Turtle theme is live out of the box.
 ```text
 --path PATH         Panel install directory  (default: /var/www/pterodactyl)
 --url URL           Public panel URL         (default: prompt)
+--node              Always install a local Wings node (no prompt)
+--no-node           Never install a local node (panel-only; current default behaviour)
 --no-discord        Do not run the Discord bot
 --update            Update an existing panel in place (keeps .env + DB)
 --skip-prereqs      Skip OS package / PHP install
 --skip-nginx        Skip nginx configuration
 ```
+
+After the panel finishes, the installer asks whether to also set up a **Local
+Node** (see below). The question defaults to **No**, so pressing Enter keeps the
+current panel-only behaviour. Use `--node` / `--no-node` to skip the prompt.
+
+## Local Wings node (optional)
+
+`turtle/install_node.sh` installs a **real, registered Wings daemon** on the same
+machine as the panel, so a single server can host both. It uses the official
+Pterodactyl mechanisms end-to-end — no fake node, no UI simulator — so normal
+server management (allocations, console, power, files, SFTP) works afterwards.
+
+It is invoked automatically at the end of `install.sh` if you answer **Yes**
+(or pass `--node`), and can also be run on its own:
+
+```bash
+sudo bash turtle/install_node.sh --panel-path /var/www/pterodactyl
+```
+
+What it does:
+
+1. Pre-flight checks (root, supported OS, panel health, free disk, free ports).
+2. Installs or verifies **Docker**.
+3. Prompts for a **Pterodactyl Application API key** and validates it.
+4. Finds or creates a *Location* and the **"Local Node"** via the Application API.
+5. Creates default allocations (`25565-25570`) if the node has none.
+6. Fetches the official node configuration and writes it to
+   `/etc/pterodactyl/config.yml` (any existing file is backed up first, `chmod 600`).
+7. Installs the official **Wings** binary from GitHub releases, pinned to the
+   latest `v1.x` release compatible with this panel.
+8. Installs the Wings systemd service, starts it and enables it on boot.
+9. Verifies the node is genuinely online using the same check the panel's admin
+   UI uses (`GET {scheme}://{fqdn}:8080/api/system`).
+
+### ⚠️ Before you start
+
+- **Create an Application API key** in the panel: *Admin → Application API →
+  Create*. Give it **Read & Write** on *Nodes*, *Locations* and *Allocations*.
+  Paste it when prompted (or set `PTERODACTYL_API_KEY`). The key is used only
+  during installation and is **never written to disk**.
+- **Ports must be reachable:** `8080/tcp` (Wings API) and `2022/tcp` (SFTP) must
+  be open/served, plus whatever game ports you allocate. Wings and the panel
+  talk over the node's FQDN, so **do not assume `127.0.0.1`**.
+- **DNS matters.** Default FQDN is the server's primary IP. If you use a
+  hostname, it must resolve back to *this* machine. Cloudflare proxy (orange
+  cloud) and Cloudflare Tunnel do **not** expose raw Wings ports — use a direct
+  DNS record (grey cloud) or the server IP for the node.
+- TLS verification is **never** disabled.
+
+Options:
+
+```text
+--panel-path PATH   Panel directory            (default: /var/www/pterodactyl)
+--url URL           Panel URL                  (default: read from panel .env)
+--api-key KEY       Application API key        (never stored; prompts if omitted)
+--fqdn HOST         Node FQDN or IP            (default: server primary IP)
+--scheme http|https                            (default: http)
+--node-name NAME    Node name                  (default: "Local Node")
+--ports RANGE       Allocation ports           (default: 25565-25570)
+--memory MB / --disk MB                        (default: detected resources)
+--wings-version TAG Wings release tag          (default: latest v1.x)
+--yes               Non-interactive
+```
+
+The script is **idempotent**: re-running it reuses the existing location and
+node and does not create duplicates. A failure while installing the node never
+touches the panel.
 
 ## Updating the panel
 

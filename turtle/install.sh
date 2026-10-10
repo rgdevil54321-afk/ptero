@@ -23,6 +23,8 @@
 #     --path PATH         Panel install directory  (default: /var/www/pterodactyl)
 #     --url URL           Public panel URL         (default: prompt)
 #     --no-discord        Do not run the Discord bot
+#     --node              Install a local Wings node after the panel (no prompt)
+#     --no-node           Never install a local Wings node (no prompt)
 #     --update            Update an existing panel in-place (keeps .env + DB)
 #     --skip-prereqs      Skip OS package / PHP install (use on second runs)
 #     --skip-nginx        Skip nginx configuration
@@ -50,6 +52,7 @@ DO_DISCORD=1
 DO_PREREQS=1
 DO_NGINX=1
 UPDATE_MODE=0
+DO_NODE=2   # Local node: 0 = never, 1 = always, 2 = ask after panel install
 
 # Internal flags
 SCRIPT_VERSION=$(cat "$REPO_ROOT/hyper_version.json" 2>/dev/null | grep -o '"version"[^,]*' | cut -d'"' -f4 || echo "unknown")
@@ -74,6 +77,8 @@ while [[ "$#" -gt 0 ]]; do
         --update)       UPDATE_MODE=1; shift ;;
         --skip-prereqs) DO_PREREQS=0; shift ;;
         --skip-nginx)   DO_NGINX=0; shift ;;
+        --node)         DO_NODE=1; shift ;;
+        --no-node)      DO_NODE=0; shift ;;
         --db-database)  DB_DATABASE="$2"; shift 2 ;;
         --db-username)  DB_USERNAME="$2"; shift 2 ;;
         --db-password)  DB_PASSWORD="$2"; shift 2 ;;
@@ -567,6 +572,41 @@ finish() {
 }
 
 # -----------------------------------------------------------------------------
+# Local Wings node (optional)
+# -----------------------------------------------------------------------------
+node_install_step() {
+    local INSTALLER="$REPO_ROOT/turtle/install_node.sh"
+    if [[ ! -f "$INSTALLER" ]]; then
+        warn "Skipping local node install: turtle/install_node.sh is missing."
+        return 0
+    fi
+
+    # --node / --no-node force the decision; otherwise ask interactively.
+    local CHOICE="n"
+    if [[ "$DO_NODE" == "1" ]]; then
+        CHOICE="y"
+    elif [[ "$DO_NODE" == "0" ]]; then
+        return 0
+    else
+        echo ""
+        log "Optional local node:"
+        echo "  Would you like to install a Local Node on this server?"
+        echo "  [Y] Yes - Install and connect a local Wings node (Docker + Wings)."
+        echo "  [N] No  - Finish the panel installation without a node."
+        read -rp "Choice [y/N]: " CHOICE_INPUT
+        CHOICE="${CHOICE_INPUT:-n}"
+    fi
+
+    if [[ "$CHOICE" =~ ^[Yy]$ ]]; then
+        log "Installing a local Wings node (turtle/install_node.sh)..."
+        bash "$INSTALLER" --panel-path "$PANEL_PATH"
+    else
+        log "Skipping local node installation. To install it later run:"
+        log "  sudo bash turtle/install_node.sh --panel-path ${PANEL_PATH}"
+    fi
+}
+
+# -----------------------------------------------------------------------------
 # Main
 # -----------------------------------------------------------------------------
 main() {
@@ -609,6 +649,8 @@ main() {
     configure_discord
     configure_nginx
     finish
+
+    node_install_step
 }
 
 main "$@"

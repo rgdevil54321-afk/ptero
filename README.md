@@ -47,6 +47,15 @@ cd /var/www/pterodactyl && php artisan p:user:make
 Full installer documentation, options, and the update flow are in
 [`turtle/README.md`](turtle/README.md).
 
+### Optional: a local Wings node on the same server
+
+At the end of the install you are asked whether to also set up a **Local Node**
+(defaults to **No**). Answering yes (or passing `--node`) installs a real,
+registered **Wings** daemon on the same machine using an Application API key you
+create in the panel — Docker, the official Wings binary, config, systemd service,
+and an online verification. It is fully optional and never affects the panel.
+See [`turtle/README.md`](turtle/README.md#local-wings-node-optional) for details.
+
 ## Repository layout
 
 ```text
@@ -54,6 +63,7 @@ app/  bootstrap/  config/  database/   <- Turtle Game Panel (ionCube-encoded PHP
 public/DGEN/      public/themes/       <- Turtle theme assets
 resources/views/  routes/              <- themed views & routes
 turtle/install.sh                       <- one-command installer
+turtle/install_node.sh                  <- optional: real local Wings node on same server
 turtle/license/                         <- ionCube license key for this release
 hyper_fetch.sh   hyper_watcher.sh      <- Hyper update scripts (shipped by Hyper)
 composer.json    composer.lock         <- panel dependencies
