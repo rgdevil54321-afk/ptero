@@ -6,8 +6,9 @@ this repo, so there is nothing extra to download.
 
 | File | Purpose |
 |------|---------|
-| `install.sh` | One-command installer (fresh install or in-place update) |
+| `install.sh` | Installer **and Control Centre** (fresh install, update, services, health, logs) |
 | `install_node.sh` | Optional module: install a real **local Wings node** on the same server |
+| `uninstall.sh` | Removes the panel (keeps the database by default) |
 | `license/` | The ionCube runtime license key + manifest shipped with the panel v2.1.2 (Hyper product, kept for compatibility) |
 
 ## Quick install (fresh server)
@@ -19,6 +20,14 @@ prepare PHP 8.4 + the ionCube Loader manually and re-run with `--skip-prereqs`).
 git clone <this-repo-url> /tmp/ptero
 cd /tmp/ptero
 sudo bash turtle/install.sh
+```
+
+With no options this opens the interactive **Control Centre** menu — choose
+**1) Install panel** for a fresh install (**2) Update panel** on an existing
+server). To skip the menu and install unattended, pass at least one option:
+
+```bash
+sudo bash turtle/install.sh --url https://panel.example.com
 ```
 
 The installer:
@@ -49,11 +58,58 @@ Open the panel URL — the Turtle theme is live out of the box.
 --update            Update an existing panel in place (keeps .env + DB)
 --skip-prereqs      Skip OS package / PHP install
 --skip-nginx        Skip nginx configuration
+--menu              Force the interactive Control Centre
+-h, --help          Show help
 ```
 
 After the panel finishes, the installer asks whether to also set up a **Local
 Node** (see below). The question defaults to **No**, so pressing Enter keeps the
 current panel-only behaviour. Use `--node` / `--no-node` to skip the prompt.
+
+## Control Centre
+
+Run the installer with **no arguments** (or with `--menu`) to get an interactive
+menu — the same entry point as a fresh install:
+
+```bash
+sudo bash turtle/install.sh
+```
+
+```text
+  1) Install panel        (fresh install)
+  2) Update panel         (in place; keeps .env + database)
+  3) Install / manage local Wings node
+  4) Uninstall panel      (removes files + services; keeps database)
+  5) Services             (start / stop / restart / status)
+  6) Health check
+  7) View logs
+  8) Panel info
+  0) Exit
+```
+
+Everything the menu does is also scriptable standalone (`install.sh`,
+`install_node.sh`, `uninstall.sh`) or through flags, so the menu is optional.
+
+## Uninstalling
+
+From the menu (**4) Uninstall panel**) or directly:
+
+```bash
+sudo bash turtle/uninstall.sh
+```
+
+By default it stops and removes the panel's Supervisor programs, removes the
+panel nginx site, deletes `/var/www/pterodactyl`, and removes the local Wings
+node if present. It **keeps your database and server data volumes**, and asks
+you to type `uninstall` to confirm. To also drop the database:
+
+```bash
+sudo bash turtle/uninstall.sh --purge-db
+```
+
+System packages, the ionCube loader and the license key are left in place (they
+may be used by other apps). Add `--keep-wings` to leave the Wings node running
+or `--purge-volumes` to delete `/var/lib/pterodactyl` (server data — careful).
 
 ## Local Wings node (optional)
 

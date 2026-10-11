@@ -38,14 +38,24 @@ cd /tmp/ptero
 sudo bash turtle/install.sh
 ```
 
+This opens an interactive **Control Centre** (Install / Update / Uninstall /
+Services / Health / Logs). Choose **1) Install panel**. To install unattended
+without the menu, pass an option, e.g. `sudo bash turtle/install.sh --url https://panel.example.com`.
+
 Then create your admin account and open the panel:
 
 ```bash
 cd /var/www/pterodactyl && php artisan p:user:make
 ```
 
-Full installer documentation, options, and the update flow are in
-[`turtle/README.md`](turtle/README.md).
+Full installer documentation, options, the Control Centre and the uninstall flow
+are in [`turtle/README.md`](turtle/README.md).
+
+### Managing the panel later
+
+Re-run `sudo bash turtle/install.sh` any time to get the menu again — update the
+panel in place, manage services, run a health check, or **uninstall** it
+(`turtle/uninstall.sh`, which keeps your database by default).
 
 ### Optional: a local Wings node on the same server
 
@@ -62,8 +72,9 @@ See [`turtle/README.md`](turtle/README.md#local-wings-node-optional) for details
 app/  bootstrap/  config/  database/   <- Turtle Game Panel (ionCube-encoded PHP)
 public/DGEN/      public/themes/       <- Turtle theme assets
 resources/views/  routes/              <- themed views & routes
-turtle/install.sh                       <- one-command installer
+turtle/install.sh                       <- installer + Control Centre menu
 turtle/install_node.sh                  <- optional: real local Wings node on same server
+turtle/uninstall.sh                     <- remove the panel (keeps database by default)
 turtle/license/                         <- ionCube license key for this release
 hyper_fetch.sh   hyper_watcher.sh      <- Hyper update scripts (shipped by Hyper)
 composer.json    composer.lock         <- panel dependencies

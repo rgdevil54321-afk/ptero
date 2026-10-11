@@ -17,7 +17,10 @@
 #  Usage (recommended - clone first, then run):
 #     git clone <this-repo> /tmp/ptero
 #     cd /tmp/ptero
-#     sudo bash turtle/install.sh
+#     sudo bash turtle/install.sh            # opens the Control Centre menu
+#
+#  Unattended install (no menu) - pass at least one option, e.g.:
+#     sudo bash turtle/install.sh --url https://panel.example.com
 #
 #  Options:
 #     --path PATH         Panel install directory  (default: /var/www/pterodactyl)
@@ -28,6 +31,8 @@
 #     --update            Update an existing panel in-place (keeps .env + DB)
 #     --skip-prereqs      Skip OS package / PHP install (use on second runs)
 #     --skip-nginx        Skip nginx configuration
+#     --menu              Force the interactive Control Centre
+#     -h, --help          Show this help
 #
 #  Environment overrides:
 #     PANEL_PATH, APP_URL, DB_DATABASE, DB_USERNAME, DB_PASSWORD
@@ -54,6 +59,11 @@ DO_NGINX=1
 UPDATE_MODE=0
 DO_NODE=2   # Local node: 0 = never, 1 = always, 2 = ask after panel install
 
+# Remember whether the caller passed any options. Running with NO options opens
+# the interactive Control Centre; any flag (or --menu) drives the installer.
+INVOCATION_ARGC=$#
+MENU_REQUESTED=0
+
 # Internal flags
 SCRIPT_VERSION=$(cat "$REPO_ROOT/hyper_version.json" 2>/dev/null | grep -o '"version"[^,]*' | cut -d'"' -f4 || echo "unknown")
 LOG_FILE="/var/log/pterodactyl/install.log"
@@ -63,7 +73,8 @@ warn() { echo -e "\e[1;33m[turtle][warn]\e[0m $*"; }
 err()  { echo -e "\e[1;31m[turtle][error]\e[0m $*" >&2; }
 
 usage() {
-    sed -n '2,30p' "${BASH_SOURCE[0]}" | sed -e 's/^# \{0,1\}//' -e '/^===/d'
+    sed -n '2,/^set -/p' "${BASH_SOURCE[0]}" \
+        | sed -e 's/^# \{0,1\}//' -e '/^set -/d' -e '/^===/d'
 }
 
 # -----------------------------------------------------------------------------
@@ -79,6 +90,7 @@ while [[ "$#" -gt 0 ]]; do
         --skip-nginx)   DO_NGINX=0; shift ;;
         --node)         DO_NODE=1; shift ;;
         --no-node)      DO_NODE=0; shift ;;
+        --menu)         MENU_REQUESTED=1; shift ;;
         --db-database)  DB_DATABASE="$2"; shift 2 ;;
         --db-username)  DB_USERNAME="$2"; shift 2 ;;
         --db-password)  DB_PASSWORD="$2"; shift 2 ;;
@@ -86,6 +98,14 @@ while [[ "$#" -gt 0 ]]; do
         *)              err "Unknown option: $1"; usage; exit 1 ;;
     esac
 done
+
+# No options at all -> open the interactive Control Centre. Any option (or an
+# explicit --menu) drives the installer directly.
+if [[ "$INVOCATION_ARGC" -eq 0 || "$MENU_REQUESTED" == "1" ]]; then
+    SHOW_MENU=1
+else
+    SHOW_MENU=0
+fi
 
 # -----------------------------------------------------------------------------
 # Pre-flight checks
@@ -243,7 +263,7 @@ DB_PASSWORD=${DB_PASSWORD}
 EOF
     chmod 600 /root/.turtle-db-credentials
 
-    log "Database credentials saved to /root/.hyper-db-credentials"
+    log "Database credentials saved to /root/.turtle-db-credentials"
 }
 
 deploy_files() {
@@ -607,9 +627,175 @@ node_install_step() {
 }
 
 # -----------------------------------------------------------------------------
+# Control Centre helpers
+# -----------------------------------------------------------------------------
+PANEL_SERVICES=(nginx "php${PHP_VERSION}-fpm" mariadb redis-server supervisor)
+
+service_state() {
+    # Prints: active | inactive | not-installed
+    local unit="$1"
+    if systemctl is-active --quiet "$unit" 2>/dev/null; then
+        echo "active"
+    elif systemctl list-unit-files "${unit}.service" --no-legend 2>/dev/null | grep -q .; then
+        echo "inactive"
+    else
+        echo "not-installed"
+    fi
+}
+
+control_service() {
+    local action="$1" unit="$2"
+    systemctl "$action" "$unit" >/dev/null 2>&1 \
+        || service "$unit" "$action" >/dev/null 2>&1 \
+        || warn "Could not ${action} ${unit}."
+}
+
+services_menu() {
+    while true; do
+        echo ""
+        log "Services"
+        echo "  1) Start all"
+        echo "  2) Stop all"
+        echo "  3) Restart all"
+        echo "  4) Status"
+        echo "  5) Restart panel workers (supervisorctl)"
+        echo "  0) Back"
+        read -rp "  Select: " SUBCHOICE
+        case "$SUBCHOICE" in
+            1) for s in "${PANEL_SERVICES[@]}"; do control_service start "$s"; done; log "Services started." ;;
+            2) for s in "${PANEL_SERVICES[@]}"; do control_service stop "$s"; done; log "Services stopped." ;;
+            3) for s in "${PANEL_SERVICES[@]}"; do control_service restart "$s"; done; log "Services restarted." ;;
+            4) for s in "${PANEL_SERVICES[@]}"; do printf "  %-24s %s\n" "$s" "$(service_state "$s")"; done ;;
+            5) supervisorctl restart all >/dev/null 2>&1 && log "Workers restarted." || warn "supervisorctl not available." ;;
+            0|"") return ;;
+            *) warn "Invalid option." ;;
+        esac
+    done
+}
+
+health_check() {
+    echo ""
+    log "Health check"
+    echo "  --- system services ---"
+    for s in "${PANEL_SERVICES[@]}"; do
+        printf "  %-24s %s\n" "$s" "$(service_state "$s")"
+    done
+
+    echo "  --- panel ---"
+    if [[ -f "$PANEL_PATH/artisan" ]]; then
+        local code
+        code="$(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1/" 2>/dev/null || echo '000')"
+        printf "  %-24s %s\n" "http://127.0.0.1/" "$code"
+        ( cd "$PANEL_PATH" && php artisan --version 2>/dev/null | head -n1 ) || true
+    else
+        warn "Panel not found at ${PANEL_PATH}."
+    fi
+
+    if [[ -f /etc/pterodactyl/config.yml ]]; then
+        echo "  --- local node ---"
+        printf "  %-24s %s\n" "wings" "$(service_state wings)"
+        local token port
+        token="$(sed -n 's/^token: *//p' /etc/pterodactyl/config.yml 2>/dev/null | head -n1)"
+        port="$(sed -n 's/^ *port: *//p' /etc/pterodactyl/config.yml 2>/dev/null | head -n1)"
+        [[ -n "$port" ]] && printf "  %-24s %s\n" "wings api" \
+            "$(curl -s -o /dev/null -w '%{http_code}' -H "Authorization: Bearer ${token}" "http://127.0.0.1:${port}/api/system" 2>/dev/null || echo '000')"
+    fi
+    echo ""
+}
+
+show_logs() {
+    echo ""
+    log "Logs"
+    echo "  1) Laravel (storage/logs/laravel.log)"
+    echo "  2) Scheduler"
+    echo "  3) Queue worker"
+    echo "  4) Discord bot"
+    echo "  5) nginx error"
+    echo "  0) Back"
+    read -rp "  Select: " SUBCHOICE
+    case "$SUBCHOICE" in
+        1) tail -n 60 "$PANEL_PATH/storage/logs/laravel.log" 2>/dev/null || warn "No Laravel log yet." ;;
+        2) tail -n 40 /var/log/pterodactyl/scheduler.err.log 2>/dev/null || warn "No scheduler log yet." ;;
+        3) tail -n 40 /var/log/pterodactyl/queue.err.log 2>/dev/null || warn "No queue log yet." ;;
+        4) tail -n 40 /var/log/pterodactyl/discord-bot.out.log 2>/dev/null || warn "No discord log yet." ;;
+        5) tail -n 40 /var/log/nginx/error.log 2>/dev/null || warn "No nginx error log." ;;
+        *) return ;;
+    esac
+    echo ""
+}
+
+panel_info() {
+    echo ""
+    log "Panel info"
+    echo "  Version    : ${SCRIPT_VERSION}"
+    echo "  Repo       : ${REPO_ROOT}"
+    echo "  Panel path : ${PANEL_PATH}"
+    if [[ -f "$PANEL_PATH/.env" ]]; then
+        local url
+        url="$(awk -F= '/^APP_URL=/{print $2}' "$PANEL_PATH/.env" 2>/dev/null)"
+        echo "  APP_URL    : ${url:-<unset>}"
+    fi
+    [[ -f /root/.turtle-db-credentials ]] && echo "  DB creds   : /root/.turtle-db-credentials"
+    if [[ -f /etc/pterodactyl/config.yml ]]; then
+        echo "  Local node : configured"
+    else
+        echo "  Local node : not configured"
+    fi
+    echo ""
+}
+
+command_centre() {
+    require_root
+    require_script_file
+
+    while true; do
+        echo ""
+        echo "=========================================================================="
+        echo "  Turtle Game Panel - Control Centre   v${SCRIPT_VERSION}"
+        echo "=========================================================================="
+        echo "  1) Install panel        (fresh install)"
+        echo "  2) Update panel         (in place; keeps .env + database)"
+        echo "  3) Install / manage local Wings node"
+        echo "  4) Uninstall panel      (removes files + services; keeps database)"
+        echo "  5) Services             (start / stop / restart / status)"
+        echo "  6) Health check"
+        echo "  7) View logs"
+        echo "  8) Panel info"
+        echo "  0) Exit"
+        echo "=========================================================================="
+        read -rp "Select an option: " CHOICE
+        echo ""
+        case "$CHOICE" in
+            1) UPDATE_MODE=0; run_install ;;
+            2) UPDATE_MODE=1; run_install ;;
+            3)
+                if [[ -f "$REPO_ROOT/turtle/install_node.sh" ]]; then
+                    bash "$REPO_ROOT/turtle/install_node.sh" --panel-path "$PANEL_PATH"
+                else
+                    err "turtle/install_node.sh not found."
+                fi
+                ;;
+            4)
+                if [[ -f "$REPO_ROOT/turtle/uninstall.sh" ]]; then
+                    bash "$REPO_ROOT/turtle/uninstall.sh" --panel-path "$PANEL_PATH"
+                else
+                    err "turtle/uninstall.sh not found."
+                fi
+                ;;
+            5) services_menu ;;
+            6) health_check ;;
+            7) show_logs ;;
+            8) panel_info ;;
+            0|q|Q|exit) log "Bye."; break ;;
+            *) warn "Invalid option." ;;
+        esac
+    done
+}
+
+# -----------------------------------------------------------------------------
 # Main
 # -----------------------------------------------------------------------------
-main() {
+run_install() {
     require_root
     require_script_file
     require_os
@@ -653,4 +839,12 @@ main() {
     node_install_step
 }
 
-main "$@"
+main() {
+    if [[ "${SHOW_MENU:-0}" == "1" ]]; then
+        command_centre
+    else
+        run_install
+    fi
+}
+
+main
