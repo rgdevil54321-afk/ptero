@@ -54,6 +54,9 @@ Open the panel URL — the Turtle theme is live out of the box.
 --url URL           Public panel URL         (default: prompt)
 --node              Always install a local Wings node (no prompt)
 --no-node           Never install a local node (panel-only; current default behaviour)
+--playit            Install the Playit.gg node bridge (no prompt)
+--no-playit         Never offer the Playit.gg bridge
+--playit-provision  Let the bridge add the playit plugin to existing Java servers
 --no-discord        Do not run the Discord bot
 --update            Update an existing panel in place (keeps .env + DB)
 --skip-prereqs      Skip OS package / PHP install
@@ -84,6 +87,7 @@ sudo bash turtle/install.sh
   6) Health check
   7) View logs
   8) Panel info
+  9) Playit.gg            (public addresses for Minecraft servers)
   0) Exit
 ```
 
@@ -99,9 +103,10 @@ sudo bash turtle/uninstall.sh
 ```
 
 By default it stops and removes the panel's Supervisor programs, removes the
-panel nginx site, deletes `/var/www/pterodactyl`, and removes the local Wings
-node if present. It **keeps your database and server data volumes**, and asks
-you to type `uninstall` to confirm. To also drop the database:
+panel nginx site, deletes `/var/www/pterodactyl`, removes the local Wings node
+(if present) and removes the Playit.gg node bridge. It **keeps your database,
+server data volumes and server plugin files**, and asks you to type `uninstall`
+to confirm. To also drop the database:
 
 ```bash
 sudo bash turtle/uninstall.sh --purge-db
@@ -173,6 +178,67 @@ Options:
 The script is **idempotent**: re-running it reuses the existing location and
 node and does not create duplicates. A failure while installing the node never
 touches the panel.
+
+## Playit.gg public addresses (optional)
+
+Minecraft servers on a node without a public IPv4 (or behind CGNAT) can still be
+reachable: the panel ships a **playit.gg** integration that gives each server a
+public `host:port` and shows it in the normal address field of the client area.
+
+There are two halves, and you can use either or both:
+
+1. **On the game server** — the Playit-enabled Paper egg installs the official
+   `playit-minecraft-plugin` automatically. The plugin reads an agent secret
+   from the panel (see the key pool below) or, if none is available, prints a
+   one-time `https://playit.gg/claim/<code>` link in the server console.
+2. **On the node** — `turtle/install_playit.sh` installs a small bridge that
+   reads each server's plugin config, asks playit for the connectable address
+   and reports it to the panel. The panel mirrors it into the server's address.
+
+### Set up the key pool (recommended)
+
+1. Open **Admin → Playit** in the panel.
+2. Create one or more agents at [playit.gg](https://playit.gg) and paste their
+   **secret keys** into *Add agent secret keys* (one per line). Each server is
+   handed its own key, so each server gets its own address.
+3. Note the **Report token** shown at the top — the node bridge needs it.
+
+### Install the node bridge
+
+```bash
+sudo bash turtle/install_playit.sh \
+     --panel https://panel.example.com \
+     --token <report token from Admin → Playit>
+```
+
+Add `--provision` to also drop the plugin into existing Java servers that do not
+have it yet (they pick it up on their next restart), and `--restart` to restart
+them immediately. Other options:
+
+```text
+--interval SECONDS   Sync interval, minimum 60   (default: 120)
+--agent-secret KEY   Also run the standalone playit agent (Docker)
+--run                Run one sync immediately
+--status             Show bridge status + last run
+--uninstall          Remove the bridge / standalone agent
+--yes                Non-interactive
+```
+
+The bridge installs a `turtle-playit-sync.timer` (systemd) that runs every
+`--interval` seconds. It never touches the panel; it only reads server volumes
+and calls the panel's token-protected `/api/public/playit/*` endpoints. Run it
+from the menu too: **Control Centre → 9) Playit.gg**.
+
+### Notes
+
+- Server plugin files live under
+  `/var/lib/pterodactyl/volumes/<uuid>/plugins/playit-gg/` and are left in place
+  by the uninstaller.
+- Without the key pool the plugin's own **claim link** still works: open the
+  server console and visit the printed URL once. The bridge reports the address
+  either way.
+- The address is written to `allocations.ip_alias` (what the client shows) and
+  to the `PLAYIT_ADDRESS` startup variable (the full `host:port`).
 
 ## Updating the panel
 

@@ -304,3 +304,21 @@ Route::group(['prefix' => 'api/DGEN', 'as' => 'admin.DGEN.'], function () {
         Route::delete('/promocodes/{id}', [Pterodactyl\Http\Controllers\Api\Client\DGEN\Billing\PromoCodeController::class, 'destroy']);
     });
 });
+
+/*
+|--------------------------------------------------------------------------
+| Playit.gg integration (Turtle addon)
+|--------------------------------------------------------------------------
+| Keys are pooled here and handed to game servers. The panel then reads the
+| connectable address from the playit API and mirrors it into the server's
+| allocation alias (the field the client renders as the connection address).
+*/
+Route::group(['prefix' => 'playit'], function () {
+    Route::get('/', [\Turtle\Playit\Http\Controllers\Admin\PlayitController::class, 'index'])->name('admin.playit');
+    Route::post('/keys', [\Turtle\Playit\Http\Controllers\Admin\PlayitController::class, 'addKeys'])->name('admin.playit.keys');
+    Route::post('/assign', [\Turtle\Playit\Http\Controllers\Admin\PlayitController::class, 'assign'])->name('admin.playit.assign');
+    Route::post('/release', [\Turtle\Playit\Http\Controllers\Admin\PlayitController::class, 'release'])->name('admin.playit.release');
+    Route::post('/delete', [\Turtle\Playit\Http\Controllers\Admin\PlayitController::class, 'destroy'])->name('admin.playit.delete');
+    Route::post('/sync', [\Turtle\Playit\Http\Controllers\Admin\PlayitController::class, 'sync'])->name('admin.playit.sync');
+    Route::post('/token', [\Turtle\Playit\Http\Controllers\Admin\PlayitController::class, 'rotateToken'])->name('admin.playit.token');
+});

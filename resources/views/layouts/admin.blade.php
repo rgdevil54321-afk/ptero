@@ -183,6 +183,13 @@
                                 <i class="fa fa-list-alt"></i> <span>Audit Log</span>
                             </a>
                         </li>
+                        @if(Auth::user()->root_admin)
+                        <li class="{{ starts_with((string) Route::currentRouteName(), 'admin.playit') ? 'active' : '' }}">
+                            <a href="{{ Route::has('admin.playit') ? route('admin.playit') : url('/admin/playit') }}">
+                                <i class="fa fa-magic"></i> <span>Playit</span>
+                            </a>
+                        </li>
+                        @endif
                         @php($showPanelLogs = Auth::user()->root_admin)
                         @if($showPanelLogs)
                         @php($panelLogsRouteAvailable = Route::has('admin.panel-logs'))

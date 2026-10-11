@@ -32,6 +32,10 @@
 #     --skip-prereqs      Skip OS package / PHP install (use on second runs)
 #     --skip-nginx        Skip nginx configuration
 #     --menu              Force the interactive Control Centre
+#     --playit            Install the Playit.gg bridge without prompting
+#     --no-playit         Never offer the Playit.gg bridge
+#     --playit-provision  Let the bridge auto-install the playit plugin into
+#                          existing Java servers (no automatic restart)
 #     -h, --help          Show this help
 #
 #  Environment overrides:
@@ -58,6 +62,8 @@ DO_PREREQS=1
 DO_NGINX=1
 UPDATE_MODE=0
 DO_NODE=2   # Local node: 0 = never, 1 = always, 2 = ask after panel install
+DO_PLAYIT=2 # Playit bridge: 0 = never, 1 = always, 2 = ask after panel install
+PLAYIT_PROVISION=0 # Let the bridge install the playit plugin into existing servers
 
 # Remember whether the caller passed any options. Running with NO options opens
 # the interactive Control Centre; any flag (or --menu) drives the installer.
@@ -90,6 +96,9 @@ while [[ "$#" -gt 0 ]]; do
         --skip-nginx)   DO_NGINX=0; shift ;;
         --node)         DO_NODE=1; shift ;;
         --no-node)      DO_NODE=0; shift ;;
+        --playit)       DO_PLAYIT=1; shift ;;
+        --no-playit)    DO_PLAYIT=0; shift ;;
+        --playit-provision) PLAYIT_PROVISION=1; shift ;;
         --menu)         MENU_REQUESTED=1; shift ;;
         --db-database)  DB_DATABASE="$2"; shift 2 ;;
         --db-username)  DB_USERNAME="$2"; shift 2 ;;
@@ -348,6 +357,11 @@ install_deps() {
             composer require "$PKG" --no-interaction --with-all-dependencies >/dev/null 2>&1 || \
             warn "Could not install optional package ${PKG}."
     done
+
+    # Make sure the Turtle addon namespace (composer.json PSR-4 "Turtle\\" =>
+    # "turtleapp/") is in the generated autoloader.
+    composer dump-autoload --optimize --no-dev --no-interaction >/dev/null 2>&1 || \
+        warn "composer dump-autoload failed; the Playit admin page may be unavailable until it runs."
 }
 
 migrate_db() {
@@ -744,6 +758,128 @@ panel_info() {
     echo ""
 }
 
+# -----------------------------------------------------------------------------
+# Playit.gg (optional)
+# -----------------------------------------------------------------------------
+panel_app_url() {
+    if [[ -n "$APP_URL" ]]; then
+        echo "$APP_URL"
+        return 0
+    fi
+    if [[ -f "$PANEL_PATH/.env" ]]; then
+        awk -F= '/^APP_URL=/{print $2}' "$PANEL_PATH/.env" 2>/dev/null | tr -d '"' | head -n1
+    fi
+}
+
+playit_token() {
+    # Ensure and print the shared report token (48 hex chars).
+    if [[ ! -f "$PANEL_PATH/artisan" ]]; then
+        return 0
+    fi
+    ( cd "$PANEL_PATH" && php artisan tinker --execute="echo app(\Turtle\Playit\PlayitService::class)->ensureReportToken();" 2>/dev/null ) \
+        | grep -oE '[0-9a-f]{48}' | head -n1
+}
+
+playit_install_bridge() {
+    local installer="$REPO_ROOT/turtle/install_playit.sh"
+    local url token provision=""
+    url="$(panel_app_url)"
+    token="$(playit_token)"
+
+    if [[ -z "$token" ]]; then
+        err "Could not create the Playit report token. Run the panel once (php artisan migrate), then try again."
+        return 1
+    fi
+    if [[ -z "$url" ]]; then
+        err "The panel URL is unknown. Pass --url at install time, or set APP_URL in ${PANEL_PATH}/.env."
+        return 1
+    fi
+
+    [[ "$PLAYIT_PROVISION" == "1" ]] && provision="--provision"
+
+    log "Report token : ${token}"
+    log "Panel URL    : ${url}"
+    log "Installing the Playit bridge (turtle/install_playit.sh)..."
+    bash "$installer" --panel "$url" --token "$token" --run $provision
+}
+
+playit_step() {
+    local installer="$REPO_ROOT/turtle/install_playit.sh"
+    if [[ ! -f "$installer" ]]; then
+        warn "Skipping Playit integration: turtle/install_playit.sh is missing."
+        return 0
+    fi
+    if [[ ! -f "$PANEL_PATH/artisan" ]]; then
+        warn "Skipping Playit integration: panel not found at ${PANEL_PATH}."
+        return 0
+    fi
+
+    local token url choice="n" choice_input
+    token="$(playit_token)"
+    url="$(panel_app_url)"
+
+    echo ""
+    if [[ -z "$token" ]]; then
+        warn "Playit tables are not present yet; re-run the installer and try again."
+        warn "Later: sudo bash turtle/install_playit.sh --panel <url> --token <token>"
+        return 0
+    fi
+
+    log "Playit.gg integration"
+    echo "  Report token : ${token}"
+    echo "  Panel URL    : ${url:-<unknown>}"
+    echo ""
+
+    if [[ "$DO_PLAYIT" == "1" ]]; then
+        choice="y"
+    elif [[ "$DO_PLAYIT" == "0" ]]; then
+        log "Skipping the on-node Playit bridge (--no-playit)."
+        log "  Later: sudo bash turtle/install_playit.sh --panel ${url:-<url>} --token ${token}"
+        return 0
+    else
+        echo "  Install the Playit bridge on this machine now? This makes playit.gg"
+        echo "  addresses show up in the panel for Minecraft servers."
+        echo "  [Y] Yes - install the bridge (recommended)."
+        echo "  [N] No  - do it later."
+        read -rp "Choice [y/N]: " choice_input
+        choice="${choice_input:-n}"
+    fi
+
+    if [[ "$choice" =~ ^[Yy]$ ]]; then
+        playit_install_bridge
+    else
+        log "Later: sudo bash turtle/install_playit.sh --panel ${url:-<url>} --token ${token}"
+    fi
+}
+
+playit_menu() {
+    while true; do
+        echo ""
+        log "Playit.gg"
+        echo "  1) Install / refresh the node bridge"
+        echo "  2) Show the report token + bridge command"
+        echo "  3) Bridge status"
+        echo "  4) Uninstall the node bridge"
+        echo "  0) Back"
+        read -rp "  Select: " SUBCHOICE
+        case "$SUBCHOICE" in
+            1) playit_install_bridge ;;
+            2)
+                local token url
+                token="$(playit_token)"
+                url="$(panel_app_url)"
+                echo "  Report token : ${token:-<not created>}"
+                echo "  Panel URL    : ${url:-<unknown>}"
+                echo "  Bridge cmd   : sudo bash turtle/install_playit.sh --panel ${url:-<url>} --token ${token:-<token>}"
+                ;;
+            3) systemctl status turtle-playit-sync.timer --no-pager 2>/dev/null || warn "Bridge timer not installed." ;;
+            4) bash "$REPO_ROOT/turtle/install_playit.sh" --uninstall ;;
+            0|"") return ;;
+            *) warn "Invalid option." ;;
+        esac
+    done
+}
+
 command_centre() {
     require_root
     require_script_file
@@ -761,6 +897,7 @@ command_centre() {
         echo "  6) Health check"
         echo "  7) View logs"
         echo "  8) Panel info"
+        echo "  9) Playit.gg        (public addresses for Minecraft servers)"
         echo "  0) Exit"
         echo "=========================================================================="
         read -rp "Select an option: " CHOICE
@@ -786,6 +923,7 @@ command_centre() {
             6) health_check ;;
             7) show_logs ;;
             8) panel_info ;;
+            9) playit_menu ;;
             0|q|Q|exit) log "Bye."; break ;;
             *) warn "Invalid option." ;;
         esac
@@ -837,6 +975,7 @@ run_install() {
     finish
 
     node_install_step
+    playit_step
 }
 
 main() {

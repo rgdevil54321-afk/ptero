@@ -85,6 +85,7 @@
         ],
         "psr-4": {
             "Pterodactyl\\": "app/",
+            "Turtle\\": "turtleapp/",
             "Database\\Factories\\": "database/Factories/",
             "Database\\Seeders\\": "database/Seeders/"
         }

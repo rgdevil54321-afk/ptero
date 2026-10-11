@@ -39,8 +39,9 @@ sudo bash turtle/install.sh
 ```
 
 This opens an interactive **Control Centre** (Install / Update / Uninstall /
-Services / Health / Logs). Choose **1) Install panel**. To install unattended
-without the menu, pass an option, e.g. `sudo bash turtle/install.sh --url https://panel.example.com`.
+Services / Health / Logs / Playit). Choose **1) Install panel**. To install
+unattended without the menu, pass an option, e.g.
+`sudo bash turtle/install.sh --url https://panel.example.com`.
 
 Then create your admin account and open the panel:
 
@@ -66,6 +67,16 @@ create in the panel — Docker, the official Wings binary, config, systemd servi
 and an online verification. It is fully optional and never affects the panel.
 See [`turtle/README.md`](turtle/README.md#local-wings-node-optional) for details.
 
+### Optional: public addresses for Minecraft servers (Playit.gg)
+
+If a node has no public IPv4 (or is behind CGNAT), the panel ships a **playit.gg**
+integration so Minecraft servers still get a public `host:port`. The Playit-enabled
+Paper egg installs the official plugin on the server, and a small node bridge
+(`turtle/install_playit.sh`) reports the connectable address back into the panel's
+normal address field. Add your playit agent keys under **Admin → Playit**, then
+install the bridge (the installer offers this, or run it later). See
+[`turtle/README.md`](turtle/README.md#playitgg-public-addresses-optional).
+
 ## Repository layout
 
 ```text
@@ -74,8 +85,10 @@ public/DGEN/      public/themes/       <- Turtle theme assets
 resources/views/  routes/              <- themed views & routes
 turtle/install.sh                       <- installer + Control Centre menu
 turtle/install_node.sh                  <- optional: real local Wings node on same server
+turtle/install_playit.sh                <- optional: report playit.gg addresses to the panel
 turtle/uninstall.sh                     <- remove the panel (keeps database by default)
 turtle/license/                         <- ionCube license key for this release
+turtleapp/                              <- Playit.gg panel addon (plain PHP, outside app/)
 hyper_fetch.sh   hyper_watcher.sh      <- Hyper update scripts (shipped by Hyper)
 composer.json    composer.lock         <- panel dependencies
 ```

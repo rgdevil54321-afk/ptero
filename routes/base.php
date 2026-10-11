@@ -86,3 +86,56 @@ Route::post('/api/public/litepay/webhook', [BillingController::class, 'litepayWe
 Route::post('/api/public/smepay/webhook', [BillingController::class, 'smepayWebhook'])
     ->withoutMiddleware(['auth', RequireTwoFactorAuthentication::class])
     ->name('api.public.smepay.webhook');
+
+/*
+|--------------------------------------------------------------------------
+| Playit.gg node bridge + egg claim endpoints (Turtle addon)
+|--------------------------------------------------------------------------
+| Stateless, token-protected (X-Playit-Token). The egg install script calls
+| /claim during installation; a node bridge calls /report to publish the
+| address that playit assigned.
+*/
+Route::post('/api/public/playit/report', [\Turtle\Playit\Http\Controllers\Api\PlayitPublicController::class, 'report'])
+    ->withoutMiddleware([
+        'auth',
+        RequireTwoFactorAuthentication::class,
+        EncryptCookies::class,
+        AddQueuedCookiesToResponse::class,
+        StartSession::class,
+        ShareErrorsFromSession::class,
+        VerifyCsrfToken::class,
+        LanguageMiddleware::class,
+        CaptureUserActivity::class,
+    ])
+    ->middleware('throttle:120,1')
+    ->name('api.public.playit.report');
+
+Route::get('/api/public/playit/claim', [\Turtle\Playit\Http\Controllers\Api\PlayitPublicController::class, 'claim'])
+    ->withoutMiddleware([
+        'auth',
+        RequireTwoFactorAuthentication::class,
+        EncryptCookies::class,
+        AddQueuedCookiesToResponse::class,
+        StartSession::class,
+        ShareErrorsFromSession::class,
+        VerifyCsrfToken::class,
+        LanguageMiddleware::class,
+        CaptureUserActivity::class,
+    ])
+    ->middleware('throttle:60,1')
+    ->name('api.public.playit.claim');
+
+Route::post('/api/public/playit/sync', [\Turtle\Playit\Http\Controllers\Api\PlayitPublicController::class, 'sync'])
+    ->withoutMiddleware([
+        'auth',
+        RequireTwoFactorAuthentication::class,
+        EncryptCookies::class,
+        AddQueuedCookiesToResponse::class,
+        StartSession::class,
+        ShareErrorsFromSession::class,
+        VerifyCsrfToken::class,
+        LanguageMiddleware::class,
+        CaptureUserActivity::class,
+    ])
+    ->middleware('throttle:12,1')
+    ->name('api.public.playit.sync');

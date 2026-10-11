@@ -48,6 +48,9 @@ WINGS_BIN="${WINGS_BIN:-/usr/local/bin/wings}"
 WINGS_CFG_DIR="${WINGS_CFG_DIR:-/etc/pterodactyl}"
 WINGS_SERVICE="${WINGS_SERVICE:-/etc/systemd/system/wings.service}"
 WINGS_DATA_DIR="${WINGS_DATA_DIR:-/var/lib/pterodactyl}"
+SYSTEMD_DIR="${SYSTEMD_DIR:-/etc/systemd/system}"
+PLAYIT_BRIDGE_BIN="${PLAYIT_BRIDGE_BIN:-/usr/local/bin/turtle-playit-sync}"
+PLAYIT_CONF_DIR="${PLAYIT_CONF_DIR:-/etc/turtle}"
 
 FORCE=0
 PURGE_DB=0
@@ -180,6 +183,34 @@ remove_wings() {
     fi
 }
 
+remove_playit_bridge() {
+    local found=0
+    [[ -f "${PLAYIT_CONF_DIR}/playit-sync.conf" ]] && found=1
+    [[ -f "$PLAYIT_BRIDGE_BIN" ]] && found=1
+    [[ -f "${SYSTEMD_DIR}/turtle-playit-sync.timer" ]] && found=1
+    [[ -f "${SYSTEMD_DIR}/turtle-playit-agent.service" ]] && found=1
+
+    if [[ "$found" -eq 0 ]]; then
+        log "No Playit bridge detected - skipping."
+        return 0
+    fi
+
+    log "Removing the Playit bridge..."
+    systemctl disable --now turtle-playit-sync.timer >/dev/null 2>&1 || true
+    systemctl disable --now turtle-playit-agent.service >/dev/null 2>&1 || true
+    rm -f "${SYSTEMD_DIR}/turtle-playit-sync.timer" \
+          "${SYSTEMD_DIR}/turtle-playit-sync.service" \
+          "${SYSTEMD_DIR}/turtle-playit-agent.service" \
+          "$PLAYIT_BRIDGE_BIN" \
+          "${PLAYIT_CONF_DIR}/playit-sync.conf"
+    rmdir "$PLAYIT_CONF_DIR" >/dev/null 2>&1 || true
+    if command -v docker >/dev/null 2>&1; then
+        docker rm -f turtle-playit-agent >/dev/null 2>&1 || true
+    fi
+    systemctl daemon-reload >/dev/null 2>&1 || true
+    log "Playit bridge removed (server plugin files were left untouched)."
+}
+
 drop_database() {
     local drop="$PURGE_DB"
     if [[ "$drop" != "1" && "$FORCE" != "1" ]]; then
@@ -228,14 +259,15 @@ remove_supervisor_programs
 remove_nginx_site
 remove_panel_files
 remove_wings
+remove_playit_bridge
 drop_database
 
 echo ""
 echo "=========================================================================="
 echo "  Turtle Game Panel uninstalled."
 echo "=========================================================================="
-echo "  Removed : panel files, nginx site, supervisor programs"
+echo "  Removed : panel files, nginx site, supervisor programs, Playit bridge"
 [[ "$KEEP_WINGS" != "1" ]] && echo "  Node    : local Wings node removed (if it was present)"
 [[ "$PURGE_DB" != "1" ]] && echo "  Kept    : database '${DB_DATABASE}' (drop it later with --purge-db)"
-echo "  Kept    : system packages, ionCube loader + license (${HYPER_IONCUBE_KEY_DIR:-/etc/hyperv2/ioncube})"
+echo "  Kept    : server plugin files under ${WINGS_DATA_DIR}, system packages, ionCube loader + license (${HYPER_IONCUBE_KEY_DIR:-/etc/hyperv2/ioncube})"
 echo "=========================================================================="
