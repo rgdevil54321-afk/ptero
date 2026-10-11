@@ -462,7 +462,16 @@ class PlayitService
 
     private function setVariable(int $serverId, string $envVariable, string $value): void
     {
-        $variableId = DB::table('egg_variables')->where('env_variable', $envVariable)->value('id');
+        // Scope by the server's egg: env_variable names are only unique within
+        // an egg, so a global lookup could pick another egg's variable id.
+        $eggId = DB::table('servers')->where('id', $serverId)->value('egg_id');
+
+        $query = DB::table('egg_variables')->where('env_variable', $envVariable);
+        if ($eggId) {
+            $query->where('egg_id', $eggId);
+        }
+
+        $variableId = $query->value('id');
         if (!$variableId) {
             return;
         }
