@@ -352,6 +352,14 @@ ensure_mariadb() {
 setup_database() {
     log "Setting up MariaDB database '${DB_DATABASE}' / user '${DB_USERNAME}'..."
 
+    # Reuse the password from a previous install so .env and MariaDB never drift
+    # apart. Only generate a new one on a genuinely fresh database.
+    if [[ -z "$DB_PASSWORD" && -f "$PANEL_PATH/.env" ]]; then
+        DB_PASSWORD="$(sed -n 's/^DB_PASSWORD=//p' "$PANEL_PATH/.env" 2>/dev/null | head -n1 | tr -d '"')"
+    fi
+    if [[ -z "$DB_PASSWORD" && -f /root/.turtle-db-credentials ]]; then
+        DB_PASSWORD="$(sed -n 's/^DB_PASSWORD=//p' /root/.turtle-db-credentials 2>/dev/null | head -n1)"
+    fi
     if [[ -z "$DB_PASSWORD" ]]; then
         DB_PASSWORD="$(openssl rand -hex 16)"
         RANDOMIZED=1
@@ -365,11 +373,20 @@ setup_database() {
         exit 1
     fi
 
-    mysql -e "CREATE DATABASE IF NOT EXISTS \`${DB_DATABASE}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
-    mysql -e "CREATE USER IF NOT EXISTS '${DB_USERNAME}'@'127.0.0.1' IDENTIFIED BY '${DB_PASSWORD}';"
-    mysql -e "CREATE USER IF NOT EXISTS '${DB_USERNAME}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';"
-    mysql -e "GRANT ALL PRIVILEGES ON \`${DB_DATABASE}\`.* TO '${DB_USERNAME}'@'127.0.0.1';"
-    mysql -e "GRANT ALL PRIVILEGES ON \`${DB_DATABASE}\`.* TO '${DB_USERNAME}'@'localhost';"
+    mysql -e "CREATE DATABASE IF NOT EXISTS \`${DB_DATABASE}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;" || {
+        err "Could not create the '${DB_DATABASE}' database (can you connect to MariaDB as root?)."
+        exit 1
+    }
+
+    # CREATE USER IF NOT EXISTS leaves an existing user's password untouched, so
+    # always ALTER it afterwards; otherwise a re-run that regenerated the
+    # password in .env would lock the panel out of its own database.
+    for HOSTPART in 127.0.0.1 localhost; do
+        mysql -e "CREATE USER IF NOT EXISTS '${DB_USERNAME}'@'${HOSTPART}' IDENTIFIED BY '${DB_PASSWORD}';"
+        mysql -e "ALTER USER '${DB_USERNAME}'@'${HOSTPART}' IDENTIFIED BY '${DB_PASSWORD}';" || \
+            err "Could not set the password for '${DB_USERNAME}'@'${HOSTPART}'."
+        mysql -e "GRANT ALL PRIVILEGES ON \`${DB_DATABASE}\`.* TO '${DB_USERNAME}'@'${HOSTPART}';"
+    done
     mysql -e "FLUSH PRIVILEGES;"
 
     # Save the credentials for reference.
@@ -507,7 +524,12 @@ migrate_db() {
     log "Running database migrations + seeders..."
     cd "$PANEL_PATH"
 
-    php artisan migrate --force
+    if ! php artisan migrate --force; then
+        err "Database migrations failed. The most common cause is a database"
+        err "credential mismatch - check /root/.turtle-db-credentials against .env,"
+        err "then re-run: sudo bash turtle/install.sh --update"
+        exit 1
+    fi
 
     log "Migrating legacy hyperv1 settings to Turtle V2 (non-fatal if it fails)..."
     php artisan hyperv2:migrate-legacy-settings || warn "Legacy settings migration skipped."
