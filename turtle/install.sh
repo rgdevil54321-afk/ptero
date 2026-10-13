@@ -65,6 +65,14 @@ DO_NODE=2   # Local node: 0 = never, 1 = always, 2 = ask after panel install
 DO_PLAYIT=2 # Playit bridge: 0 = never, 1 = always, 2 = ask after panel install
 PLAYIT_PROVISION=0 # Let the bridge install the playit plugin into existing servers
 
+# Init system: a normal VPS boots with systemd, but many containers (Docker with
+# s6/tini as PID 1) do not. When systemd is absent we fall back to SysV init
+# scripts / direct commands so services still come up.
+HAS_SYSTEMD=0
+if [[ -d /run/systemd/system ]] && command -v systemctl >/dev/null 2>&1; then
+    HAS_SYSTEMD=1
+fi
+
 # Remember whether the caller passed any options. Running with NO options opens
 # the interactive Control Centre; any flag (or --menu) drives the installer.
 INVOCATION_ARGC=$#
@@ -251,12 +259,95 @@ EOF
     fi
 }
 
+# -----------------------------------------------------------------------------
+# Service management (systemd on a VPS, SysV init scripts inside containers)
+# -----------------------------------------------------------------------------
+svc_start() {
+    local name="$1"
+    if [[ "$HAS_SYSTEMD" == "1" ]]; then
+        systemctl enable --now "$name" >/dev/null 2>&1 && return 0
+    fi
+    service "$name" start >/dev/null 2>&1 && return 0
+    if [[ -x "/etc/init.d/$name" ]]; then
+        "/etc/init.d/$name" start >/dev/null 2>&1 && return 0
+    fi
+    return 1
+}
+
+svc_reload() {
+    local name="$1"
+    if [[ "$HAS_SYSTEMD" == "1" ]]; then
+        systemctl reload "$name" >/dev/null 2>&1 && return 0
+    fi
+    service "$name" reload >/dev/null 2>&1 && return 0
+    if [[ -x "/etc/init.d/$name" ]]; then
+        "/etc/init.d/$name" reload >/dev/null 2>&1 && return 0
+    fi
+    return 1
+}
+
+svc_restart() {
+    local name="$1"
+    if [[ "$HAS_SYSTEMD" == "1" ]]; then
+        systemctl restart "$name" >/dev/null 2>&1 && return 0
+    fi
+    service "$name" restart >/dev/null 2>&1 && return 0
+    if [[ -x "/etc/init.d/$name" ]]; then
+        "/etc/init.d/$name" restart >/dev/null 2>&1 && return 0
+    fi
+    return 1
+}
+
+svc_stop() {
+    local name="$1"
+    if [[ "$HAS_SYSTEMD" == "1" ]]; then
+        systemctl stop "$name" >/dev/null 2>&1 && return 0
+    fi
+    service "$name" stop >/dev/null 2>&1 && return 0
+    if [[ -x "/etc/init.d/$name" ]]; then
+        "/etc/init.d/$name" stop >/dev/null 2>&1 && return 0
+    fi
+    return 1
+}
+
+# True when the MariaDB/MySQL client can reach a running server.
+db_ready() { mysql -e 'SELECT 1' >/dev/null 2>&1; }
+
+ensure_mariadb() {
+    # A normal VPS has MariaDB started by its package postinstall; inside a
+    # container it is often installed but never started, so start it here.
+    db_ready && return 0
+
+    log "MariaDB is not reachable - attempting to start it..."
+    if [[ "$HAS_SYSTEMD" == "1" ]]; then
+        systemctl enable --now mariadb >/dev/null 2>&1 \
+            || systemctl enable --now mysql >/dev/null 2>&1 || true
+    fi
+    db_ready || svc_start mariadb || svc_start mysql || true
+
+    local i=0
+    while [[ "$i" -lt 15 ]]; do
+        db_ready && return 0
+        sleep 1
+        i=$((i + 1))
+    done
+    return 1
+}
+
 setup_database() {
     log "Setting up MariaDB database '${DB_DATABASE}' / user '${DB_USERNAME}'..."
 
     if [[ -z "$DB_PASSWORD" ]]; then
         DB_PASSWORD="$(openssl rand -hex 16)"
         RANDOMIZED=1
+    fi
+
+    if ! ensure_mariadb; then
+        err "MariaDB/MySQL is not running, so the panel database cannot be created."
+        err "Install and start it first, for example:"
+        err "    apt-get update && apt-get install -y mariadb-server"
+        err "    service mariadb start   # containers without systemd"
+        exit 1
     fi
 
     mysql -e "CREATE DATABASE IF NOT EXISTS \`${DB_DATABASE}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
@@ -336,7 +427,7 @@ write_env() {
 
     # Queue worker + Redis defaults are already correct in .env.example
     # (QUEUE_CONNECTION=redis); make sure Redis is started.
-    systemctl enable --now redis-server >/dev/null 2>&1 || true
+    svc_start redis-server || true
 
     cd "$PANEL_PATH"
     php artisan key:generate --force --no-interaction
@@ -490,8 +581,10 @@ configure_scheduler() {
     if ! command -v supervisord >/dev/null 2>&1; then
         apt-get install -y supervisor >/dev/null
     fi
-    systemctl enable supervisor >/dev/null 2>&1 || true
-    systemctl start supervisor >/dev/null 2>&1 || service supervisor start >/dev/null 2>&1 || true
+    if [[ "$HAS_SYSTEMD" == "1" ]]; then
+        systemctl enable supervisor >/dev/null 2>&1 || true
+    fi
+    svc_start supervisor || true
 
     cat > /etc/supervisor/conf.d/pterodactyl-scheduler.conf <<EOF
 [program:pterodactyl-scheduler]
@@ -590,12 +683,15 @@ EOF
 
     ln -sf /etc/nginx/sites-available/pterodactyl.conf /etc/nginx/sites-enabled/pterodactyl.conf
     rm -f /etc/nginx/sites-enabled/default
-    nginx -t && systemctl reload nginx
+    if nginx -t; then
+        svc_reload nginx || svc_restart nginx || nginx -s reload >/dev/null 2>&1 || \
+            warn "Could not reload nginx automatically; reload it manually."
+    fi
 }
 
 restart_fpm() {
     log "Restarting PHP-FPM to flush ionCube/OPcache state..."
-    systemctl restart php${PHP_VERSION}-fpm >/dev/null 2>&1 || service php${PHP_VERSION}-fpm restart >/dev/null 2>&1 || \
+    svc_restart "php${PHP_VERSION}-fpm" || \
         warn "Could not restart PHP-FPM automatically."
 }
 
@@ -667,10 +763,21 @@ PANEL_SERVICES=(nginx "php${PHP_VERSION}-fpm" mariadb redis-server supervisor)
 service_state() {
     # Prints: active | inactive | not-installed
     local unit="$1"
-    if systemctl is-active --quiet "$unit" 2>/dev/null; then
-        echo "active"
-    elif systemctl list-unit-files "${unit}.service" --no-legend 2>/dev/null | grep -q .; then
-        echo "inactive"
+    if [[ "$HAS_SYSTEMD" == "1" ]]; then
+        if systemctl is-active --quiet "$unit" 2>/dev/null; then
+            echo "active"
+        elif systemctl list-unit-files "${unit}.service" --no-legend 2>/dev/null | grep -q .; then
+            echo "inactive"
+        else
+            echo "not-installed"
+        fi
+        return
+    fi
+    # No systemd: use the SysV init script (or the binary) instead.
+    if [[ -x "/etc/init.d/$unit" ]]; then
+        if service "$unit" status >/dev/null 2>&1; then echo "active"; else echo "inactive"; fi
+    elif command -v "$unit" >/dev/null 2>&1; then
+        echo "installed"
     else
         echo "not-installed"
     fi
@@ -678,9 +785,14 @@ service_state() {
 
 control_service() {
     local action="$1" unit="$2"
-    systemctl "$action" "$unit" >/dev/null 2>&1 \
-        || service "$unit" "$action" >/dev/null 2>&1 \
-        || warn "Could not ${action} ${unit}."
+    case "$action" in
+        start)   svc_start "$unit"   || warn "Could not start ${unit}." ;;
+        stop)    svc_stop "$unit"    || warn "Could not stop ${unit}." ;;
+        restart) svc_restart "$unit" || warn "Could not restart ${unit}." ;;
+        *)       systemctl "$action" "$unit" >/dev/null 2>&1 \
+                     || service "$unit" "$action" >/dev/null 2>&1 \
+                     || warn "Could not ${action} ${unit}." ;;
+    esac
 }
 
 services_menu() {
