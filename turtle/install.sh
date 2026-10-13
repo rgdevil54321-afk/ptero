@@ -397,14 +397,29 @@ migrate_db() {
 }
 
 install_license_key() {
-    log "Installing the Turtle license (ionCube runtime key)..."
+    # The panel PHP is ionCube-encoded. The loader needs the runtime key on disk
+    # BEFORE anything boots the app (artisan key:generate, composer's
+    # post-autoload-dump -> package:discover, migrations). Installing it later is
+    # what made fresh installs die with "an encoding key was not found".
     mkdir -p "$HYPER_IONCUBE_KEY_DIR"
+
+    # www-data exists once nginx is installed; fall back to root if not (e.g.
+    # --skip-prereqs on a bare box) so the key is never skipped.
+    local KEY_GROUP="$WEB_USER"
+    getent group "$KEY_GROUP" >/dev/null 2>&1 || KEY_GROUP="root"
 
     local KEY_SRC="$REPO_ROOT/turtle/license/hyperv2-release.key"
     local MANIFEST_SRC="$REPO_ROOT/turtle/license/hyperv2-ioncube.json"
+    local KEY_DST="$HYPER_IONCUBE_KEY_DIR/hyperv2-release.key"
+    local MANIFEST_DST="$HYPER_IONCUBE_KEY_DIR/hyperv2-ioncube.json"
 
-    if [[ -f "$KEY_SRC" ]]; then
-        install -o root -g "$WEB_USER" -m 0640 "$KEY_SRC" "$HYPER_IONCUBE_KEY_DIR/hyperv2-release.key"
+    if [[ -s "$KEY_SRC" ]]; then
+        log "Installing the Turtle license (ionCube runtime key)..."
+        install -o root -g "$KEY_GROUP" -m 0640 "$KEY_SRC" "$KEY_DST"
+    elif [[ -s "$KEY_DST" ]]; then
+        # In-place update where the checkout does not carry the key: keep the
+        # one already installed rather than failing the update.
+        log "License key already present at $KEY_DST - keeping it."
     else
         # Fallback: fetch the key from the Hyper license API.
         log "Repo does not ship a license key - fetching from the update API..."
@@ -414,19 +429,21 @@ install_license_key() {
         if [[ -n "$DL_URL" ]]; then
             local TMP_DIR
             TMP_DIR="$(mktemp -d)"
-            curl -fsSL "$DL_URL" -o "$TMP_DIR/key.zip"
-            unzip -oq "$TMP_DIR/key.zip" -d "$TMP_DIR"
-            find "$TMP_DIR" -type f -name 'hyperv2-release.key' -exec install -o root -g "$WEB_USER" -m 0640 {} "$HYPER_IONCUBE_KEY_DIR/hyperv2-release.key" \;
-            find "$TMP_DIR" -type f -name 'hyperv2-ioncube.json' -exec install -o root -g "$WEB_USER" -m 0640 {} "$HYPER_IONCUBE_KEY_DIR/hyperv2-ioncube.json" \;
+            if curl -fsSL "$DL_URL" -o "$TMP_DIR/key.zip" && unzip -oq "$TMP_DIR/key.zip" -d "$TMP_DIR"; then
+                find "$TMP_DIR" -type f -name 'hyperv2-release.key' -exec install -o root -g "$KEY_GROUP" -m 0640 {} "$KEY_DST" \;
+                find "$TMP_DIR" -type f -name 'hyperv2-ioncube.json' -exec install -o root -g "$KEY_GROUP" -m 0640 {} "$MANIFEST_DST" \;
+            fi
             rm -rf "$TMP_DIR"
-        else
-            err "Could not obtain the license key. The panel will not start."
-            return 1
         fi
     fi
 
-    if [[ -f "$MANIFEST_SRC" ]]; then
-        install -o root -g "$WEB_USER" -m 0640 "$MANIFEST_SRC" "$HYPER_IONCUBE_KEY_DIR/hyperv2-ioncube.json"
+    if [[ -s "$MANIFEST_SRC" ]]; then
+        install -o root -g "$KEY_GROUP" -m 0640 "$MANIFEST_SRC" "$MANIFEST_DST"
+    fi
+
+    if [[ ! -s "$KEY_DST" ]]; then
+        err "Could not obtain the ionCube license key. The panel will not start."
+        return 1
     fi
 
     log "License key installed to $HYPER_IONCUBE_KEY_DIR"
@@ -949,6 +966,14 @@ run_install() {
         install_ioncube_loader || true
     fi
 
+    # The ionCube key has to be on disk before anything boots the app, otherwise
+    # the encoded files cannot be decoded and composer/artisan abort. Do it first
+    # and treat failure as fatal (the panel cannot run without it).
+    install_license_key || {
+        err "Aborting: the panel cannot run without its ionCube license key."
+        exit 1
+    }
+
     if [[ "$UPDATE_MODE" == "1" ]]; then
         deploy_files
         ensure_storage
@@ -963,7 +988,6 @@ run_install() {
         migrate_db
     fi
 
-    install_license_key || true
     restart_fpm
     set_permissions
     clear_caches
