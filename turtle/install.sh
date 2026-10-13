@@ -170,12 +170,14 @@ install_prereqs() {
 
     apt-get install -y --no-install-recommends \
         curl wget tar unzip git ca-certificates gnupg lsb-release \
-        software-properties-common apt-transport-https \
+        apt-transport-https \
         nginx mariadb-server redis-server supervisor \
-        >/dev/null
+        >/dev/null || warn "One or more base packages failed to install; continuing."
 
+    # add-apt-repository is only needed for the ondrej/php PPA (Ubuntu). On
+    # Debian it is unavailable, and it must never abort the install above.
     if ! command -v add-apt-repository >/dev/null 2>&1; then
-        apt-get install -y software-properties-common >/dev/null
+        apt-get install -y software-properties-common >/dev/null 2>&1 || true
     fi
 
     # PHP (8.4) from the ondrej PPA
