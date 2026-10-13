@@ -453,12 +453,30 @@ write_env() {
     sed -i "s/^DB_USERNAME=.*/DB_USERNAME=${DB_USERNAME}/" "$ENV_FILE"
     sed -i "s/^DB_PASSWORD=.*/DB_PASSWORD=${DB_PASSWORD}/" "$ENV_FILE"
 
+    # APP_KEY must exist BEFORE any artisan call. Several panel providers resolve
+    # the encrypter while the app boots, so even `php artisan key:generate` dies
+    # with "No application encryption key has been specified" on a fresh .env
+    # (chicken-and-egg). Generate the key directly with openssl instead.
+    local CURRENT_KEY
+    CURRENT_KEY="$(sed -n 's/^APP_KEY=//p' "$ENV_FILE" 2>/dev/null | head -n1)"
+    case "$CURRENT_KEY" in
+        ""|"base64:"|"null")
+            CURRENT_KEY="base64:$(openssl rand -base64 32 | tr -d '\n')"
+            if grep -q '^APP_KEY=' "$ENV_FILE"; then
+                sed -i "s|^APP_KEY=.*|APP_KEY=${CURRENT_KEY}|" "$ENV_FILE"
+            else
+                printf '\nAPP_KEY=%s\n' "$CURRENT_KEY" >> "$ENV_FILE"
+            fi
+            log "Generated a new application encryption key (APP_KEY)."
+            ;;
+        *)
+            log "Keeping the existing APP_KEY."
+            ;;
+    esac
+
     # Queue worker + Redis defaults are already correct in .env.example
     # (QUEUE_CONNECTION=redis); make sure Redis is started.
     svc_start redis-server || true
-
-    cd "$PANEL_PATH"
-    php artisan key:generate --force --no-interaction
 }
 
 install_deps() {
