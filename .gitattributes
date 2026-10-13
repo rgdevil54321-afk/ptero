@@ -1,6 +1,10 @@
 # Shell scripts must stay LF (they run on Linux servers).
 *.sh text eol=lf
 
+# The Laravel console entrypoint has no extension, so it would otherwise be
+# subjected to core.autocrlf and get CRLF endings.
+artisan text eol=lf
+
 # The Turtle panel's PHP (forked from Hyper) is ionCube-encoded. Line-ending
 # conversion corrupts encoded payloads, so treat every .php file as binary
 # (stored verbatim).

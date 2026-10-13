@@ -603,7 +603,7 @@ finish() {
     echo "  Turtle Game Panel $SCRIPT_VERSION installed successfully!"
     echo "=========================================================================="
     echo ""
-    echo "  Panel URL      : ${APP_URL}"
+    echo "  Panel URL      : $(panel_app_url)"
     echo "  Panel path     : ${PANEL_PATH}"
     echo "  DB credentials : /root/.turtle-db-credentials"
     echo ""
@@ -986,6 +986,14 @@ run_install() {
         write_env
         install_deps
         migrate_db
+    fi
+
+    # Never pretend to succeed on an incomplete checkout: without artisan (and
+    # bootstrap/app.php) every artisan/composer step above silently no-ops.
+    if [[ ! -f "$PANEL_PATH/artisan" || ! -f "$PANEL_PATH/bootstrap/app.php" ]]; then
+        err "Panel code is incomplete: missing artisan and/or bootstrap/app.php in ${PANEL_PATH}."
+        err "This means the checked-out repository is not the full panel. Aborting."
+        exit 1
     fi
 
     restart_fpm
