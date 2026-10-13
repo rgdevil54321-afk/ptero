@@ -1,3 +1,4 @@
+SET FOREIGN_KEY_CHECKS=0;
 DROP TABLE IF EXISTS `activity_log_subjects`;
 CREATE TABLE `activity_log_subjects` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
@@ -760,3 +761,4 @@ INSERT INTO `migrations` VALUES (191,'2022_08_16_230204_add_installed_at_column_
 INSERT INTO `migrations` VALUES (192,'2022_12_12_213937_update_mail_settings_to_new_format',1);
 INSERT INTO `migrations` VALUES (193,'2023_01_24_210051_add_uuid_column_to_failed_jobs_table',1);
 INSERT INTO `migrations` VALUES (194,'2023_02_23_191004_add_expires_at_column_to_api_keys_table',1);
+SET FOREIGN_KEY_CHECKS=1;

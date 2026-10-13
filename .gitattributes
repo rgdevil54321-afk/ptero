@@ -12,3 +12,7 @@ artisan text eol=lf
 
 # License/material byte-exact files.
 *.key binary
+
+# SQL dumps are piped straight into the mysql client on Linux; CRLF can break
+# statements, so force LF.
+*.sql text eol=lf

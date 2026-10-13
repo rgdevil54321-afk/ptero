@@ -520,9 +520,25 @@ install_deps() {
         warn "composer dump-autoload failed; the Playit admin page may be unavailable until it runs."
 }
 
+ensure_schema_dump_safe() {
+    # The squashed schema dump is applied with a plain `mysql < dump` and relies
+    # on foreign-key checks being disabled while it creates tables alphabetically
+    # (children before parents). Laravel's own schema:dump writes that guard as
+    # the first line; some builds of this dump are missing it, which makes the
+    # load die with errno 150 on MariaDB. Restore it idempotently.
+    local DUMP="$PANEL_PATH/database/schema/mysql-schema.sql"
+    [[ -f "$DUMP" ]] || return 0
+    if ! grep -q 'FOREIGN_KEY_CHECKS' "$DUMP"; then
+        log "Patching the database schema dump so it loads on MariaDB (FK ordering)..."
+        sed -i '1i SET FOREIGN_KEY_CHECKS=0;' "$DUMP"
+        printf '\nSET FOREIGN_KEY_CHECKS=1;\n' >> "$DUMP"
+    fi
+}
+
 migrate_db() {
     log "Running database migrations + seeders..."
     cd "$PANEL_PATH"
+    ensure_schema_dump_safe
 
     if ! php artisan migrate --force; then
         err "Database migrations failed. The most common cause is a database"
