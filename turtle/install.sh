@@ -36,6 +36,10 @@
 #     --no-playit         Never offer the Playit.gg bridge
 #     --playit-provision  Let the bridge auto-install the playit plugin into
 #                          existing Java servers (no automatic restart)
+#     --admin-email EMAIL      First admin login email (default: admin@<host>)
+#     --admin-username USER    First admin username (default: admin)
+#     --admin-password PASS    First admin password (default: generated + shown)
+#     --no-admin               Do not create an admin user
 #     -h, --help          Show this help
 #
 #  Environment overrides:
@@ -64,6 +68,13 @@ UPDATE_MODE=0
 DO_NODE=2   # Local node: 0 = never, 1 = always, 2 = ask after panel install
 DO_PLAYIT=2 # Playit bridge: 0 = never, 1 = always, 2 = ask after panel install
 PLAYIT_PROVISION=0 # Let the bridge install the playit plugin into existing servers
+
+# First admin user (created automatically after the database is ready).
+ADMIN_EMAIL="${ADMIN_EMAIL:-}"
+ADMIN_USERNAME="${ADMIN_USERNAME:-}"
+ADMIN_PASSWORD="${ADMIN_PASSWORD:-}"
+ADMIN_CREATED=0
+DO_ADMIN=1
 
 # Init system: a normal VPS boots with systemd, but many containers (Docker with
 # s6/tini as PID 1) do not. When systemd is absent we fall back to SysV init
@@ -107,6 +118,10 @@ while [[ "$#" -gt 0 ]]; do
         --playit)       DO_PLAYIT=1; shift ;;
         --no-playit)    DO_PLAYIT=0; shift ;;
         --playit-provision) PLAYIT_PROVISION=1; shift ;;
+        --admin-email)     ADMIN_EMAIL="$2"; shift 2 ;;
+        --admin-username)  ADMIN_USERNAME="$2"; shift 2 ;;
+        --admin-password)  ADMIN_PASSWORD="$2"; shift 2 ;;
+        --no-admin)        DO_ADMIN=0; shift ;;
         --menu)         MENU_REQUESTED=1; shift ;;
         --db-database)  DB_DATABASE="$2"; shift 2 ;;
         --db-username)  DB_USERNAME="$2"; shift 2 ;;
@@ -393,6 +408,19 @@ ensure_storage() {
         "$PANEL_PATH/storage/framework/views" \
         "$PANEL_PATH/storage/logs" \
         "$PANEL_PATH/bootstrap/cache"
+
+    # Purge compiled caches left behind by a previous install or the base image.
+    # A stale bootstrap/cache/config.php can reference packages that a
+    # production vendor/ tree does not contain (e.g. the dev-only
+    # barryvdh/laravel-ide-helper), which makes every `php artisan` call die
+    # with "Class ... not found". The committed hyperv2_security_manifest.php is
+    # intentionally preserved.
+    rm -f \
+        "$PANEL_PATH/bootstrap/cache/config.php" \
+        "$PANEL_PATH/bootstrap/cache/packages.php" \
+        "$PANEL_PATH/bootstrap/cache/services.php" \
+        "$PANEL_PATH/bootstrap/cache/events.php" \
+        "$PANEL_PATH"/bootstrap/cache/routes-*.php 2>/dev/null || true
 }
 
 write_env() {
@@ -487,6 +515,55 @@ migrate_db() {
 
     mv -f database/Seeders/NestSeeder.php.bak database/Seeders/NestSeeder.php 2>/dev/null || true
     mv -f database/Seeders/EggSeeder.php.bak database/Seeders/EggSeeder.php 2>/dev/null || true
+}
+
+create_admin_user() {
+    # Creates the first admin account non-interactively so a fresh install is
+    # ready to log into. Idempotent: does nothing if an admin already exists.
+    if [[ "$DO_ADMIN" != "1" ]]; then
+        return 0
+    fi
+
+    cd "$PANEL_PATH" || return 0
+
+    local existing
+    existing="$(php artisan tinker \
+        --execute='echo "TURTLEADMINCOUNT=".\Pterodactyl\Models\User::where("root_admin", true)->count();' \
+        2>/dev/null | grep -oE 'TURTLEADMINCOUNT=[0-9]+' | head -n1 | cut -d= -f2)"
+    if [[ -n "$existing" && "$existing" != "0" ]]; then
+        log "An admin user already exists; skipping admin creation."
+        ADMIN_CREATED=0
+        return 0
+    fi
+
+    # Derive sensible defaults from the panel URL / hostname.
+    local url host
+    url="$(panel_app_url)"
+    host="${url#http://}"; host="${host#https://}"
+    host="${host%%/*}"; host="${host%%:*}"
+    : "${ADMIN_USERNAME:=admin}"
+    : "${ADMIN_EMAIL:=admin@${host:-localhost}}"
+    local first="${ADMIN_FIRST:-Panel}"
+    local last="${ADMIN_LAST:-Admin}"
+
+    if [[ -z "$ADMIN_PASSWORD" ]]; then
+        ADMIN_PASSWORD="$(openssl rand -base64 24 | tr -dc 'A-Za-z0-9' | head -c 20)"
+    fi
+
+    log "Creating the first admin user (${ADMIN_EMAIL})..."
+    if php artisan p:user:make \
+            --email="$ADMIN_EMAIL" \
+            --username="$ADMIN_USERNAME" \
+            --name-first="$first" \
+            --name-last="$last" \
+            --password="$ADMIN_PASSWORD" \
+            --admin=1 >/dev/null 2>&1; then
+        ADMIN_CREATED=1
+    else
+        warn "Could not create the admin user automatically."
+        warn "Create it by hand: cd ${PANEL_PATH} && php artisan p:user:make"
+        ADMIN_CREATED=0
+    fi
 }
 
 install_license_key() {
@@ -705,13 +782,22 @@ finish() {
     echo "  Panel path     : ${PANEL_PATH}"
     echo "  DB credentials : /root/.turtle-db-credentials"
     echo ""
-    echo "  Next steps:"
-    echo "    1. Create your first admin user:"
-    echo "         cd ${PANEL_PATH} && php artisan p:user:make"
-    echo "    2. Open the panel, log in, and bank on the Turtle theme being live."
-    echo "    3. (Optional) Configure a domain + TLS, e.g. with certbot."
-    echo "    4. To update the panel later:"
-    echo "         cd ${PANEL_PATH} && sudo bash hyper_fetch.sh"
+    if [[ "${ADMIN_CREATED:-0}" == "1" ]]; then
+        echo "  First admin login (change the password after logging in):"
+        echo "      URL      : $(panel_app_url)"
+        echo "      Email    : ${ADMIN_EMAIL}"
+        echo "      Username : ${ADMIN_USERNAME}"
+        echo "      Password : ${ADMIN_PASSWORD}"
+    else
+        echo "  Next steps:"
+        echo "    1. Create your first admin user:"
+        echo "         cd ${PANEL_PATH} && php artisan p:user:make"
+    fi
+    echo ""
+    echo "  After logging in, check Settings -> Theme for the Turtle look."
+    echo "  (Optional) Configure a domain + TLS, e.g. with certbot."
+    echo "  To update the panel later:"
+    echo "      cd ${PANEL_PATH} && sudo bash hyper_fetch.sh"
     echo ""
     echo "  Services managed by Supervisor:"
     echo "    - pterodactyl-scheduler (Laravel scheduler)"
@@ -1109,6 +1195,8 @@ run_install() {
         err "This means the checked-out repository is not the full panel. Aborting."
         exit 1
     fi
+
+    create_admin_user
 
     restart_fpm
     set_permissions
