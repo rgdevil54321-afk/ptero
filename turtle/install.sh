@@ -677,8 +677,14 @@ install_license_key() {
 
 set_permissions() {
     log "Setting file permissions..."
+    # This MUST run after every artisan invocation: artisan runs as root during
+    # the install and Laravel writes root-owned cache/view files under storage/
+    # and bootstrap/cache. If those stay owned by root the first web request dies
+    # with "file_put_contents(...): Permission denied" (see AppServiceProvider's
+    # versionData() cache warm-up).
     chown -R ${WEB_USER}:${WEB_USER} "$PANEL_PATH"/{app,bootstrap,config,database,public,resources,routes,storage} 2>/dev/null || true
-    chmod -R 755 "$PANEL_PATH"/storage/* "$PANEL_PATH"/bootstrap/cache/ 2>/dev/null || true
+    chmod -R 775 "$PANEL_PATH/storage" "$PANEL_PATH/bootstrap/cache" 2>/dev/null || true
+    find "$PANEL_PATH/storage" "$PANEL_PATH/bootstrap/cache" -type d -exec chmod g+s {} + 2>/dev/null || true
     chmod +x "$PANEL_PATH/hyper_fetch.sh" 2>/dev/null || true
     chmod +x "$PANEL_PATH/hyper_watcher.sh" 2>/dev/null || true
 }
@@ -1254,9 +1260,9 @@ run_install() {
 
     create_admin_user
 
-    restart_fpm
-    set_permissions
     clear_caches
+    set_permissions
+    restart_fpm
 
     configure_scheduler
     configure_queue
