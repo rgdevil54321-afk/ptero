@@ -1,0 +1,2 @@
+import{jf as i}from"/assets/entry.1m6q20ta.js?v=50f150d24267cb17";import{hq as t}from"/assets/entry.vff0hng4.js?v=50f150d24267cb17";import{Cr as o}from"/assets/entry.3ck3c65s.js?v=50f150d24267cb17";var d=({name:e,label:n,description:c,readOnly:l})=>{let[a,,r]=t(e);return o(i,{name:e,label:n,description:c,checked:a.value,readOnly:l,onChange:(s)=>{r.setValue(s.target.checked),r.setTouched(!0)}})},f=d;
+export{f as Td};

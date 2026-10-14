@@ -1,0 +1,2 @@
+import{Er as u}from"/assets/entry.jjf5jc5d.js?v=50f150d24267cb17";import{Fr as d}from"/assets/entry.r3nyea1z.js?v=50f150d24267cb17";var e=d(u(),1),w=(n,t,r)=>{let o=e.useRef(null);e.useEffect(()=>{o.current=t},[t]),e.useEffect(()=>{if(!(window&&window.addEventListener))return;let i=(s)=>o.current(s);return window.addEventListener(n,i,r),()=>{window.removeEventListener(n,i,r)}},[n])};
+export{w as Af};

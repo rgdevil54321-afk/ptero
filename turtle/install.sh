@@ -1258,6 +1258,20 @@ run_install() {
         exit 1
     fi
 
+    # The Hyper theme renders the layout through a pre-built front-end whose
+    # bundles and manifest live in public/assets. resources/views/templates/
+    # wrapper.blade.php calls $asset->integrity('main.js') / $asset->url('main.js')
+    # on every render; when public/assets/manifest.json is missing the AssetService
+    # throws ManifestDoesNotExistException, which is a fatal HTTP 500 in production
+    # (the encoded exception class implements a Spatie Ignition interface that is
+    # not installed when Composer runs with --no-dev). Fail loudly instead.
+    if [[ ! -s "$PANEL_PATH/public/assets/manifest.json" ]]; then
+        err "Panel assets are missing: ${PANEL_PATH}/public/assets/manifest.json not found."
+        err "Every page would return HTTP 500. The checked-out repository does not"
+        err "include the built front-end; re-clone/update it and re-run the installer."
+        exit 1
+    fi
+
     create_admin_user
 
     clear_caches

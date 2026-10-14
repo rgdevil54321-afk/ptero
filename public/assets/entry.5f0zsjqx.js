@@ -1,0 +1,2 @@
+function o(){return{pathname:window.location.pathname,search:window.location.search,state:window.history.state}}function i(a=window.location.pathname){let t=a.replace(/^\/auth\/?/,"/");return t==="/"?"/login":t}function h(a,t={}){let e=new URL(a,window.location.origin),n=t.replace?"replaceState":"pushState";window.history[n](t.state??null,"",`${e.pathname}${e.search}${e.hash}`),window.dispatchEvent(new PopStateEvent("popstate",{state:t.state??null}))}
+export{o as rj,i as sj,h as tj};

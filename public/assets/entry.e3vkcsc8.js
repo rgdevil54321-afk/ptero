@@ -1,0 +1,2 @@
+import{Ve as I}from"/assets/entry.67f7bhf6.js?v=50f150d24267cb17";import{Er as K}from"/assets/entry.jjf5jc5d.js?v=50f150d24267cb17";import{Fr as J}from"/assets/entry.r3nyea1z.js?v=50f150d24267cb17";var q=J(K(),1),M=(z,B)=>{let w=!1,g=null;try{let j=I.useStoreState((A)=>A.socket);w=j?.connected||!1,g=j?.instance||null}catch(j){w=!1,g=null}let F=q.useRef(null);return q.useEffect(()=>{F.current=B},[B]),q.useEffect(()=>{let j=(A)=>F.current(A);if(w&&g)g.addListener(z,j);return()=>{g&&g.removeListener(z,j)}},[z,w,g])},Q=M;
+export{Q as Jd};

@@ -1,0 +1,2 @@
+import{Ui as r}from"/assets/entry.nwwnhc74.js?v=50f150d24267cb17";import{Cr as o}from"/assets/entry.3ck3c65s.js?v=50f150d24267cb17";import{Fr as n}from"/assets/entry.r3nyea1z.js?v=50f150d24267cb17";var a=n(r(),1);var d=({dark:e,className:c,children:t})=>o("code",{className:a.default("font-mono text-sm px-2 py-1 inline-block rounded-lg",c,{"bg-hyper-accent":!e,"bg-hyper-accent text-gray-100":e}),children:t});
+export{d as mc};

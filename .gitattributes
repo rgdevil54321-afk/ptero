@@ -13,6 +13,12 @@ artisan text eol=lf
 # License/material byte-exact files.
 *.key binary
 
+# Built front-end bundles under public/assets are shipped verbatim and are
+# referenced by Subresource-Integrity (sha384) hashes in public/assets/
+# manifest.json. Any line-ending conversion would change the bytes and make the
+# browser refuse to load them, so store them exactly as built.
+public/assets/** -text
+
 # SQL dumps are piped straight into the mysql client on Linux; CRLF can break
 # statements, so force LF.
 *.sql text eol=lf

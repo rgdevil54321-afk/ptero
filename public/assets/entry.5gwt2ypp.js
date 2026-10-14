@@ -1,0 +1,2 @@
+import{dr as w}from"/assets/entry.rqhhxny7.js?v=50f150d24267cb17";import{Cr as f}from"/assets/entry.3ck3c65s.js?v=50f150d24267cb17";function B({children:g,className:k="",delay:z=0,variant:q="default"}){if(!w())return f("div",{className:k,children:g});return f("div",{className:`${k} animate-fade-in ${q==="hover"?"hover":""} ${q==="tap"?"tap":""}`,style:{animationDelay:`${z}s`},children:g})}
+export{B as Oh};

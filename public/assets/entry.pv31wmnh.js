@@ -1,0 +1,2 @@
+import{Cr as b}from"/assets/entry.3ck3c65s.js?v=50f150d24267cb17";import{Er as w}from"/assets/entry.jjf5jc5d.js?v=50f150d24267cb17";import{Fr as g,Kr as q}from"/assets/entry.r3nyea1z.js?v=50f150d24267cb17";var d=g(w(),1);var A=d.lazy(()=>import("/assets/IconPicker.0cr1ewy0.js?v=50f150d24267cb17"));function B(f){return b(d.Suspense,{fallback:b("div",{className:"h-10 w-full rounded-md border border-hyper-secondary bg-hyper-sidebar animate-pulse"}),children:b(A,{...f})})}
+export{B as T};
