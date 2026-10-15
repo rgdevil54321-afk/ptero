@@ -30,6 +30,7 @@
 #
 #  Usage:
 #     sudo bash turtle/install_node.sh --panel-path /var/www/pterodactyl
+#     sudo bash turtle/install_node.sh --local     # no FQDN needed (same box)
 #
 #  Options:
 #     --panel-path PATH   Panel directory   (default: /var/www/pterodactyl)
@@ -37,6 +38,8 @@
 #     --api-key KEY       Application API key (never stored; prompts if omitted)
 #     --fqdn HOST         Node FQDN/IP      (default: server primary IP)
 #     --scheme http|https                  (default: http)
+#     --local             Local node mode  - no public FQDN needed; the panel
+#                         reaches Wings at 127.0.0.1 and allocations bind 0.0.0.0
 #     --node-name NAME    Node name         (default: "Local Node")
 #     --ports RANGE       Allocation ports, e.g. 25565-25570 (default)
 #     --memory MB         Node memory       (default: detected system memory)
@@ -62,6 +65,8 @@ NODE_API_KEY="${PTERODACTYL_API_KEY:-}"
 NODE_NAME="${NODE_NAME:-Local Node}"
 NODE_FQDN="${NODE_FQDN:-}"
 NODE_SCHEME="${NODE_SCHEME:-}"
+NODE_LOCAL="${NODE_LOCAL:-0}"
+NODE_ALLOC_IP="${NODE_ALLOC_IP:-}"
 NODE_LOCATION_SHORT="${NODE_LOCATION_SHORT:-Local}"
 NODE_LOCATION_ID="${NODE_LOCATION_ID:-}"
 NODE_DESCRIPTION="${NODE_DESCRIPTION:-Installed by the Turtle node installer}"
@@ -116,6 +121,7 @@ while [[ "$#" -gt 0 ]]; do
         --api-key)      NODE_API_KEY="$2"; shift 2 ;;
         --fqdn)         NODE_FQDN="$2"; shift 2 ;;
         --scheme)       NODE_SCHEME="$2"; shift 2 ;;
+        --local)        NODE_LOCAL=1; shift ;;
         --node-name)    NODE_NAME="$2"; shift 2 ;;
         --ports)        NODE_PORTS="$2"; shift 2 ;;
         --memory)       NODE_MEMORY="$2"; shift 2 ;;
@@ -282,7 +288,33 @@ install_docker() {
         log "Docker is now running."
     else
         err "Could not get Docker running. Run 'docker info' to diagnose."
+        diagnose_docker_failure
         exit 1
+    fi
+}
+
+diagnose_docker_failure() {
+    # Wings needs a Docker daemon that can create bridge networks (it uses the
+    # default bridge plus published ports for every game server). On shared or
+    # edge container platforms the most common cause of failure is a missing
+    # CAP_NET_ADMIN capability, which makes iptables/nftables fail.
+    local capeff dec
+    capeff="$(awk '/^CapEff:/{print $2}' /proc/self/status 2>/dev/null || true)"
+    if [[ -n "$capeff" ]]; then
+        dec=$((16#$capeff))
+        # CAP_NET_ADMIN is bit 12.
+        if (( (dec >> 12) & 1 == 0 )); then
+            err "This host is missing CAP_NET_ADMIN."
+            err "Docker cannot create its network bridge here, so Wings - and any"
+            err "panel that runs servers in containers - cannot work on this host."
+            err "This normally means you are inside an unprivileged container."
+            err "Run the node on a real VPS/KVM host that supports Docker."
+            return 0
+        fi
+    fi
+    if [[ -f /var/log/dockerd.log ]]; then
+        warn "Recent dockerd output:"
+        tail -n 12 /var/log/dockerd.log 2>/dev/null | sed 's/^/    /' || true
     fi
 }
 
@@ -374,6 +406,24 @@ find_or_create_location() {
 }
 
 choose_networking() {
+    # Local node mode: the panel and Wings share this machine, so the panel
+    # reaches the daemon over loopback and no public FQDN/hostname is needed.
+    if [[ "$NODE_LOCAL" == "1" ]]; then
+        NODE_FQDN="${NODE_FQDN:-127.0.0.1}"
+        NODE_SCHEME="${NODE_SCHEME:-http}"
+        NODE_PUBLIC="false"
+        NODE_BEHIND_PROXY="false"
+        NODE_ALLOC_IP="${NODE_ALLOC_IP:-0.0.0.0}"
+        case "$NODE_SCHEME" in
+            http|https) ;;
+            *) err "Scheme must be http or https (got '${NODE_SCHEME}')."; exit 1 ;;
+        esac
+        log "Local node mode - no public FQDN required."
+        log "  Panel -> Wings : ${NODE_SCHEME}://${NODE_FQDN}:${NODE_DAEMON_LISTEN}"
+        log "  Allocations    : ${NODE_ALLOC_IP} ports ${NODE_PORTS}"
+        return 0
+    fi
+
     # The node FQDN must be reachable from the panel (which lives on this same
     # box). The safest default is the server's own IP address. A hostname is
     # only accepted when it resolves directly back to this machine so that we
@@ -536,7 +586,7 @@ create_allocations() {
         return 0
     fi
 
-    local alloc_ip="$NODE_FQDN"
+    local alloc_ip="${NODE_ALLOC_IP:-$NODE_FQDN}"
     local ports_json
     ports_json="$(php -r '
         $ports = array_map("trim", explode(",", $argv[1]));
@@ -735,7 +785,7 @@ finish_report() {
     echo "  Node id       : ${NODE_ID}"
     echo "  Daemon URL    : ${NODE_SCHEME}://${NODE_FQDN}:${NODE_DAEMON_LISTEN}"
     echo "  SFTP port     : ${NODE_DAEMON_SFTP}"
-    echo "  Allocations   : ${NODE_PORTS} on ${NODE_FQDN}"
+    echo "  Allocations   : ${NODE_PORTS} on ${NODE_ALLOC_IP:-$NODE_FQDN}"
     echo "  Config file   : ${WINGS_CFG}"
     echo "  Service       : wings (systemd, enabled)"
     echo ""

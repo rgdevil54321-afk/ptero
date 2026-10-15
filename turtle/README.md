@@ -130,6 +130,18 @@ It is invoked automatically at the end of `install.sh` if you answer **Yes**
 sudo bash turtle/install_node.sh --panel-path /var/www/pterodactyl
 ```
 
+**No FQDN?** Add `--local` — the node binds the panel↔Wings link to `127.0.0.1`
+and allocations to `0.0.0.0`, so you never have to type a domain name:
+
+```bash
+sudo bash turtle/install_node.sh --local
+```
+
+> `--local` still needs a working Docker daemon. If Docker cannot start because
+> the host lacks `CAP_NET_ADMIN` (common on free/edge container platforms), the
+> installer now says so explicitly instead of failing silently — move the node to
+> a real VPS/KVM host in that case.
+
 What it does:
 
 1. Pre-flight checks (root, supported OS, panel health, free disk, free ports).
