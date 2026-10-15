@@ -146,7 +146,7 @@ What it does:
 
 1. Pre-flight checks (root, supported OS, panel health, free disk, free ports).
 2. Installs or verifies **Docker**.
-3. Prompts for a **Pterodactyl Application API key** and validates it.
+3. Obtains a **Pterodactyl Application API key** (auto-minted and removed on exit) and validates it.
 4. Finds or creates a *Location* and the **"Local Node"** via the Application API.
 5. Creates default allocations (`25565-25570`) if the node has none.
 6. Fetches the official node configuration and writes it to
@@ -159,17 +159,24 @@ What it does:
 
 ### ⚠️ Before you start
 
-- **Create an Application API key** in the panel: *Admin → Application API →
-  Create*. Give it **Read & Write** on *Nodes*, *Locations* and *Allocations*.
-  Paste it when prompted (or set `PTERODACTYL_API_KEY`). The key is used only
-  during installation and is **never written to disk**.
-- **Ports must be reachable:** `8080/tcp` (Wings API) and `2022/tcp` (SFTP) must
-  be open/served, plus whatever game ports you allocate. Wings and the panel
-  talk over the node's FQDN, so **do not assume `127.0.0.1`**.
-- **DNS matters.** Default FQDN is the server's primary IP. If you use a
-  hostname, it must resolve back to *this* machine. Cloudflare proxy (orange
-  cloud) and Cloudflare Tunnel do **not** expose raw Wings ports — use a direct
-  DNS record (grey cloud) or the server IP for the node.
+- **No API key needed.** The installer mints a temporary Application API key
+  itself (Read + Write on *Nodes*, *Locations* and *Allocations*) and deletes it
+  again when it exits. Supply your own with `--api-key`/`PTERODACTYL_API_KEY`, or
+  pass `--no-auto-key` to be prompted instead. Keys are **never written to disk**.
+- **Docker must actually run.** Wings runs every server in a container. On hosts
+  without the `CAP_NET_ADMIN` kernel capability (most free/edge container
+  platforms) Docker cannot create its network bridge and the installer will say
+  so — use a real VPS/KVM host there.
+- **Use `--local` when the panel and node share a machine.** It binds the
+  panel↔Wings link to `127.0.0.1` and allocations to `0.0.0.0`, so no public FQDN
+  is required. Only set a real FQDN when the panel must reach Wings across a
+  network, and then **do not assume `127.0.0.1`**.
+- **Ports must be reachable** by players for whatever game ports you allocate.
+  `8080/tcp` (Wings API) and `2022/tcp` (SFTP) are only needed when the panel and
+  node are on different machines.
+- **DNS matters** for a remote node. If you use a hostname it must resolve back to
+  *this* machine. Cloudflare proxy (orange cloud) and Cloudflare Tunnel do **not**
+  expose raw Wings ports — use a direct DNS record (grey cloud) or the server IP.
 - TLS verification is **never** disabled.
 
 Options:
@@ -177,7 +184,9 @@ Options:
 ```text
 --panel-path PATH   Panel directory            (default: /var/www/pterodactyl)
 --url URL           Panel URL                  (default: read from panel .env)
---api-key KEY       Application API key        (never stored; prompts if omitted)
+--api-key KEY       Application API key        (auto-minted if omitted)
+--no-auto-key       Prompt for a key instead of auto-minting
+--local             Same-box node: 127.0.0.1 + 0.0.0.0, no FQDN
 --fqdn HOST         Node FQDN or IP            (default: server primary IP)
 --scheme http|https                            (default: http)
 --node-name NAME    Node name                  (default: "Local Node")

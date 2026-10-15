@@ -6,15 +6,15 @@
 #  Installs a real, registered Pterodactyl/Wings node on the same machine as
 #  the panel. Run AFTER the panel (turtle/install.sh) has been installed.
 #
-#  The node is created through the official Pterodactyl Application API using
-#  an Application API key that YOU create in the panel (Admin -> Application
-#  API). The key is only used during installation and is never stored on disk
-#  or written into the repository.
+#  The node is created through the official Pterodactyl Application API. A
+#  temporary Application API key is minted automatically for the install and
+#  deleted again on exit; it is never stored on disk or written into the
+#  repository.
 #
 #  What this script does:
 #    1. Pre-flight checks (root, OS, panel health, disk space, free ports)
 #    2. Installs / verifies Docker
-#    3. Prompts for the Application API key and validates it
+#    3. Obtains an Application API key automatically and validates it
 #    4. Finds or creates a Location and the "Local Node" through the API
 #    5. Creates default allocations for the node
 #    6. Fetches the official node configuration and writes it securely to
@@ -32,10 +32,16 @@
 #     sudo bash turtle/install_node.sh --panel-path /var/www/pterodactyl
 #     sudo bash turtle/install_node.sh --local     # no FQDN needed (same box)
 #
+#  API key: by default the installer mints a temporary Application API key
+#  through the panel (READ+WRITE on nodes/locations/allocations) and deletes it
+#  again on exit, so no key has to be created by hand. Pass --no-auto-key to be
+#  prompted instead, or supply your own key with --api-key.
+#
 #  Options:
 #     --panel-path PATH   Panel directory   (default: /var/www/pterodactyl)
 #     --url URL           Panel URL         (default: read from panel .env)
-#     --api-key KEY       Application API key (never stored; prompts if omitted)
+#     --api-key KEY       Application API key (never stored; auto-minted if omitted)
+#     --no-auto-key       Do not auto-mint a key; prompt for one instead
 #     --fqdn HOST         Node FQDN/IP      (default: server primary IP)
 #     --scheme http|https                  (default: http)
 #     --local             Local node mode  - no public FQDN needed; the panel
@@ -48,7 +54,8 @@
 #     --yes               Non-interactive; use env vars / defaults
 #
 #  Environment overrides:
-#     PANEL_PATH APP_URL PTERODACTYL_API_KEY NODE_NAME NODE_FQDN NODE_SCHEME
+#     PANEL_PATH APP_URL PTERODACTYL_API_KEY NODE_ALLOW_AUTO_KEY
+#     NODE_NAME NODE_FQDN NODE_SCHEME NODE_LOCAL NODE_ALLOC_IP
 #     NODE_LOCATION_SHORT NODE_LOCATION_ID NODE_PORTS NODE_MEMORY NODE_DISK
 #     NODE_DAEMON_BASE NODE_DAEMON_LISTEN NODE_DAEMON_SFTP NODE_BEHIND_PROXY
 #     WINGS_VERSION WINGS_REMOTE_URL
@@ -62,6 +69,9 @@ set -uo pipefail
 NODE_PANEL_PATH="${PANEL_PATH:-/var/www/pterodactyl}"
 NODE_URL="${APP_URL:-}"
 NODE_API_KEY="${PTERODACTYL_API_KEY:-}"
+NODE_ALLOW_AUTO_KEY="${NODE_ALLOW_AUTO_KEY:-1}"
+NODE_KEY_CREATED=0
+NODE_KEY_IDENT=""
 NODE_NAME="${NODE_NAME:-Local Node}"
 NODE_FQDN="${NODE_FQDN:-}"
 NODE_SCHEME="${NODE_SCHEME:-}"
@@ -93,14 +103,29 @@ NODE_YES=0
 API_HTTP_CODE=""
 API_BODY=""
 TMP="$(mktemp -d)"
-trap 'rm -rf "$TMP"' EXIT
+
+cleanup() {
+    # Remove any API key this run minted, then drop scratch space. Guarded so an
+    # early exit (bad flag) cannot error out inside the trap.
+    if declare -F delete_application_api_key >/dev/null 2>&1; then
+        delete_application_api_key
+    fi
+    rm -rf "$TMP"
+}
+trap cleanup EXIT
 
 log()  { echo -e "\e[1;34m[turtle][node]\e[0m $*"; }
 warn() { echo -e "\e[1;33m[turtle][node][warn]\e[0m $*"; }
 err()  { echo -e "\e[1;31m[turtle][node][error]\e[0m $*" >&2; }
 
 usage() {
-    sed -n '2,29p' "${BASH_SOURCE[0]}" | sed -e 's/^# \{0,1\}//' -e '/^===/d'
+    # Print the header comment block: from just under the top border through the
+    # line above the closing border (skips the title-box separators).
+    awk '
+        NR == 1 { next }
+        /^# =+$/ { n++; if (n == 3) exit; next }
+        n >= 1 { sub(/^# ?/, ""); print }
+    ' "${BASH_SOURCE[0]}"
 }
 
 need() {
@@ -129,6 +154,7 @@ while [[ "$#" -gt 0 ]]; do
         --wings-version) WINGS_VERSION="$2"; shift 2 ;;
         --remote-url)   WINGS_REMOTE_URL="$2"; shift 2 ;;
         --yes)          NODE_YES=1; shift ;;
+        --no-auto-key)  NODE_ALLOW_AUTO_KEY=0; shift ;;
         -h|--help)      usage; exit 0 ;;
         *)              err "Unknown option: $1"; usage; exit 1 ;;
     esac
@@ -321,11 +347,99 @@ diagnose_docker_failure() {
 # -----------------------------------------------------------------------------
 # Application API key
 # -----------------------------------------------------------------------------
+# The installer needs an Application API key to register the node. By default
+# it mints one itself (READ+WRITE on nodes/locations/allocations) and deletes
+# it again on exit, so a fully automatic install never has to visit the panel
+# UI. Pass --no-auto-key to be prompted instead.
+write_key_helper_php() {
+    # write_key_helper_php DEST MODE   (MODE = create | delete)
+    local dest="$1" mode="$2"
+    local panel="$NODE_PANEL_PATH"
+    if [[ "$mode" == "create" ]]; then
+        cat > "$dest" <<PHP
+<?php
+require '${panel}/vendor/autoload.php';
+\$app = require_once '${panel}/bootstrap/app.php';
+\$app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+
+\$admin = Pterodactyl\Models\User::query()->where('root_admin', 1)->orderBy('id')->first();
+if (!\$admin) {
+    fwrite(STDERR, "no-admin-user\n");
+    exit(2);
+}
+
+// AdminAcl permission values are a bitmask: can() tests permission AND action.
+// WRITE alone is 2, and 2 AND READ(1) is 0, so every GET would 403.
+// The installer lists nodes/locations/allocations before it writes to them.
+\$perm = Pterodactyl\Services\Acl\Api\AdminAcl::READ
+      | Pterodactyl\Services\Acl\Api\AdminAcl::WRITE;
+
+\$key = app(Pterodactyl\Services\Api\KeyCreationService::class)
+    ->setKeyType(Pterodactyl\Models\ApiKey::TYPE_APPLICATION)
+    ->handle(
+        ['user_id' => \$admin->id, 'memo' => 'Turtle node installer (temporary)'],
+        ['r_nodes' => \$perm, 'r_locations' => \$perm, 'r_allocations' => \$perm]
+    );
+
+// The user-facing key is the 16-char identifier ("ptla_...") plus the
+// decrypted 32-char token; findToken() splits on that same boundary.
+echo \$key->identifier . decrypt(\$key->token);
+PHP
+    else
+        cat > "$dest" <<PHP
+<?php
+require '${panel}/vendor/autoload.php';
+\$app = require_once '${panel}/bootstrap/app.php';
+\$app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
+Pterodactyl\Models\ApiKey::query()->where('identifier', '${NODE_KEY_IDENT}')->delete();
+PHP
+    fi
+}
+
+auto_create_api_key() {
+    command -v php >/dev/null 2>&1 || return 1
+    [[ -f "$NODE_PANEL_PATH/vendor/autoload.php" ]] || return 1
+    [[ -f "$NODE_PANEL_PATH/bootstrap/app.php" ]] || return 1
+
+    local script="$TMP/turtle-api-key-create.php" out
+    write_key_helper_php "$script" create
+    out="$(cd "$NODE_PANEL_PATH" && php "$script" 2>"$TMP/api-key-create.err" | tr -d '\r\n')" || true
+    if [[ -z "$out" || "${#out}" -lt 32 ]]; then
+        return 1
+    fi
+
+    NODE_API_KEY="$out"
+    NODE_KEY_CREATED=1
+    NODE_KEY_IDENT="${out:0:16}"
+    return 0
+}
+
+delete_application_api_key() {
+    [[ "$NODE_KEY_CREATED" == "1" ]] || return 0
+    [[ -n "$NODE_KEY_IDENT" ]] || return 0
+    command -v php >/dev/null 2>&1 || return 0
+
+    local script="$TMP/turtle-api-key-delete.php"
+    write_key_helper_php "$script" delete
+    ( cd "$NODE_PANEL_PATH" && php "$script" >/dev/null 2>&1 ) || true
+    log "Removed the temporary Application API key."
+    NODE_KEY_CREATED=0
+}
+
 ask_api_key() {
     if [[ -n "$NODE_API_KEY" ]]; then
         log "Using the Application API key provided via option/env."
         return 0
     fi
+
+    if [[ "$NODE_ALLOW_AUTO_KEY" == "1" ]]; then
+        if auto_create_api_key; then
+            log "Minted a temporary Application API key (deleted when this script exits)."
+            return 0
+        fi
+        warn "Could not auto-create an Application API key; falling back to a prompt."
+    fi
+
     if [[ "$NODE_YES" == "1" ]]; then
         err "An Application API key is required. Provide one with"
         err "  --api-key KEY   or   PTERODACTYL_API_KEY=KEY  or run interactively."

@@ -871,6 +871,18 @@ finish() {
 # -----------------------------------------------------------------------------
 # Local Wings node (optional)
 # -----------------------------------------------------------------------------
+# The panel and the node share this machine whenever install.sh drives the node
+# step, so default the node installer to --local (no FQDN) unless the operator
+# explicitly overrode the address via NODE_FQDN/NODE_SCHEME.
+run_node_installer() {
+    local installer="$1"
+    local -a args=(--panel-path "$PANEL_PATH")
+    if [[ -z "${NODE_FQDN:-}" && -z "${NODE_SCHEME:-}" ]]; then
+        args+=(--local)
+    fi
+    bash "$installer" "${args[@]}"
+}
+
 node_install_step() {
     local INSTALLER="$REPO_ROOT/turtle/install_node.sh"
     if [[ ! -f "$INSTALLER" ]]; then
@@ -896,10 +908,10 @@ node_install_step() {
 
     if [[ "$CHOICE" =~ ^[Yy]$ ]]; then
         log "Installing a local Wings node (turtle/install_node.sh)..."
-        bash "$INSTALLER" --panel-path "$PANEL_PATH"
+        run_node_installer "$INSTALLER"
     else
         log "Skipping local node installation. To install it later run:"
-        log "  sudo bash turtle/install_node.sh --panel-path ${PANEL_PATH}"
+        log "  sudo bash turtle/install_node.sh --local"
     fi
 }
 
@@ -1186,7 +1198,7 @@ command_centre() {
             2) UPDATE_MODE=1; run_install ;;
             3)
                 if [[ -f "$REPO_ROOT/turtle/install_node.sh" ]]; then
-                    bash "$REPO_ROOT/turtle/install_node.sh" --panel-path "$PANEL_PATH"
+                    run_node_installer "$REPO_ROOT/turtle/install_node.sh"
                 else
                     err "turtle/install_node.sh not found."
                 fi
