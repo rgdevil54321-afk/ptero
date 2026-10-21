@@ -190,6 +190,13 @@
                             </a>
                         </li>
                         @endif
+                        @if(Auth::user()->root_admin)
+                        <li class="{{ starts_with((string) Route::currentRouteName(), 'admin.local') ? 'active' : '' }}">
+                            <a href="{{ Route::has('admin.local') ? route('admin.local') : url('/admin/local') }}">
+                                <i class="fa fa-server"></i> <span>Local Servers</span>
+                            </a>
+                        </li>
+                        @endif
                         @php($showPanelLogs = Auth::user()->root_admin)
                         @if($showPanelLogs)
                         @php($panelLogsRouteAvailable = Route::has('admin.panel-logs'))

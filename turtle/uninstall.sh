@@ -26,6 +26,7 @@
 #     --purge-db          Also drop the panel database + DB user
 #     --keep-wings        Leave the local Wings node installed
 #     --purge-volumes     Also delete /var/lib/pterodactyl (server data!)
+#     --purge-local       Also delete /var/lib/turtle-local (native server data!)
 #     -h, --help          Show this help
 #
 #  Environment overrides (mainly for testing):
@@ -51,11 +52,14 @@ WINGS_DATA_DIR="${WINGS_DATA_DIR:-/var/lib/pterodactyl}"
 SYSTEMD_DIR="${SYSTEMD_DIR:-/etc/systemd/system}"
 PLAYIT_BRIDGE_BIN="${PLAYIT_BRIDGE_BIN:-/usr/local/bin/turtle-playit-sync}"
 PLAYIT_CONF_DIR="${PLAYIT_CONF_DIR:-/etc/turtle}"
+LOCAL_BASE_DIR="${TURTLE_LOCAL_DIR:-/var/lib/turtle-local}"
+LOCAL_SERVICE="${LOCAL_SERVICE:-/etc/systemd/system/turtle-local.service}"
 
 FORCE=0
 PURGE_DB=0
 KEEP_WINGS=0
 PURGE_VOLUMES=0
+PURGE_LOCAL=0
 
 log()  { echo -e "\e[1;34m[turtle]\e[0m $*"; }
 warn() { echo -e "\e[1;33m[turtle][warn]\e[0m $*"; }
@@ -73,6 +77,7 @@ while [[ "$#" -gt 0 ]]; do
         --purge-db)      PURGE_DB=1; shift ;;
         --keep-wings)    KEEP_WINGS=1; shift ;;
         --purge-volumes) PURGE_VOLUMES=1; shift ;;
+        --purge-local)   PURGE_LOCAL=1; shift ;;
         -h|--help)       usage; exit 0 ;;
         *)               err "Unknown option: $1"; usage; exit 1 ;;
     esac
@@ -211,8 +216,57 @@ remove_playit_bridge() {
     log "Playit bridge removed (server plugin files were left untouched)."
 }
 
-drop_database() {
-    local drop="$PURGE_DB"
+remove_local_runtime() {
+    local found=0
+    [[ -f "$LOCAL_SERVICE" ]] && found=1
+    [[ -d "$LOCAL_BASE_DIR" ]] && found=1
+
+    if [[ "$found" -eq 0 ]]; then
+        log "No local runtime detected - skipping."
+        return 0
+    fi
+
+    log "Stopping any running local (native) servers..."
+    # Each native server writes its PID next to its data; stop them cleanly.
+    if [[ -d "$LOCAL_BASE_DIR" ]]; then
+        local pidfile pid
+        while IFS= read -r pidfile; do
+            pid="$(cat "$pidfile" 2>/dev/null || true)"
+            if [[ -n "$pid" ]] && kill -0 "$pid" 2>/dev/null; then
+                kill -TERM "$pid" >/dev/null 2>&1 || true
+            fi
+        done < <(find "$LOCAL_BASE_DIR" -maxdepth 2 -name server.pid 2>/dev/null)
+        sleep 2
+        while IFS= read -r pidfile; do
+            pid="$(cat "$pidfile" 2>/dev/null || true)"
+            if [[ -n "$pid" ]] && kill -0 "$pid" 2>/dev/null; then
+                kill -KILL "$pid" >/dev/null 2>&1 || true
+            fi
+        done < <(find "$LOCAL_BASE_DIR" -maxdepth 2 -name server.pid 2>/dev/null)
+    fi
+
+    if [[ -f "$LOCAL_SERVICE" ]]; then
+        systemctl disable --now turtle-local.service >/dev/null 2>&1 || true
+        rm -f "$LOCAL_SERVICE"
+        systemctl daemon-reload >/dev/null 2>&1 || true
+    fi
+    log "Local runtime boot unit removed."
+
+    local purge="$PURGE_LOCAL"
+    if [[ -d "$LOCAL_BASE_DIR" && "$purge" != "1" && "$FORCE" != "1" ]]; then
+        echo ""
+        read -rp "Also delete native server data in ${LOCAL_BASE_DIR}? [y/N]: " purge_input
+        [[ "${purge_input:-n}" =~ ^[Yy]$ ]] && purge=1
+    fi
+    if [[ "$purge" == "1" && -d "$LOCAL_BASE_DIR" ]]; then
+        warn "Deleting native server data in ${LOCAL_BASE_DIR}..."
+        rm -rf "$LOCAL_BASE_DIR"
+    else
+        [[ -d "$LOCAL_BASE_DIR" ]] && log "Kept native server data in ${LOCAL_BASE_DIR}."
+    fi
+}
+
+drop_database() {    local drop="$PURGE_DB"
     if [[ "$drop" != "1" && "$FORCE" != "1" ]]; then
         echo ""
         read -rp "Also DROP the database '${DB_DATABASE}' and user '${DB_USERNAME}'? [y/N]: " db_input
@@ -260,13 +314,14 @@ remove_nginx_site
 remove_panel_files
 remove_wings
 remove_playit_bridge
+remove_local_runtime
 drop_database
 
 echo ""
 echo "=========================================================================="
 echo "  Turtle Game Panel uninstalled."
 echo "=========================================================================="
-echo "  Removed : panel files, nginx site, supervisor programs, Playit bridge"
+echo "  Removed : panel files, nginx site, supervisor programs, Playit bridge, local runtime"
 [[ "$KEEP_WINGS" != "1" ]] && echo "  Node    : local Wings node removed (if it was present)"
 [[ "$PURGE_DB" != "1" ]] && echo "  Kept    : database '${DB_DATABASE}' (drop it later with --purge-db)"
 echo "  Kept    : server plugin files under ${WINGS_DATA_DIR}, system packages, ionCube loader + license (${HYPER_IONCUBE_KEY_DIR:-/etc/hyperv2/ioncube})"

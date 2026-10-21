@@ -103,7 +103,9 @@ class PlayitService
 
     public function poolCount(): int
     {
-        return PlayitAgent::query()->whereNull('server_uuid')->count();
+        // A key is only free when it is bound to neither a Pterodactyl server
+        // nor a native "local node" server.
+        return PlayitAgent::query()->whereNull('server_uuid')->whereNull('local_server_id')->count();
     }
 
     /**
@@ -154,7 +156,7 @@ class PlayitService
             return $existing;
         }
 
-        $agent = PlayitAgent::query()->whereNull('server_uuid')->orderBy('id')->first();
+        $agent = PlayitAgent::query()->whereNull('server_uuid')->whereNull('local_server_id')->orderBy('id')->first();
         if (!$agent) {
             return null;
         }
@@ -209,9 +211,22 @@ class PlayitService
             $this->clearServer($agent->server_uuid);
         }
 
+        if ($agent->local_server_id) {
+            PlayitAgent::query()->where('id', $agent->id)->update(['local_server_id' => null]);
+            DB::table('local_servers')->where('id', $agent->local_server_id)->update([
+                'playit_agent_id' => null,
+                'playit_address' => null,
+                'playit_host' => null,
+                'playit_port' => null,
+                'playit_synced_at' => null,
+                'updated_at' => now(),
+            ]);
+        }
+
         $agent->forceFill([
             'server_uuid' => null,
             'server_id' => null,
+            'local_server_id' => null,
             'status' => 'available',
             'agent_id' => null,
             'tunnel_id' => null,
@@ -233,12 +248,139 @@ class PlayitService
             $this->clearServer($agent->server_uuid);
         }
 
+        if ($agent->local_server_id) {
+            DB::table('local_servers')->where('id', $agent->local_server_id)->update([
+                'playit_agent_id' => null,
+                'playit_address' => null,
+                'playit_host' => null,
+                'playit_port' => null,
+                'playit_synced_at' => null,
+                'updated_at' => now(),
+            ]);
+        }
+
         $agent->delete();
     }
 
     public function secretForServer(string $serverUuid): ?string
     {
         return PlayitAgent::query()->where('server_uuid', $serverUuid)->value('secret_key');
+    }
+
+    // ---------------------------------------------------------------------
+    // Native "local node" servers (no Wings, no Docker).
+    // ---------------------------------------------------------------------
+
+    /**
+     * Claim the next free key for a native local server. Idempotent.
+     */
+    public function assignNextToLocal(int $localServerId): ?PlayitAgent
+    {
+        $existing = PlayitAgent::query()->where('local_server_id', $localServerId)->first();
+        if ($existing) {
+            return $existing;
+        }
+
+        $agent = PlayitAgent::query()->whereNull('server_uuid')->whereNull('local_server_id')->orderBy('id')->first();
+        if (!$agent) {
+            return null;
+        }
+
+        $agent->forceFill([
+            'local_server_id' => $localServerId,
+            'server_uuid' => null,
+            'server_id' => null,
+            'status' => 'assigned',
+        ])->save();
+
+        return $agent;
+    }
+
+    public function secretForLocal(int $localServerId): ?string
+    {
+        return PlayitAgent::query()->where('local_server_id', $localServerId)->value('secret_key');
+    }
+
+    /**
+     * Read the agent secret out of a playit plugin config.yml.
+     */
+    public function extractSecretFromYaml(string $yaml): ?string
+    {
+        if (preg_match('/^[ \t]*agent-secret[ \t]*:[ \t]*(.+)$/m', $yaml, $m)) {
+            $value = trim($m[1], " \t\"'");
+
+            return $value !== '' ? $value : null;
+        }
+
+        return null;
+    }
+
+    /**
+     * Ask playit for the connectable address behind a raw agent secret.
+     *
+     * @return array{ok:bool,address:?string,host:?string,port:?int,message:string}
+     */
+    public function resolveAddress(string $secret): array
+    {
+        $secret = trim($secret);
+        if ($secret === '') {
+            return ['ok' => false, 'address' => null, 'host' => null, 'port' => null, 'message' => 'no key'];
+        }
+
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => 'agent-key ' . $secret,
+                'Content-Type' => 'application/json',
+            ])->timeout(20)->post(self::API_BASE . '/v1/agents/rundata', (object) []);
+        } catch (\Throwable $e) {
+            return ['ok' => false, 'address' => null, 'host' => null, 'port' => null, 'message' => 'request failed'];
+        }
+
+        if (!$response->successful()) {
+            return ['ok' => false, 'address' => null, 'host' => null, 'port' => null, 'message' => 'HTTP ' . $response->status()];
+        }
+
+        $data = $response->json();
+        $tunnels = is_array($data['tunnels'] ?? null) ? $data['tunnels'] : [];
+        if ($tunnels === []) {
+            return ['ok' => false, 'address' => null, 'host' => null, 'port' => null, 'message' => 'no tunnel yet'];
+        }
+
+        $tunnel = $this->pickTunnel($tunnels, null);
+        $display = is_string($tunnel['display_address'] ?? null) ? trim($tunnel['display_address']) : '';
+        [$host, $port] = $this->splitAddress($display);
+
+        if (!$host) {
+            return ['ok' => false, 'address' => null, 'host' => null, 'port' => null, 'message' => 'tunnel has no address yet'];
+        }
+
+        return ['ok' => true, 'address' => $display, 'host' => $host, 'port' => $port, 'message' => 'ok'];
+    }
+
+    /**
+     * Detach a key from a native local server and clear its stored address.
+     */
+    public function clearLocal(int $localServerId): void
+    {
+        PlayitAgent::query()->where('local_server_id', $localServerId)->update([
+            'local_server_id' => null,
+            'status' => 'available',
+            'agent_id' => null,
+            'tunnel_id' => null,
+            'address' => null,
+            'host' => null,
+            'port' => null,
+            'last_error' => null,
+        ]);
+
+        DB::table('local_servers')->where('id', $localServerId)->update([
+            'playit_agent_id' => null,
+            'playit_address' => null,
+            'playit_host' => null,
+            'playit_port' => null,
+            'playit_synced_at' => null,
+            'updated_at' => now(),
+        ]);
     }
 
     // ---------------------------------------------------------------------

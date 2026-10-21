@@ -14,6 +14,7 @@ class PlayitAgent extends Model
 
     protected $casts = [
         'server_id' => 'integer',
+        'local_server_id' => 'integer',
         'port' => 'integer',
         'last_synced_at' => 'datetime',
     ];

@@ -36,6 +36,9 @@
 #     --no-playit         Never offer the Playit.gg bridge
 #     --playit-provision  Let the bridge auto-install the playit plugin into
 #                          existing Java servers (no automatic restart)
+#     --local-runtime     Set up native local servers (JDK + data dir + boot
+#                          unit) without prompting
+#     --no-local-runtime   Never set up the native local runtime
 #     --admin-email EMAIL      First admin login email (default: admin@<host>)
 #     --admin-username USER    First admin username (default: admin)
 #     --admin-password PASS    First admin password (default: generated + shown)
@@ -67,6 +70,7 @@ DO_NGINX=1
 UPDATE_MODE=0
 DO_NODE=2   # Local node: 0 = never, 1 = always, 2 = ask after panel install
 DO_PLAYIT=2 # Playit bridge: 0 = never, 1 = always, 2 = ask after panel install
+DO_LOCAL=2  # Native local runtime (no Docker): 0 = never, 1 = always, 2 = ask
 PLAYIT_PROVISION=0 # Let the bridge install the playit plugin into existing servers
 
 # First admin user (created automatically after the database is ready).
@@ -118,6 +122,8 @@ while [[ "$#" -gt 0 ]]; do
         --playit)       DO_PLAYIT=1; shift ;;
         --no-playit)    DO_PLAYIT=0; shift ;;
         --playit-provision) PLAYIT_PROVISION=1; shift ;;
+        --local-runtime)    DO_LOCAL=1; shift ;;
+        --no-local-runtime) DO_LOCAL=0; shift ;;
         --admin-email)     ADMIN_EMAIL="$2"; shift 2 ;;
         --admin-username)  ADMIN_USERNAME="$2"; shift 2 ;;
         --admin-password)  ADMIN_PASSWORD="$2"; shift 2 ;;
@@ -1171,10 +1177,125 @@ playit_menu() {
     done
 }
 
+# -----------------------------------------------------------------------------
+# Native "local node" runtime (optional)
+# -----------------------------------------------------------------------------
+# Installs the pieces the panel needs to run Minecraft servers directly on this
+# machine (no Wings, no Docker): a JDK, the data directory, and a boot unit that
+# restarts the servers the operator had left running. The panel itself does all
+# process management (start/stop/console) - this step just prepares the host.
+install_java_runtime() {
+    if command -v java >/dev/null 2>&1; then
+        log "Java already present: $(java -version 2>&1 | head -n1)"
+        return 0
+    fi
+
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get update -qq >/dev/null 2>&1 || true
+
+    # Prefer 21 (Minecraft 1.20.5+); fall back to 17 (1.18 - 1.20.4).
+    local pkg
+    for pkg in openjdk-21-jre-headless openjdk-17-jre-headless default-jre-headless; do
+        if apt-get install -y -qq "$pkg" >/dev/null 2>&1; then
+            log "Installed ${pkg}."
+            return 0
+        fi
+    done
+
+    warn "Could not install a JDK automatically. Install one, e.g.:"
+    warn "    apt-get install -y openjdk-21-jre-headless"
+    return 1
+}
+
+local_runtime_step() {
+    echo ""
+    log "Local runtime (native Minecraft servers - no Docker)"
+
+    if [[ ! -d "$PANEL_PATH/turtleapp/Local" ]]; then
+        warn "Skipping local runtime: ${PANEL_PATH}/turtleapp/Local is missing."
+        warn "Re-clone the repository (the Turtle addon lives in turtleapp/)."
+        return 0
+    fi
+
+    local choice="n" choice_input
+    if [[ "$DO_LOCAL" == "1" ]]; then
+        choice="y"
+    elif [[ "$DO_LOCAL" == "0" ]]; then
+        log "Skipping the local runtime (--no-local-runtime)."
+        return 0
+    else
+        echo "  Let the panel run Minecraft servers directly on this machine?"
+        echo "  This installs a JDK and a data directory; it does NOT install Docker"
+        echo "  and does NOT touch the panel or the theme."
+        echo "  [Y] Yes - set it up (recommended)."
+        echo "  [N] No  - skip."
+        read -rp "Choice [y/N]: " choice_input
+        choice="${choice_input:-n}"
+    fi
+
+    if ! [[ "$choice" =~ ^[Yy]$ ]]; then
+        log "Skipped. Later: sudo bash turtle/install.sh --local-runtime"
+        return 0
+    fi
+
+    install_java_runtime || true
+
+    local base="${TURTLE_LOCAL_DIR:-/var/lib/turtle-local}"
+    mkdir -p "$base"
+    chown -R "${WEB_USER}:${WEB_USER}" "$base" 2>/dev/null || true
+    chmod 2775 "$base" 2>/dev/null || true
+    log "Data directory ready: ${base} (owned by ${WEB_USER})"
+
+    # Make the web process (php-fpm) and the boot unit agree on the data dir.
+    local env_file="$PANEL_PATH/.env"
+    if [[ -f "$env_file" ]]; then
+        if grep -q '^TURTLE_LOCAL_DIR=' "$env_file" 2>/dev/null; then
+            sed -i "s|^TURTLE_LOCAL_DIR=.*|TURTLE_LOCAL_DIR=${base}|" "$env_file"
+        else
+            printf '\nTURTLE_LOCAL_DIR=%s\n' "$base" >> "$env_file"
+        fi
+        chown "${WEB_USER}:${WEB_USER}" "$env_file" 2>/dev/null || true
+        ( cd "$PANEL_PATH" && php artisan config:clear >/dev/null 2>&1 ) || true
+        log "Panel .env updated: TURTLE_LOCAL_DIR=${base}"
+    fi
+
+    if [[ "$HAS_SYSTEMD" == "1" ]]; then
+        local php_bin sd
+        php_bin="$(command -v php || echo /usr/bin/php)"
+        sd="${SYSTEMD_DIR:-/etc/systemd/system}"
+        mkdir -p "$sd" 2>/dev/null || true
+        cat >"${sd}/turtle-local.service" <<EOF
+[Unit]
+Description=Turtle Game Panel - restore native local servers
+After=network-online.target mariadb.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=${PANEL_PATH}
+Environment=TURTLE_LOCAL_DIR=${base}
+ExecStart=${php_bin} ${PANEL_PATH}/turtleapp/Local/runner.php restore
+User=${WEB_USER}
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+EOF
+        systemctl daemon-reload >/dev/null 2>&1 || true
+        systemctl enable turtle-local.service >/dev/null 2>&1 || true
+        log "Boot unit installed: turtle-local.service"
+    else
+        warn "systemd not detected, so local servers will not auto-start at boot."
+        warn "Start them from the panel, or add this to your init/cron:"
+        warn "    ${PANEL_PATH}/turtleapp/Local/runner.php restore"
+    fi
+
+    log "Local runtime ready. Open Admin -> Local Servers in the panel."
+}
+
 command_centre() {
     require_root
     require_script_file
-
     while true; do
         echo ""
         echo "=========================================================================="
@@ -1189,6 +1310,7 @@ command_centre() {
         echo "  7) View logs"
         echo "  8) Panel info"
         echo "  9) Playit.gg        (public addresses for Minecraft servers)"
+        echo " 10) Local runtime    (native servers - no Docker, no FQDN)"
         echo "  0) Exit"
         echo "=========================================================================="
         read -rp "Select an option: " CHOICE
@@ -1215,6 +1337,7 @@ command_centre() {
             7) show_logs ;;
             8) panel_info ;;
             9) playit_menu ;;
+            10) local_runtime_step ;;
             0|q|Q|exit) log "Bye."; break ;;
             *) warn "Invalid option." ;;
         esac
@@ -1298,6 +1421,7 @@ run_install() {
 
     node_install_step
     playit_step
+    local_runtime_step
 }
 
 main() {

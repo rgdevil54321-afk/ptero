@@ -77,6 +77,17 @@ normal address field. Add your playit agent keys under **Admin → Playit**, the
 install the bridge (the installer offers this, or run it later). See
 [`turtle/README.md`](turtle/README.md#playitgg-public-addresses-optional).
 
+### Optional: pure local servers — no Wings, no Docker, no FQDN
+
+If you do not want to run **Wings + Docker** at all (for example on a small VPS),
+the panel can run Minecraft servers **natively on the panel host** — the same
+idea as the JTG panel's "local" runtime. `sudo bash turtle/install.sh --local-runtime`
+(or Control Centre option **10**) installs a JDK and prepares a data directory,
+then **Admin → Local Servers** lets you create Paper/Purpur/Vanilla servers,
+watch their console, and start/stop them. There is no node, no container, and
+nothing to point at a domain. See
+[`turtle/README.md`](turtle/README.md#local-runtime--native-servers-no-docker-optional).
+
 ## Repository layout
 
 ```text
@@ -88,7 +99,8 @@ turtle/install_node.sh                  <- optional: real local Wings node on sa
 turtle/install_playit.sh                <- optional: report playit.gg addresses to the panel
 turtle/uninstall.sh                     <- remove the panel (keeps database by default)
 turtle/license/                         <- ionCube license key for this release
-turtleapp/                              <- Playit.gg panel addon (plain PHP, outside app/)
+turtleapp/Playit/                       <- Playit.gg panel addon (plain PHP, outside app/)
+turtleapp/Local/                        <- native "local node" runtime (no Wings/Docker)
 hyper_fetch.sh   hyper_watcher.sh      <- Hyper update scripts (shipped by Hyper)
 composer.json    composer.lock         <- panel dependencies
 ```

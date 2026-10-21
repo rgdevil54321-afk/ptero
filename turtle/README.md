@@ -57,6 +57,8 @@ Open the panel URL — the Turtle theme is live out of the box.
 --playit            Install the Playit.gg node bridge (no prompt)
 --no-playit         Never offer the Playit.gg bridge
 --playit-provision  Let the bridge add the playit plugin to existing Java servers
+--local-runtime     Set up native local servers (JDK + data dir + boot unit)
+--no-local-runtime  Never set up the native local runtime
 --no-discord        Do not run the Discord bot
 --update            Update an existing panel in place (keeps .env + DB)
 --skip-prereqs      Skip OS package / PHP install
@@ -88,6 +90,7 @@ sudo bash turtle/install.sh
   7) View logs
   8) Panel info
   9) Playit.gg            (public addresses for Minecraft servers)
+ 10) Local runtime        (native servers - no Docker, no FQDN)
   0) Exit
 ```
 
@@ -115,6 +118,47 @@ sudo bash turtle/uninstall.sh --purge-db
 System packages, the ionCube loader and the license key are left in place (they
 may be used by other apps). Add `--keep-wings` to leave the Wings node running
 or `--purge-volumes` to delete `/var/lib/pterodactyl` (server data — careful).
+`--purge-local` deletes native server data in `/var/lib/turtle-local`.
+
+## Local runtime — native servers, no Docker (optional)
+
+`turtle/install.sh --local-runtime` (or menu option **10**) prepares this host to
+run Minecraft servers **directly, as normal processes** — no Wings, no Docker,
+no FQDN. This is the same idea as the JTG panel's "local" runtime, and it is what
+makes a one-box "pure local node" possible.
+
+What the installer does:
+
+- installs a JDK (`openjdk-21-jre-headless`, falling back to 17),
+- creates `/var/lib/turtle-local` owned by the panel user,
+- installs a boot unit (`turtle-local.service`) that restarts the servers you
+  had left running.
+
+Then open **Admin → Local Servers** in the panel:
+
+- **Create & install** — pick Paper / Purpur / Vanilla (or a custom jar), a
+  version, memory and a port. The panel downloads the jar in the background and
+  writes `eula.txt` + `server.properties` for you.
+- **Console** — live log tail plus a command box (works over a FIFO; no RCON).
+- **Power** — start / stop / restart / kill.
+- **Address** — the direct `host:port` and, for Paper/Purpur/Spigot, a public
+  **playit.gg** address (the panel installs the playit plugin and, if you have a
+  key in the pool, wires it up headlessly — otherwise claim it from the console).
+
+Each server lives in `/var/lib/turtle-local/<id>` with `console.log`,
+`install.log`, `server.pid` and `stdin.fifo`. Nothing about the panel, the theme
+or the Wings flow is touched: native servers are stored in their own tables and
+managed from their own pages.
+
+> These servers do **not** appear in the normal Pterodactyl server list — that
+> list is served by Wings/Docker. They live under **Admin → Local Servers**.
+
+### How a "local" server is run
+
+The panel starts `java -jar … nogui` under `setsid` so it survives the web
+request. Console input is a named pipe the process holds open read/write, and
+console output is appended to `console.log`, which the panel tails. The game PID
+is written to `server.pid`. No supervisor, no container runtime — just a process.
 
 ## Local Wings node (optional)
 

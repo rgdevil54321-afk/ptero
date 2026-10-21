@@ -322,3 +322,28 @@ Route::group(['prefix' => 'playit'], function () {
     Route::post('/sync', [\Turtle\Playit\Http\Controllers\Admin\PlayitController::class, 'sync'])->name('admin.playit.sync');
     Route::post('/token', [\Turtle\Playit\Http\Controllers\Admin\PlayitController::class, 'rotateToken'])->name('admin.playit.token');
 });
+
+/*
+|--------------------------------------------------------------------------
+| Local Servers (Turtle addon - native "local node" runtime)
+|--------------------------------------------------------------------------
+| Servers are run as normal OS processes on the panel host: no Wings, no
+| Docker, no FQDN. This mirrors the JTG panel's "local" runtime.
+*/
+Route::group(['prefix' => 'local'], function () {
+    Route::get('/', [\Turtle\Local\Http\Controllers\Admin\LocalController::class, 'index'])->name('admin.local');
+    Route::post('/', [\Turtle\Local\Http\Controllers\Admin\LocalController::class, 'create'])->name('admin.local.create');
+
+    Route::group(['where' => ['server' => '[0-9]+']], function () {
+        Route::get('/{server}', [\Turtle\Local\Http\Controllers\Admin\LocalController::class, 'show'])->name('admin.local.show');
+        Route::get('/{server}/console', [\Turtle\Local\Http\Controllers\Admin\LocalController::class, 'console'])->name('admin.local.console');
+        Route::post('/{server}/start', [\Turtle\Local\Http\Controllers\Admin\LocalController::class, 'start'])->name('admin.local.start');
+        Route::post('/{server}/stop', [\Turtle\Local\Http\Controllers\Admin\LocalController::class, 'stop'])->name('admin.local.stop');
+        Route::post('/{server}/restart', [\Turtle\Local\Http\Controllers\Admin\LocalController::class, 'restart'])->name('admin.local.restart');
+        Route::post('/{server}/kill', [\Turtle\Local\Http\Controllers\Admin\LocalController::class, 'kill'])->name('admin.local.kill');
+        Route::post('/{server}/command', [\Turtle\Local\Http\Controllers\Admin\LocalController::class, 'command'])->name('admin.local.command');
+        Route::post('/{server}/reinstall', [\Turtle\Local\Http\Controllers\Admin\LocalController::class, 'reinstall'])->name('admin.local.reinstall');
+        Route::post('/{server}/playit', [\Turtle\Local\Http\Controllers\Admin\LocalController::class, 'syncPlayit'])->name('admin.local.playit');
+        Route::delete('/{server}', [\Turtle\Local\Http\Controllers\Admin\LocalController::class, 'destroy'])->name('admin.local.delete');
+    });
+});

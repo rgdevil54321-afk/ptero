@@ -143,6 +143,8 @@
                                 <td>
                                     @if($agent->server_uuid)
                                         <code>{{ $agent->server_uuid }}</code>
+                                    @elseif($agent->local_server_id)
+                                        <span class="label label-info">local #{{ $agent->local_server_id }}</span>
                                     @else
                                         <span class="text-muted">pool</span>
                                     @endif
@@ -156,7 +158,7 @@
                                 </td>
                                 <td>{{ $agent->status }}</td>
                                 <td class="text-right">
-                                    @if($agent->server_uuid)
+                                    @if($agent->server_uuid || $agent->local_server_id)
                                         <form action="{{ route('admin.playit.release') }}" method="POST" style="display:inline">
                                             @csrf
                                             <input type="hidden" name="agent_id" value="{{ $agent->id }}">
